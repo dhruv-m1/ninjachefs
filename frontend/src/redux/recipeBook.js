@@ -36,7 +36,7 @@ export const postRecipe = createAsyncThunk(
 
       let format = parition[0].slice(-3);
 
-      if (format == 'peg') {
+      if (format === 'peg') {
         
         format = 'jpg';
       }
@@ -58,11 +58,10 @@ export const postRecipe = createAsyncThunk(
     });
 
     res = await res.json()
-
+    data.idx = res.idx;
 
     if (imgObj != null) {
 
-      console.log('hi');
       imgObj.idx = res.idx;
       
       let img = await fetch("http://localhost:8080/api/v1/recipes/thumbnails", {
@@ -81,13 +80,19 @@ export const postRecipe = createAsyncThunk(
     return data;
 })
 
+export const deleteRecipe = createAsyncThunk(
+  'recipeBook/deleteRecipe',
+  async (idx) => {
+    await fetch(`http://localhost:8080/api/v1/recipes/${idx}`, { method: 'DELETE' }).then(
+    (data) => data.json()
+  )
+  return idx;
+})
+
 export const recipeSlice = createSlice({
   name: 'recipeBook',
   initialState,
   reducers: {
-    add: (state, action) => {
-      state.recipes.push(action.payload);
-    },
     show: (state, action) => {
       state.display = action.payload;
     },
@@ -102,12 +107,24 @@ export const recipeSlice = createSlice({
       state.recipes.push(payload);
     },
 
+    [deleteRecipe.fulfilled]: (state, { payload }) => {
+      state.recipes.splice(payload, 1);
+    },
+
+    [postRecipe.rejected]: (state, { payload }) => {
+      alert('Error: Unable to post recipe.');
+    },
+
+    [deleteRecipe.rejected]: (state, { payload }) => {
+      alert('Error: Unable to delete recipe.');
+    },
+
     [getRecipes.rejected]: () => {
-      alert('Error: Unable to fetch recipes.')
+      alert('Error: Unable to fetch recipes.');
     }
   }
 })
 
-export const { add, show } = recipeSlice.actions
+export const { show } = recipeSlice.actions
 
 export default recipeSlice.reducer

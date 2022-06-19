@@ -494,3 +494,10 @@ article {
       margin-top: -60px;
       z-index: 100;
   }
+
+  .btn-del {
+    float: right;
+    margin-top: -60px;
+    margin-right: 75px;
+    z-index: 100;
+}

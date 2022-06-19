@@ -186,6 +186,8 @@ dataStore.delete = (idx) => {
         return {code: 200, msg: `Deleted item with idx ${idx}`};
 
     } catch (error) {
+
+        console.log(error);
         
         return { code: 404, msg: "Could not delete item, please check the idx"};
 

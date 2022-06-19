@@ -1,12 +1,22 @@
 import { useSelector } from 'react-redux';
+import { useDispatch } from "react-redux";
+import { deleteRecipe } from '../redux/recipeBook';
 
 export default function RecipeModal() {
 
     const { display } = useSelector(state => state.recipeBook);
 
+    const dispatch = useDispatch();
+
     const closeModal = () => {
         document.querySelector('.recipe-modal-wrapper').style.display = 'none';
         document.querySelector('body').style.overflowY = 'unset';
+    }
+
+    const deleteAction = () => {
+        dispatch(deleteRecipe(display.idx));
+        alert('Deleted');
+        closeModal();
     }
 
     const ingredients = display.preplist.map((ingredient, i) => {
@@ -27,6 +37,7 @@ export default function RecipeModal() {
             <section id="page-title-banner">
 
                 <h1>Recipe</h1>
+                <input className="red-btn btn btn-del" type="button" value="Delete" onClick={deleteAction}/>
                 <input className="red-btn btn btn-spl" type="button" value="Close" onClick={closeModal}/>
             </section>
 
