@@ -11,7 +11,7 @@ let data = [
         chef: "Sanjyot Keer",
         preptime: "45",
         type: "vegetarian",
-        img: null,
+        img: "http://localhost:8080/images/img-cover-0.png",
         preplist: [
             "Spinach 1 big bunch",
             "A pinch of salt",
@@ -61,7 +61,7 @@ let data = [
         idx: 1,
         name: "Shrimp Scampi with Capellini Pasta",
         chef: "Gordon Ramsay",
-        img: null,
+        img: "http://localhost:8080/images/img-cover-1.png",
         preptime: "60",
         type: "non-vegetarian",
         preplist: [
@@ -102,7 +102,7 @@ let data = [
         chef: "Dohoon Lee",
         preptime: "60",
         type: "vegan",
-        img: null,
+        img: "http://localhost:8080/images/img-cover-2.png",
         preplist: [
             "1 (16 ounce) package firm tofu, cubed",
             "1 cup cored and quartered apples",
@@ -134,7 +134,7 @@ dataStore.add = (obj) => {
         obj.img = null;
         data.push(obj);
 
-        return { code: 201, msg: "Item added"};
+        return { code: 201, msg: "Item added", idx: obj.idx};
         
     } catch (error) {
 
@@ -151,8 +151,8 @@ dataStore.addThumbnail = async(obj) => {
             
             let fileName = `img-cover-${obj.idx}.${obj.format}`;
             await fs.writeFile(`./public/images/${fileName}`, obj.img, {encoding: 'base64'});
-            data[obj.idx].img = `http://localhost:3000/images/${fileName}`;
-            resolve({code: 201});
+            data[obj.idx].img = `http://localhost:8080/images/${fileName}`;
+            resolve({code: 201, url: data[obj.idx].img});
             
         } catch (error) {
             

@@ -1,0 +1,496 @@
+/*
+
+Styling for Ninjachefs, all pages.
+
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+body {
+
+    padding: 0 7vw;
+    margin: 0;
+    background-color: #FBFCFF;
+    overflow-x: hidden;
+
+}
+
+.grid-container {
+    
+    display: grid;
+    grid-auto-rows: minmax(115px, auto);
+
+}
+
+header {
+    grid-column: 1/-1;
+}
+
+#logo {
+    position: relative;
+    top: 30px;
+    width: auto;
+    height: 45px;
+}
+
+nav {
+    float: right;
+    position: relative;
+    top: 42px;
+    right: 5px;
+}
+
+nav a {
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 30px;
+    text-align: center;
+    text-decoration: none;
+    margin-left: 20px;
+    color: #171A29 !important;
+}
+
+#featured-section {
+
+    grid-column: 1/-1;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-areas: "text-banner text-banner card-wrapper control-box";
+    gap: 12px;
+
+}
+
+#featured-section .text-banner {
+    
+    background: #171A29;
+    border-radius: 20px;
+    padding: 20px 30px;
+    height: 250px;
+    grid-area: text-banner;
+    /*width: 37%;*/
+    display: inline;
+}
+
+#featured-section h1{
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 28px;
+    margin: 0;
+}
+#featured-section .text-banner h1 {
+
+    color: #FFFFFF;
+
+}
+
+#featured-section .text-banner h2 {
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 32px;
+    
+    color: #FFFFFF;
+
+}
+
+#featured-section .controls-box {
+    background: #D6F4EF;
+    border-radius: 10px;
+    height: 250px;
+    grid-area: control-box;
+    padding: 20px 30px;
+    display: inline;
+}
+
+#featured-section .controls-box h1 {
+    color: #00654B;
+}
+
+#featured-section .controls-box button {
+    position: relative;
+    width: 250px;
+    height: 50px;
+    top: 50px;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    background: #0F7556;
+    border-radius: 10px;
+    border-style: none;
+
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 17px;
+    text-align: center;
+
+    color: #FFFFFF;
+
+}
+
+#featured-section .controls-box button:hover {
+    opacity: 0.9;
+    cursor: pointer;
+}
+
+#featured-section .controls-box a {
+    text-align: center;
+    font-family: 'Poppins';
+    color: #0F7556;
+    height: 17px;
+    position: relative;
+    top: 50px;
+    width: 100%;
+    left: 25%;
+}
+
+#featured-section .controls-box a:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.card {
+    background: #FFFFFF;
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.12);
+    border-radius: 8px;
+}
+
+.card-wrapper .card {
+
+    height: 100%;
+    width: 100%;
+
+}
+
+.card {
+    font-family: 'Poppins';
+}
+
+.card-wrapper {
+    display: inline-grid;
+    height: 285px;
+    /*width: 20%;*/
+    grid-area: card-wrapper;
+}
+
+.card-thumbnail {
+
+    background-color: gray;
+    background-size: cover;
+    height: 150px;
+    width: 90%;
+    position: relative;
+    left: 5%;
+    top: 5%;
+    border-radius: 5px;
+}
+
+.card-title {
+    font-style: normal;
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 30px;
+    height: 60px;
+    width: 90%;
+    margin-left: 5%;
+    margin-top: 20px;
+    color: #171A29;
+}
+
+.meal-type {
+    float: right;
+    margin-top: 10px;
+    margin-right: 5%;
+    font-weight: 400;
+    font-size: 14px;
+    text-align: right;
+    text-transform: capitalize;
+}
+
+.vegetarian {
+    color: #119C72;
+}
+
+.non-vegetarian {
+    color: #9c1a11;
+}
+
+.vegan {
+    color: #2f9c11;
+}
+
+.chef-name {
+    margin-left: 5%;
+    float: left;
+    margin-top: 10px;
+    font-weight: 400;
+    font-size: 14px;
+    color: #2B7CD3;
+}
+
+.card:hover {
+    cursor: pointer;
+}
+
+#all-recipes h1 {
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 28px;
+    line-height: 48px;
+
+    color: #171A29;
+}
+
+#card-library-wrapper .card {
+
+
+    width: 300px;
+    height: 275px;
+
+}
+
+.card-list {
+    list-style: none;
+    margin-left: 0;
+    padding-left: 0;
+}
+.card-list li {
+    display: inline-grid;
+    margin-right: 15px;
+    margin-bottom: 15px;
+}
+
+#all-recipes {
+    margin-bottom: 150px;
+}
+
+.reset-modal-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    z-index: 100;
+    height: 100%;
+    width: 100%;
+    display: none;
+
+}
+
+#reset-modal {
+    background-color: rgba(0, 0, 0, 0.9);
+    height: 100vh;
+    width: 100vw;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.pop-out {
+    background-color: #FBFCFF;
+    padding: 50px;
+    border-radius: 10px;
+}
+
+.pop-out p {
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 18px;
+
+    color: #171A29;
+}
+
+.green-btn {
+    background: #0F7556;
+}
+
+.red-btn {
+    background: #87221d;
+}
+
+.btn {
+    border-radius: 5px;
+    border-style: none;
+
+    text-align: center;
+    font-family: 'Poppins';
+    font-weight: 600;
+    font-size: 15px;
+
+    padding: 5px 10px;
+    color: #FFFFFF;
+    margin-bottom: 5px;
+}
+
+.btn:hover {
+    cursor: pointer;
+    opacity: 0.9;
+}
+
+#item-modal form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 600;
+}
+
+#item-modal form div{
+    width: 100%;
+}
+
+#item-modal form input{
+    padding: 10px 15px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    border-width: 1pt;
+    border-color: #171A29;
+    width: 77%;
+}
+
+#item-modal form textarea{
+    padding: 10px 20px;
+    margin-bottom: 15px;
+    min-height: 100px;
+    border-radius: 5px;
+    border-width: 1pt;
+    border-color: #171A29;
+    width: 75%;
+}
+
+#item-modal form select{
+    padding: 10px 10px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    border-width: 1pt;
+    border-color: #171A29;
+    width: 85%;
+}
+
+.add-item-modal-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    z-index: 100;
+    height: 100vh;
+    width: 100vw;
+    display: none;
+
+}
+
+.recipe-modal-wrapper {
+
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    z-index: 100;
+    height: 100vh;
+    width: 100vw;
+    display: none;
+    background-color: #FBFCFF;
+    overflow-y: scroll;
+
+}
+
+.recipe-modal-wrapper li {
+    display: block;
+}
+
+.recipe-modal-wrapper ul {
+    list-style: unset !important;
+}
+
+#featured-dynamic-text {
+    cursor: pointer;
+}
+
+#item-modal {
+    height: 100vh;
+    width: 100vw;
+
+    display: flex;
+    justify-content: center;
+    background-color: #FBFCFF;
+    overflow-y: scroll;
+}
+
+#page-title-banner {
+    font-family: Poppins;
+    background-color: #171A29;
+    color: #FFFFFF !important;
+    padding: 25px;
+}
+
+#page-title-banner h1{
+    color: white;
+}
+
+article {
+    font-family: Poppins;
+
+    padding: 0 5px;
+}
+
+@media only screen and (max-width: 1200px) {
+    #featured-section {
+        grid-template-columns: repeat(1, 1fr);
+        grid-template-areas: 
+            "text-banner"
+            "card-wrapper"
+            "control-box";
+    
+    }
+
+    #featured-section .card-wrapper {
+        display: none;
+    }
+
+    #featured-section .controls-box button {
+        width: 90%;
+        top: 75px;
+    }
+
+    #featured-section .controls-box a {
+        width: 90%;
+        display: block;
+        top: 100px;
+        left: 5%;
+    }
+
+    header {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        height: 150px;
+    }
+
+    #logo {
+        height: 45px;
+        width: 187.85;
+        position: unset;
+    }
+
+    nav {
+        float: unset;
+        position: unset;
+        margin-left: -15px;
+    }
+
+  }
+
+  .btn-spl {
+      float: right;
+      margin-top: -60px;
+      z-index: 100;
+  }

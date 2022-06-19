@@ -1,11 +1,19 @@
 const express = require('express');
 const app = express();
-const port = 3000;
+const port = 8080;
 
 const ds = require("./dataStore");
 
 app.use(express.json({limit: '50mb'}));
 app.use(express.static('public'));
+
+app.use(function (req, res, next) {
+    res.setHeader('Access-Control-Allow-Headers', 'accept, authorization, content-type, x-requested-with');
+    res.setHeader('Access-Control-Allow-Methods', 'GET,HEAD,PUT,PATCH,POST,DELETE');
+    res.setHeader('Access-Control-Allow-Origin', '*');
+
+    next();
+});
 
 app.get('/api/v1/recipes', (req, res) => {
 
