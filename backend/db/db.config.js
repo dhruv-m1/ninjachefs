@@ -62,7 +62,7 @@ const recipeSchema = new mongoose.Schema({
     }
 });
 
-db.Recipie = mongoose.model("Recipie", recipeSchema);
+db.Recipe = mongoose.model("Recipe", recipeSchema);
 
 const imgSchema = new mongoose.Schema({
     recipeId: {

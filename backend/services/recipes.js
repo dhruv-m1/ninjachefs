@@ -126,9 +126,9 @@ let data = [
 
 const db = require('../db/db.config');
 
-const recipies = {};
+const recipes = {};
 
-recipies.add = async(obj) => {
+recipes.add = async(obj) => {
 
     try {
 
@@ -141,7 +141,7 @@ recipies.add = async(obj) => {
             steps: obj.steps
         }
 
-        let addedRecipe = await db.Recipie.create(newRecipe);
+        let addedRecipe = await db.Recipe.create(newRecipe);
 
         return { code: 201, msg: "Item added", _id: addedRecipe._id};
         
@@ -153,7 +153,7 @@ recipies.add = async(obj) => {
 
 }
 
-recipies.addThumbnail = async(obj) => {
+recipes.addThumbnail = async(obj) => {
 
     return new Promise(async(resolve) => {
         try {
@@ -170,7 +170,7 @@ recipies.addThumbnail = async(obj) => {
     
             await db.Img.create(newImg);
 
-            await db.Recipie.updateOne({ _id: obj.idx }, 
+            await db.Recipe.updateOne({ _id: obj.idx }, 
                 { "img":`http://localhost:8080/api/v1/recipes/thumbnails/${obj.idx}`});
 
             resolve({code: 201, url: `http://localhost:8080/api/v1/recipes/thumbnails/${obj.idx}`});
@@ -185,7 +185,7 @@ recipies.addThumbnail = async(obj) => {
 
 }
 
-recipies.getThumbnail = async(idx) => {
+recipes.getThumbnail = async(idx) => {
 
     return new Promise(async(resolve) => {
         try {
@@ -206,10 +206,10 @@ recipies.getThumbnail = async(idx) => {
 
 }
 
-recipies.get = async() => {
+recipes.get = async() => {
 
     try {
-        const recipeData = await db.Recipie.find()
+        const recipeData = await db.Recipe.find()
         return {code: 200, data: recipeData};
 
     } catch (error) {
@@ -220,11 +220,11 @@ recipies.get = async() => {
     
 }
 
-recipies.delete = async(idx) => {
+recipes.delete = async(idx) => {
 
     try {
 
-        await db.Recipie.deleteOne({ _id: idx });
+        await db.Recipe.deleteOne({ _id: idx });
         return {code: 200, msg: `Deleted item with _id ${idx}`};
 
     } catch (error) {
@@ -237,7 +237,7 @@ recipies.delete = async(idx) => {
 
 }
 
-recipies.init = async() => {
+recipes.init = async() => {
     
     console.log('\x1b[36mNinjaChefs API is starting...\x1b[0m');
     console.log('→ Clearing image data from previous session...');
@@ -255,4 +255,4 @@ recipies.init = async() => {
 
 }
 
-module.exports = recipies;
+module.exports = recipes;
