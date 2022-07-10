@@ -2,7 +2,8 @@ const express = require('express');
 const app = express();
 const port = 8080;
 
-const ds = require("./dataStore");
+const ds = require("./services/recipies");
+const db = require('./db/db.config');
 
 app.use(express.json({limit: '50mb'}));
 app.use(express.static('public'));
@@ -15,26 +16,18 @@ app.use(function (req, res, next) {
     next();
 });
 
-app.get('/api/v1/recipes', (req, res) => {
+app.get('/api/v1/recipes', async(req, res) => {
 
-    const retrivedData = ds.get();
+    const retrivedData = await ds.get();
     res.statusCode = retrivedData.code;
 
     res.json(retrivedData.data);
 
 })
 
-app.post('/api/v1/recipes', (req, res) => {
+app.post('/api/v1/recipes', async(req, res) => {
     
-    const response = ds.add(req.body);
-    res.statusCode = response.code;
-    res.json(response);
-
-})
-
-app.post('/api/v1/recipes', (req, res) => {
-    
-    const response = ds.add(req.body);
+    const response = await ds.add(req.body);
     res.statusCode = response.code;
     res.json(response);
 
@@ -48,9 +41,22 @@ app.post('/api/v1/recipes/thumbnails/', async(req, res) => {
 
 })
 
-app.delete('/api/v1/recipes/:idx', (req, res) => {
+app.get('/api/v1/recipes/thumbnails/:idx', async(req, res) => {
     
-    const response = ds.delete(req.params.idx);
+    const response = await ds.getThumbnail(req.params.idx);
+
+    res.writeHead(200, {
+        'Content-Type': `image/${response.format}`,
+        'Content-Length': response.data.length
+    });
+
+    res.end(response.data);
+
+})
+
+app.delete('/api/v1/recipes/:idx', async(req, res) => {
+    
+    const response = await ds.delete(req.params.idx);
     res.statusCode = response.code;
     res.json(response);
 
@@ -58,5 +64,8 @@ app.delete('/api/v1/recipes/:idx', (req, res) => {
 
 app.listen(port, async() => {
     await ds.init();
+    console.log(`\x1b[33m→ Connecting to Database...\x1b[0m`)
+    await db.connect();
+    console.log(`\x1b[32m → Connected.\x1b[0m`)
     console.log(`\x1b[32mNinjaChefs API listening on port ${port}\x1b[0m`)
 })

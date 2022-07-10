@@ -14,7 +14,7 @@ export default function RecipeModal() {
     }
 
     const deleteAction = () => {
-        dispatch(deleteRecipe(display.idx));
+        dispatch(deleteRecipe(display._id));
         alert('Deleted');
         closeModal();
     }

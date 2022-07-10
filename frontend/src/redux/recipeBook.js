@@ -62,7 +62,7 @@ export const postRecipe = createAsyncThunk(
 
     if (imgObj != null) {
 
-      imgObj.idx = res.idx;
+      imgObj.idx = res._id;
       
       let img = await fetch("http://localhost:8080/api/v1/recipes/thumbnails", {
       "method": "POST",

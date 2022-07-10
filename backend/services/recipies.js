@@ -124,35 +124,56 @@ let data = [
     }
 ]
 
-const dataStore = {};
+const db = require('../db/db.config');
 
-dataStore.add = (obj) => {
+const recipies = {};
+
+recipies.add = async(obj) => {
 
     try {
 
-        obj.idx = data.length;
-        obj.img = null;
-        data.push(obj);
+        let newRecipe = {
+            name: obj.name,
+            chef: obj.chef,
+            preptime: parseInt(obj.preptime),
+            type: obj.type.toLowerCase(),
+            preplist: obj.preplist,
+            steps: obj.steps
+        }
 
-        return { code: 201, msg: "Item added", idx: obj.idx};
+        let addedRecipe = await db.Recipie.create(newRecipe);
+
+        return { code: 201, msg: "Item added", _id: addedRecipe._id};
         
     } catch (error) {
-
+        
         return { code: 500, msg: "Could not add item"};
 
     }
 
 }
 
-dataStore.addThumbnail = async(obj) => {
+recipies.addThumbnail = async(obj) => {
 
     return new Promise(async(resolve) => {
         try {
             
-            let fileName = `img-cover-${obj.idx}.${obj.format}`;
-            await fs.writeFile(`./public/images/${fileName}`, obj.img, {encoding: 'base64'});
-            data[obj.idx].img = `http://localhost:8080/images/${fileName}`;
-            resolve({code: 201, url: data[obj.idx].img});
+            /*let fileName = `img-cover-${obj.idx}.${obj.format}`;
+            await fs.writeFile(`./public/images/${fileName}`, obj.img, {encoding: 'base64'});*/
+            /*data[obj.idx].img = `http://localhost:8080/images/${fileName}`;*/
+
+            let newImg = {
+                recipeId: obj.idx,
+                thumbnail: Buffer.from(obj.img, "base64"),
+                format: obj.format
+            }
+    
+            await db.Img.create(newImg);
+
+            await db.Recipie.updateOne({ _id: obj.idx }, 
+                { "img":`http://localhost:8080/api/v1/recipes/thumbnails/${obj.idx}`});
+
+            resolve({code: 201, url: `http://localhost:8080/api/v1/recipes/thumbnails/${obj.idx}`});
             
         } catch (error) {
             
@@ -164,11 +185,32 @@ dataStore.addThumbnail = async(obj) => {
 
 }
 
-dataStore.get = () => {
+recipies.getThumbnail = async(idx) => {
+
+    return new Promise(async(resolve) => {
+        try {
+            
+            const img = await db.Img.findOne(
+                {recipeId: idx}
+            )
+
+            resolve({data: img.thumbnail, format: img.format});
+            
+        } catch (error) {
+            
+            console.log(error);
+            resolve({ code: 500, msg: "Could not get image"});
+    
+        }
+    })
+
+}
+
+recipies.get = async() => {
 
     try {
-
-        return {code: 200, data: data};
+        const recipeData = await db.Recipie.find()
+        return {code: 200, data: recipeData};
 
     } catch (error) {
         
@@ -178,24 +220,24 @@ dataStore.get = () => {
     
 }
 
-dataStore.delete = (idx) => {
+recipies.delete = async(idx) => {
 
     try {
 
-        data.splice(idx, 1);
-        return {code: 200, msg: `Deleted item with idx ${idx}`};
+        await db.Recipie.deleteOne({ _id: idx });
+        return {code: 200, msg: `Deleted item with _id ${idx}`};
 
     } catch (error) {
 
         console.log(error);
         
-        return { code: 404, msg: "Could not delete item, please check the idx"};
+        return { code: 404, msg: "Could not delete item, please check the _id"};
 
     }
 
 }
 
-dataStore.init = async() => {
+recipies.init = async() => {
     
     console.log('\x1b[36mNinjaChefs API is starting...\x1b[0m');
     console.log('→ Clearing image data from previous session...');
@@ -213,4 +255,4 @@ dataStore.init = async() => {
 
 }
 
-module.exports = dataStore;
+module.exports = recipies;
