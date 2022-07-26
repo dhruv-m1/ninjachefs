@@ -16,10 +16,12 @@ const initialState = {
 
 }
 
+const BACKEND_URI = 'https://ninjachefs-api.dhruv.tech';
+
 export const getRecipes = createAsyncThunk(
   'recipeBook/getRecipes',
   async () => {
-    const res = await fetch('http://localhost:8080/api/v1/recipes').then(
+    const res = await fetch(`${BACKEND_URI}/api/v1/recipes`).then(
     (data) => data.json()
   )
   return res;
@@ -49,7 +51,7 @@ export const postRecipe = createAsyncThunk(
       data.img = null;
     }
 
-    let res = await fetch("http://localhost:8080/api/v1/recipes", {
+    let res = await fetch(`${BACKEND_URI}/api/v1/recipes`, {
       "method": "POST",
       "headers": {
         "Content-Type": "application/json"
@@ -64,7 +66,7 @@ export const postRecipe = createAsyncThunk(
 
       imgObj.idx = res._id;
       
-      let img = await fetch("http://localhost:8080/api/v1/recipes/thumbnails", {
+      let img = await fetch(`${BACKEND_URI}/api/v1/recipes/thumbnails`, {
       "method": "POST",
       "headers": {
         "Content-Type": "application/json"
@@ -83,7 +85,7 @@ export const postRecipe = createAsyncThunk(
 export const deleteRecipe = createAsyncThunk(
   'recipeBook/deleteRecipe',
   async (idx) => {
-    await fetch(`http://localhost:8080/api/v1/recipes/${idx}`, { method: 'DELETE' }).then(
+    await fetch(`${BACKEND_URI}/api/v1/recipes/${idx}`, { method: 'DELETE' }).then(
     (data) => data.json()
   )
   return idx;
@@ -108,7 +110,8 @@ export const recipeSlice = createSlice({
     },
 
     [deleteRecipe.fulfilled]: (state, { payload }) => {
-      state.recipes.splice(payload, 1);
+      let index = state.recipes.findIndex(recipe => recipe._id === payload );
+      state.recipes.splice(index, 1);
     },
 
     [postRecipe.rejected]: (state, { payload }) => {
