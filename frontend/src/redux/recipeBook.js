@@ -60,7 +60,7 @@ export const postRecipe = createAsyncThunk(
     });
 
     res = await res.json()
-    data.idx = res.idx;
+    data._id = res.idx;
 
     if (imgObj != null) {
 
