@@ -9,7 +9,7 @@ const ds = require("./services/recipes");
 const db = require('./db/db.config');
 
 app.use(express.json({limit: '50mb'}));
-app.use(express.static('public'));
+
 
 app.use(function (req, res, next) {
     res.setHeader('Access-Control-Allow-Headers', 'accept, authorization, content-type, x-requested-with');
@@ -66,7 +66,6 @@ app.delete('/api/v1/recipes/:idx', async(req, res) => {
 })
 
 app.listen(port, host, async() => {
-    await ds.init();
     console.log(`\x1b[33m→ Connecting to Database...\x1b[0m`)
     await db.connect();
     console.log(`\x1b[32m → Connected.\x1b[0m`)
