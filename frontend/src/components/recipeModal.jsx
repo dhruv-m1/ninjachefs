@@ -53,7 +53,7 @@ export default function RecipeModal() {
 
                 <h3>Ingredients</h3>
 
-                <ol>{ingredients}</ol>
+                <ul>{ingredients}</ul>
 
                 <h3>Steps</h3>
 

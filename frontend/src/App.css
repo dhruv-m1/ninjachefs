@@ -402,8 +402,8 @@ nav a {
 
 }
 
-.recipe-modal-wrapper li {
-    display: block;
+.recipe-modal-wrapper article{
+   padding: 0px 25px;
 }
 
 .recipe-modal-wrapper ul {
