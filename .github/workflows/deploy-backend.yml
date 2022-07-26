@@ -23,5 +23,5 @@ jobs:
         - name: Build & Deploy using DO App Platform
           uses: digitalocean/app_action@main
           with:
-            app_name: ninjachefs_backend
+            app_name: ninjachefs-backend
             token: ${{ secrets.DO_ACCESS_TOKEN }}
