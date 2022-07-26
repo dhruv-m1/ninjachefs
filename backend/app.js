@@ -1,6 +1,9 @@
+
 const express = require('express');
 const app = express();
-const port = 8080;
+
+const port = process.env.PORT || 8080;
+const host = process.env.HOST || '127.0.0.1';
 
 const ds = require("./services/recipes");
 const db = require('./db/db.config');
@@ -62,7 +65,7 @@ app.delete('/api/v1/recipes/:idx', async(req, res) => {
 
 })
 
-app.listen(port, async() => {
+app.listen(port, host, async() => {
     await ds.init();
     console.log(`\x1b[33m→ Connecting to Database...\x1b[0m`)
     await db.connect();
