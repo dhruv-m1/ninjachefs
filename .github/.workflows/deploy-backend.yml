@@ -1,0 +1,24 @@
+name: Deploy Backend
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+
+  deploy:
+      name: Deploy
+      runs-on: ubuntu-latest
+
+      steps: 
+        - name: Checkout
+          uses: actions/checkout@v1
+
+        - name: Build & Deploy using DO App Platform
+          working-directory: Backend
+          uses: digitalocean/app_action@main
+          with:
+            app_name: ninjachefs_backend
+            token: ${{ secrets.DO_ACCESS_TOKEN }}
