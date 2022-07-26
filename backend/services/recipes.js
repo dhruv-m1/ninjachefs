@@ -47,9 +47,9 @@ recipes.addThumbnail = async(obj) => {
             await db.Img.create(newImg);
 
             await db.Recipe.updateOne({ _id: obj.idx }, 
-                { "img":`http://ninjachefs-api.dhruv.tech/api/v1/recipes/thumbnails/${obj.idx}`});
+                { "img":`https://ninjachefs-api.dhruv.tech/api/v1/recipes/thumbnails/${obj.idx}`});
 
-            resolve({code: 201, url: `http://ninjachefs-api.dhruv.tech/api/v1/recipes/thumbnails/${obj.idx}`});
+            resolve({code: 201, url: `https://ninjachefs-api.dhruv.tech/api/v1/recipes/thumbnails/${obj.idx}`});
             
         } catch (error) {
             
