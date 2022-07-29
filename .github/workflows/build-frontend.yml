@@ -1,0 +1,29 @@
+name: Build Frontend
+
+on:
+  pull_request:
+    branches: '**'
+
+defaults:
+  run:
+    working-directory: frontend
+
+jobs:
+
+  build:
+      name: Build
+      runs-on: ubuntu-latest
+
+      steps: 
+        - name: Checkout
+          uses: actions/checkout@v1
+
+        - name: Use Node.js
+          uses: actions/setup-node@v2
+          with:
+            node-version: 16.x
+
+        - name: npm ci & build
+          run: |
+            npm ci
+            npm run build
