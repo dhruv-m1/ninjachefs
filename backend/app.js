@@ -19,7 +19,7 @@ app.use(function (req, res, next) {
     next();
 });
 
-app.get('/api/v1/recipes', async(req, res) => {
+app.get('/v1/recipes', async(req, res) => {
 
     const retrivedData = await ds.get();
     res.statusCode = retrivedData.code;
@@ -28,7 +28,7 @@ app.get('/api/v1/recipes', async(req, res) => {
 
 })
 
-app.post('/api/v1/recipes', async(req, res) => {
+app.post('/v1/recipes', async(req, res) => {
     
     const response = await ds.add(req.body);
     res.statusCode = response.code;
@@ -36,7 +36,7 @@ app.post('/api/v1/recipes', async(req, res) => {
 
 })
 
-app.post('/api/v1/recipes/thumbnails/', async(req, res) => {
+app.post('/v1/recipes/thumbnails/', async(req, res) => {
     
     const response = await ds.addThumbnail(req.body);
     res.statusCode = response.code;
@@ -44,7 +44,7 @@ app.post('/api/v1/recipes/thumbnails/', async(req, res) => {
 
 })
 
-app.get('/api/v1/recipes/thumbnails/:idx', async(req, res) => {
+app.get('/v1/recipes/thumbnails/:idx', async(req, res) => {
     
     const response = await ds.getThumbnail(req.params.idx);
 
@@ -57,7 +57,7 @@ app.get('/api/v1/recipes/thumbnails/:idx', async(req, res) => {
 
 })
 
-app.delete('/api/v1/recipes/:idx', async(req, res) => {
+app.delete('/v1/recipes/:idx', async(req, res) => {
     
     const response = await ds.delete(req.params.idx);
     res.statusCode = response.code;
