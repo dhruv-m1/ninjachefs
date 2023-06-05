@@ -143,9 +143,7 @@ nav a {
     color: #0F7556;
     height: 17px;
     position: relative;
-    top: 50px;
     width: 100%;
-    left: 25%;
 }
 
 #featured-section .controls-box a:hover {
@@ -500,4 +498,9 @@ article {
     margin-top: -60px;
     margin-right: 75px;
     z-index: 100;
+}
+
+.userButton {
+    float: right;
+    margin-top: 30px;
 }

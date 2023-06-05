@@ -16,7 +16,7 @@ const initialState = {
 
 }
 
-const BACKEND_URI = 'https://ninjachefs-api.dhruv.tech';
+const BACKEND_URI = 'http://localhost:8080';
 
 export const getRecipes = createAsyncThunk(
   'recipeBook/getRecipes',
