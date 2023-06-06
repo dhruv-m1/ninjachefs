@@ -4,11 +4,16 @@ import {
     SignedOut,
     UserButton,
     useUser,
-    RedirectToSignIn,
+    SignIn,
   } from "@clerk/clerk-react";
   
 export default function ControlBox() {
 
+    const SignInDialog = document.querySelector('#SignInBox');
+
+    const openSignInDialog = () => {
+        SignInDialog.showModal();
+    }
 
     const openModal = () => {
         window.scrollTo({ top: 0, left: 0});
@@ -16,17 +21,19 @@ export default function ControlBox() {
         document.querySelector('body').style.overflowY = 'hidden';
     }
 
+
+
     return (
         <div className="controls-box">
             <h1>Sharing is caring.</h1>
             <SignedIn>
                 <button type="button" onClick={openModal}>Add Recipe</button>
             </SignedIn>
+            
             <SignedOut>
-                <a href="https://apt-dassie-76.accounts.dev/sign-in?redirect_url=http%3A%2F%2Flocalhost%3A3000%2F">
-                    <button type="button">Sign In</button>
-                </a>
+                <button type="button" onClick={openSignInDialog}>Sign In</button>
             </SignedOut>
+
         </div>
     );
   }

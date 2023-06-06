@@ -122,8 +122,9 @@ export const recipeSlice = createSlice({
       alert('Error: Unable to delete recipe.');
     },
 
-    [getRecipes.rejected]: () => {
+    [getRecipes.rejected]: (payload) => {
       alert('Error: Unable to fetch recipes.');
+      console.log(payload);
     }
   }
 })

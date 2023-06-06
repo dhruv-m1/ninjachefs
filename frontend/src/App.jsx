@@ -10,6 +10,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import RecipeModal from './components/recipeModal';
 import { getRecipes } from './redux/recipeBook';
 import { useEffect } from 'react';
+import SignInBox from './components/signInBox';
 
 function App() {
 
@@ -65,6 +66,7 @@ function App() {
 
         <FormModal/>
         <RecipeModal/>
+        <SignInBox/>
     </div>
   );
 }

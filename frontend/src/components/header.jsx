@@ -14,7 +14,7 @@ export default function Header() {
 
             <img  id="logo" src={logo} alt="Ninja Chefs Logo"/>
 
-            <section class="userButton">
+            <section className="userButton">
                 <UserButton></UserButton>
             </section>
             
