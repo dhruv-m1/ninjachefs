@@ -15,7 +15,7 @@ const initialState = {
 
 }
 
-const BACKEND_URI = 'http://localhost:8080';
+const BACKEND_URI = 'https://localhost:8080';
 
 export const getRecipes = createAsyncThunk(
   'recipeBook/getRecipes',
