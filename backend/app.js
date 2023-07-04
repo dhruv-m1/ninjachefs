@@ -34,6 +34,12 @@ const unauthenticated = (res) => {
 
 // Endpoints
 
+app.get('/status',async(req, res) => {
+
+    res.json({status: 'UP'});
+
+})
+
 app.get('/api/v1/recipes',async(req, res) => {
 
     const retrivedData = await ds.get();
