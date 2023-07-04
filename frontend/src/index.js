@@ -6,12 +6,7 @@ import { Provider } from 'react-redux';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import {
-  ClerkProvider,
-  SignedIn,
-  SignedOut,
-  UserButton,
-  useUser,
-  RedirectToSignIn,
+  ClerkProvider
 } from "@clerk/clerk-react";
 
 if (!process.env.REACT_APP_CLERK_PUBLISHABLE_KEY) {

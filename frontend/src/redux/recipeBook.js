@@ -1,5 +1,4 @@
 // Cookbook Store
-
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 
 const initialState = {
@@ -31,6 +30,9 @@ export const postRecipe = createAsyncThunk(
   'recipeBook/postRecipe',
   async (data) => {
 
+    let token = data.token;
+    delete data.token;
+
     let imgObj = null;
     if (data.img != null) {
 
@@ -50,11 +52,12 @@ export const postRecipe = createAsyncThunk(
 
       data.img = null;
     }
-
+    //console.log(await getToken());
     let res = await fetch(`${BACKEND_URI}/api/v1/recipes`, {
       "method": "POST",
       "headers": {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
       },
       "body": JSON.stringify(data)
     });
@@ -69,7 +72,8 @@ export const postRecipe = createAsyncThunk(
       let img = await fetch(`${BACKEND_URI}/api/v1/recipes/thumbnails`, {
       "method": "POST",
       "headers": {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
       },
       "body": JSON.stringify(imgObj)
     })
@@ -84,11 +88,12 @@ export const postRecipe = createAsyncThunk(
 
 export const deleteRecipe = createAsyncThunk(
   'recipeBook/deleteRecipe',
-  async (idx) => {
-    await fetch(`${BACKEND_URI}/api/v1/recipes/${idx}`, { method: 'DELETE' }).then(
-    (data) => data.json()
+  async (data) => {
+    let token = data.token;
+    await fetch(`${BACKEND_URI}/api/v1/recipes/${data.idx}`, { method: 'DELETE', "headers": { "Authorization": `Bearer ${token}`} }).then(
+    (res) => res.json()
   )
-  return idx;
+  return data.idx;
 })
 
 export const recipeSlice = createSlice({

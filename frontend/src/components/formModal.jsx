@@ -1,10 +1,11 @@
 import { useDispatch } from "react-redux";
 import { postRecipe } from '../redux/recipeBook';
-
+import { useSession } from "@clerk/clerk-react";
 
 export default function FormModal() {
 
     const dispatch = useDispatch();
+    const { session } = useSession();
 
     const closeModal = () => {
         document.querySelector('.add-item-modal-wrapper').style.display = 'none';
@@ -15,8 +16,9 @@ export default function FormModal() {
         document.querySelector('form').reset();
     }
 
-    const addItem = () => {
+    const addItem = async() => {
 
+        let token = await session.getToken();
         let formdata = new FormData(document.querySelector("#add-item-form"));
 
         let values = [];
@@ -61,8 +63,8 @@ export default function FormModal() {
                     type: values[3],
                     preplist: values[4].split('\n'),
                     steps: values[5].split('\n'),
-                    img: values[6]
-                
+                    img: values[6],
+                    token: token
                 }
                 
                 dispatch(postRecipe(item));

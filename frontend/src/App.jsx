@@ -11,6 +11,7 @@ import RecipeModal from './components/recipeModal';
 import { getRecipes } from './redux/recipeBook';
 import { useEffect } from 'react';
 import SignInBox from './components/signInBox';
+import { useSession } from '@clerk/clerk-react';
 
 function App() {
 
@@ -20,6 +21,7 @@ function App() {
   useEffect(() => {
     dispatch(getRecipes())
   }, [dispatch])
+
 
   let banner_text = "There are no recipes to display or feature.";
   let randomIdx = 0;

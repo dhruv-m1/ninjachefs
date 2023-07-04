@@ -1,20 +1,24 @@
 import { useSelector } from 'react-redux';
 import { useDispatch } from "react-redux";
 import { deleteRecipe } from '../redux/recipeBook';
+import { useSession } from '@clerk/clerk-react';
 
 export default function RecipeModal() {
 
     const { display } = useSelector(state => state.recipeBook);
 
     const dispatch = useDispatch();
+    const { session } = useSession();
 
     const closeModal = () => {
         document.querySelector('.recipe-modal-wrapper').style.display = 'none';
         document.querySelector('body').style.overflowY = 'unset';
     }
 
-    const deleteAction = () => {
-        dispatch(deleteRecipe(display._id));
+    const deleteAction = async() => {
+        let token = await session.getToken();
+
+        dispatch(deleteRecipe({idx: display._id, token: token}));
         alert('Deleted');
         closeModal();
     }

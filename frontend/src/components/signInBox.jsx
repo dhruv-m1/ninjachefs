@@ -4,7 +4,7 @@ import {
     SignedOut,
     UserButton,
     useUser,
-    SignIn,
+    SignIn
   } from "@clerk/clerk-react";
 
 export default function SignInBox() {
