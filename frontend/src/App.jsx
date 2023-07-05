@@ -27,7 +27,7 @@ function App() {
   let randomIdx = 0;
   let selection = null;
   let img = "";
-  console.log(recipes)
+
   if (recipes.length > 0) {
     randomIdx = Math.abs(Math.round(Math.random() * (recipes.length - 1)));
     selection = recipes[randomIdx];

@@ -1,5 +1,5 @@
 // Cookbook Store
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 const initialState = {
 
@@ -15,7 +15,7 @@ const initialState = {
 
 }
 
-const BACKEND_URI = 'https://localhost:8080';
+const BACKEND_URI = "https://walrus-app-kn6zv.ondigitalocean.app";
 
 export const getRecipes = createAsyncThunk(
   'recipeBook/getRecipes',
