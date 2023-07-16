@@ -1,14 +1,10 @@
-import { useSelector } from 'react-redux';
-import { useDispatch } from "react-redux";
-import { deleteRecipe } from '../redux/recipeBook';
-import { useSession } from '@clerk/clerk-react';
+import { useRecipes } from '../providers/recipeContext';
 
 export default function RecipeModal() {
 
-    const { display } = useSelector(state => state.recipeBook);
+    const recipes = useRecipes();
 
-    const dispatch = useDispatch();
-    const { session } = useSession();
+    let display = recipes.display;
 
     const closeModal = () => {
         document.querySelector('.recipe-modal-wrapper').style.display = 'none';
@@ -16,24 +12,11 @@ export default function RecipeModal() {
     }
 
     const deleteAction = async() => {
-        let token = await session.getToken();
 
-        dispatch(deleteRecipe({idx: display._id, token: token}));
+        recipes.delete({idx: display._id})
         alert('Deleted');
         closeModal();
     }
-
-    const ingredients = display.preplist.map((ingredient, i) => {
-
-        return <li key={i}>{ingredient}</li>
-    
-    });
-
-    const proceedure = display.steps.map((step, i) => {
-
-        return <li key={"s"+i}>{step}</li>
-    
-    });
 
     return (
 
@@ -47,21 +30,40 @@ export default function RecipeModal() {
 
             <article>
             
-                <h2>{display.name}</h2>
+                {
+                    display['_id'] ? 
+                    (
+                        <>
+                        <h2>{display.name}</h2>
 
-                <p>{display.chef}</p>
+                        <p>{display.chef}</p>
 
-                <p>Cooking Time: {display.preptime} mins</p>
+                        <p>Cooking Time: {display.preptime} mins</p>
 
-                <p>The recipe is suitable for people with {display.type} dietary requirements.</p>
+                        <p>The recipe is suitable for people with {display.type} dietary requirements.</p>
 
-                <h3>Ingredients</h3>
+                        <h3>Ingredients</h3>
 
-                <ul>{ingredients}</ul>
+                        <ul>
+                            {display.preplist.map((ingredient, i) => (
+                                <li key={`${display._id}-preplist-${i}`}>
+                                    {ingredient}
+                                </li>
+                            ))}
+                        </ul>
 
-                <h3>Steps</h3>
+                        <h3>Steps</h3>
 
-                <ol>{proceedure}</ol>
+                        <ol>
+                            {display.steps.map((step, i) => (
+                                <li key={`${display._id}-step-${i}`}>
+                                    {step}
+                                </li>
+                            ))}
+                        </ol>
+                        </>
+                    ) : ""
+                }
             </article>
         </div>
     );

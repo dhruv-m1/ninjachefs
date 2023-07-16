@@ -1,12 +1,10 @@
-
-import { useDispatch } from "react-redux";
-import { show } from "../redux/recipeBook";
+import { useRecipes } from "../providers/recipeContext";
 
 
 export default function Card(props) {
-    const dispatch = useDispatch();
-    const openModal = () => {
-        dispatch(show(props.obj));
+    const recipes = useRecipes()
+    const openModal = async() => {
+        await recipes.getSpecific(props.obj._id);
         window.scrollTo({ top: 0, left: 0});
         document.querySelector('.recipe-modal-wrapper').style.display = 'unset';
         document.querySelector('body').style.overflowY = 'hidden';

@@ -1,12 +1,13 @@
-
-import { useSelector } from 'react-redux';
 import Card from './card';
+
+import { useRecipes } from '../providers/recipeContext';
 
 export default function Library() {
 
-    const { recipes } = useSelector(state => state.recipeBook);
+    const recipes = useRecipes();
+    const recentRecipes = recipes.recent;
 
-    const listItems = recipes.map((recipe, i) => {
+    const listItems = recentRecipes.map((recipe, i) => {
 
         let img = "";
         if (recipe.img != null) {

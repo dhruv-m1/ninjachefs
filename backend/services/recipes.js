@@ -82,10 +82,14 @@ recipes.getThumbnail = async(idx) => {
 
 }
 
-recipes.get = async() => {
-
+recipes.get = async(args = {}) => {
+    
     try {
-        const recipeData = await db.Recipe.find()
+
+        let recipeData = []
+        if (args['idx']) recipeData = await db.Recipe.findOne({ _id: args['idx'] });
+        else recipeData = await db.Recipe.find().select('_id name preptime chef type img');
+
         return {code: 200, data: recipeData};
 
     } catch (error) {
