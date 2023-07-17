@@ -1,0 +1,53 @@
+.box {
+    background: #D6F4EF;
+    border-radius: 10px;
+    height: 250px;
+    grid-area: control-box;
+    padding: 20px 30px;
+    display: inline;
+}
+
+.box h1 {
+    color: #00654B;
+}
+
+.box button {
+    position: relative;
+    width: 250px;
+    height: 50px;
+    top: 50px;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    background: #0F7556;
+    border-radius: 10px;
+    border-style: none;
+
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 17px;
+    text-align: center;
+
+    color: #FFFFFF;
+
+}
+
+.box button:hover {
+    opacity: 0.9;
+    cursor: pointer;
+}
+
+.box a {
+    text-align: center;
+    font-family: 'Poppins';
+    color: #0F7556;
+    height: 17px;
+    position: relative;
+    width: 100%;
+}
+
+.box a:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}

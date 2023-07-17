@@ -1,6 +1,8 @@
-import { useRecipes } from "../providers/recipeContext";
+import { useRecipes } from "../../providers/recipeContext";
 
-export default function FormModal() {
+import styles from "./formModal.module.css";
+
+export default function FormModal({form, setForm}) {
 
     const recipes = useRecipes();
 
@@ -73,9 +75,9 @@ export default function FormModal() {
     }
 
     return (
-        <div className="add-item-modal-wrapper">
+        <div className={`${styles.wrapper} add-item-modal-wrapper`}>
 
-            <section id="item-modal">
+            <section className={styles.addForm}>
                 <form id="add-item-form" name="add-item-form">
                     <h1>Add Recipe (all text fields mandatory)</h1>
                     <div><input type="text" id="item-title" name="itemTitle" placeholder="Recipe Title" required/></div>

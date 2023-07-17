@@ -1,14 +1,34 @@
 import './App.css';
+import Index from './pages/Index';
 import { RecipeProvider } from './providers/recipeContext';
-import Index from './pages';
+
+import ViewRecipe from './pages/recipe/view/view';
+import MainLayout from './layouts/MainLayout';
+
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { ClerkProvider } from "@clerk/clerk-react";
+
+if (!process.env.REACT_APP_CLERK_PUBLISHABLE_KEY) {
+  throw new Error("Missing Publishable Key")
+}
+const clerkPubKey = process.env.REACT_APP_CLERK_PUBLISHABLE_KEY;
 
 function App() {
 
   return (
     <div className="App">
-      <RecipeProvider>
-        <Index></Index>
-      </RecipeProvider>
+      <ClerkProvider publishableKey={clerkPubKey}>
+        <RecipeProvider>
+          <BrowserRouter>
+            <MainLayout>
+              <Routes>
+                <Route index element={<Index/>} />
+                <Route path='/recipe/view/:idx' element={<ViewRecipe/>} />
+              </Routes>
+            </MainLayout>
+          </BrowserRouter>
+        </RecipeProvider>
+      </ClerkProvider>
     </div>
   );
 }

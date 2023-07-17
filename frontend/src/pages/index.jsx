@@ -1,18 +1,20 @@
-import Banner from '../components/banner';
-import Header from '../components/header';
-import ControlBox from '../components/controlBox';
+import Banner from '../components/banner/banner';
+import ControlBox from '../components/controlBox/controlBox';
+import Library from '../components/library/library';
 
-import Library from '../components/library';
-import FormModal from '../components/formModal';
-import Card from '../components/card';
-import RecipeModal from '../components/recipeModal';
+import FormModal from '../components/formModal/formModal';
+import Card from '../components/card/card';
 import { useEffect, useState } from 'react';
-import SignInBox from '../components/signInBox';
+
+import SignInBox from '../components/signInBox/signInBox';
 import { useRecipes } from '../providers/recipeContext';
+
+import './Index.css'
 
 function Index() {
   const recipe = useRecipes();
-  const [recentRecipes, setRecentRecipies] = useState([])
+  const [recentRecipes, setRecentRecipies] = useState([]);
+  const [dialog, setDialog] = useState(false);
 
   useEffect(() => {
     const loadRecipes = async() => {
@@ -20,6 +22,10 @@ function Index() {
     }
     loadRecipes()
   },[])
+
+  useEffect(() => {
+    console.log(dialog);
+  }, [dialog])
 
 
   let banner_text = "There are no recipes to display or feature.";
@@ -37,20 +43,18 @@ function Index() {
   }
 
   return (
-      <div className="App">
-          <div className="grid-container">
-
-              <Header/>
-
+      <div>
+          <div className="grid-container padded">
+            
               <section id="featured-section">
 
                   <Banner text={banner_text}/>
 
                   <div className="card-wrapper">
-                      { (recentRecipes.length > 0) && <Card name={selection.name} type={selection.type} chef={selection.chef} img={img} obj={selection}/>}
+                      { (recentRecipes.length > 0) && <Card width="100%" height="100%" name={selection.name} type={selection.type} chef={selection.chef} img={img} obj={selection}/>}
                   </div>
                   
-                  <ControlBox/>
+                  <ControlBox setDialog={setDialog}/>
                   
 
               </section>
@@ -62,12 +66,10 @@ function Index() {
                   <Library/>
 
               </section>
-
-          </div>
+        </div>
 
           <FormModal/>
-          <RecipeModal/>
-          <SignInBox/>
+          <SignInBox dialog={dialog} setDialog={setDialog}/>
       </div>
   );
 }

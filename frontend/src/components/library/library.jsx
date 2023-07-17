@@ -1,6 +1,8 @@
-import Card from './card';
+import Card from '../card/card';
 
-import { useRecipes } from '../providers/recipeContext';
+import { useRecipes } from '../../providers/recipeContext';
+
+import styles from './library.module.css'
 
 export default function Library() {
 
@@ -16,14 +18,14 @@ export default function Library() {
             
         }
 
-        return <li key={i}><Card name={recipe.name} chef={recipe.chef} type={recipe.type} img={img} obj={recipe}/></li>
+        return <li key={i}><Card width="300px" height="275px" name={recipe.name} chef={recipe.chef} type={recipe.type} img={img} obj={recipe}/></li>
     
     });
 
     return (
-        <div id="card-library-wrapper">
+        <div className={styles.library}>
 
-            <ul className="card-list">
+            <ul className={styles.cardList}>
                {listItems}
             </ul>
 

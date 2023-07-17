@@ -1,0 +1,63 @@
+#featured-section {
+
+    grid-column: 1/-1;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-areas: "text-banner text-banner card-wrapper control-box";
+    gap: 12px;
+
+}
+
+#featured-section h1{
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 28px;
+    margin: 0;
+}
+
+#all-recipes h1 {
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 28px;
+    line-height: 48px;
+
+    color: #171A29;
+}
+
+#all-recipes {
+    margin-bottom: 150px;
+}
+
+#featured-dynamic-text {
+    cursor: pointer;
+}
+
+@media only screen and (max-width: 1200px) {
+    #featured-section {
+        grid-template-columns: repeat(1, 1fr);
+        grid-template-areas: 
+            "text-banner"
+            "card-wrapper"
+            "control-box";
+    
+    }
+
+    #featured-section .card-wrapper {
+        display: none;
+    }
+
+    #featured-section .controls-box button {
+        width: 90%;
+        top: 75px;
+    }
+
+    #featured-section .controls-box a {
+        width: 90%;
+        display: block;
+        top: 100px;
+        left: 5%;
+    }
+
+  }

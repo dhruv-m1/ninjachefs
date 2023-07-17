@@ -1,7 +1,8 @@
+import styles from './banner.module.css'
 
 export default function Banner(props) {
     return (
-        <div className="text-banner">
+        <div className={`${styles.banner} text-banner`}>
             <h1>Featured</h1>
             <h2 id="featured-dynamic-text">{props.text}</h2>
         </div>

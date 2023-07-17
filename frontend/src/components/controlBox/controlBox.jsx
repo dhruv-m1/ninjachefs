@@ -7,12 +7,11 @@ import {
     SignIn,
   } from "@clerk/clerk-react";
   
-export default function ControlBox() {
-
-    const SignInDialog = document.querySelector('#SignInBox');
+  import styles from './controlBox.module.css';
+export default function ControlBox({ setDialog }) {
 
     const openSignInDialog = () => {
-        SignInDialog.showModal();
+        setDialog(true);
     }
 
     const openModal = () => {
@@ -24,7 +23,7 @@ export default function ControlBox() {
 
 
     return (
-        <div className="controls-box">
+        <div className={styles.box}>
             <h1>Sharing is caring.</h1>
             <SignedIn>
                 <button type="button" onClick={openModal}>Add Recipe</button>
