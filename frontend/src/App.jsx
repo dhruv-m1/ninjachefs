@@ -7,6 +7,7 @@ import MainLayout from './layouts/MainLayout';
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ClerkProvider } from "@clerk/clerk-react";
+import AddRecipe from './pages/recipe/add/add';
 
 if (!process.env.REACT_APP_CLERK_PUBLISHABLE_KEY) {
   throw new Error("Missing Publishable Key")
@@ -24,6 +25,7 @@ function App() {
               <Routes>
                 <Route index element={<Index/>} />
                 <Route path='/recipe/view/:idx' element={<ViewRecipe/>} />
+                <Route path='/recipe/add' element={<AddRecipe/>} />
               </Routes>
             </MainLayout>
           </BrowserRouter>
