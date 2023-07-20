@@ -1,6 +1,6 @@
 # NinjaChefs
 
-Web application to facilitate the sharing of recipies within a community.
+Web application for facilitating the sharing of recipies within a community.
 
 Demo: https://ninjachefs.dhruv.tech/
 
