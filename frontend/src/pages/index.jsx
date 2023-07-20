@@ -23,10 +23,6 @@ function Index() {
     loadRecipes()
   },[])
 
-  useEffect(() => {
-    console.log(dialog);
-  }, [dialog])
-
 
   let banner_text = "There are no recipes to display or feature.";
   let randomIdx = 0;
