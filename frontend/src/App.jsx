@@ -1,13 +1,13 @@
 import './App.css';
-import Index from './pages/Index';
+import Index from './pages/index.jsx';
 import { RecipeProvider } from './providers/recipeContext';
 
-import ViewRecipe from './pages/recipe/view/view';
-import MainLayout from './layouts/MainLayout';
+import ViewRecipe from './pages/recipe/view/view.jsx';
+import MainLayout from './layouts/MainLayout.jsx';
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ClerkProvider, SignedIn } from "@clerk/clerk-react";
-import AddRecipe from './pages/recipe/add/add';
+import AddRecipe from './pages/recipe/add/add.jsx';
 
 if (!process.env.REACT_APP_CLERK_PUBLISHABLE_KEY) {
   throw new Error("Missing Publishable Key")
