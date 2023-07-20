@@ -8,7 +8,7 @@ import { useSession } from "@clerk/clerk-react";
 const RecipeContext = React.createContext();
 
 const BACKEND_URI = process.env.REACT_APP_BACKEND_URI;
-
+console.log(process.env.REACT_APP_BACKEND_URI)
 export const useRecipes = () => {
 
     return useContext(RecipeContext);
@@ -21,7 +21,7 @@ export const RecipeProvider = ({children}) => {
     const [display, setDisplay] = useState({})
 
     const { session } = useSession();
-
+    console.log(process.env.REACT_APP_BACKEND_URI)
     recipes.recent = recentRecipes;
 
     recipes.display = display;
