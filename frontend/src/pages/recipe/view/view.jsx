@@ -2,12 +2,16 @@ import { useEffect, useState } from 'react';
 import { useRecipes } from '../../../providers/recipeContext';
 import { useParams } from "react-router-dom";
 
-export default function ViewRecipe(props) {
+import { useUser } from '@clerk/clerk-react';
+
+export default function ViewRecipe() {
 
     const recipes = useRecipes();
+    const userData = useUser();
     let { idx } = useParams(); 
 
     let [currentRecipe, setCurrentRecipe] = useState({});
+    let [user, setUser] = useState({id: "unset"});
 
     const deleteAction = async() => {
 
@@ -25,13 +29,24 @@ export default function ViewRecipe(props) {
 
     }, [])
 
+    useEffect(() => {
+        
+        if (userData.user) setUser(userData.user);
+
+    }, [userData])
+
     return (
 
         <div className="grid-container">
             <section id="page-title-banner">
 
                 <h1>Recipe</h1>
-                <input className="red-btn btn btn-del" type="button" value="Delete" onClick={deleteAction}/>
+                {
+                    (user.id === currentRecipe.owner) ?
+                    (<input className="red-btn btn btn-del" type="button" value="Delete" onClick={deleteAction}/>)
+                    :
+                    ("")
+                }
             </section>
 
             <article className='padded'>
