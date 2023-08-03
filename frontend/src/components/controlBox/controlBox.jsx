@@ -24,7 +24,7 @@ export default function ControlBox({ setDialog }) {
             </SignedIn>
             
             <SignedOut>
-                <button type="button" onClick={openSignInDialog}>Sign In</button>
+                <button className="w-[250px] h-[50px] mt-[20px] bg-[#0F7556] rounded-[10px] font-poppins font-bold text-[17px] text-center text-white hover:opacity-90 cursor-pointer" type="button" onClick={openSignInDialog}>Sign In</button>
             </SignedOut>
 
         </div>
