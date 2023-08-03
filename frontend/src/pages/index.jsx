@@ -1,3 +1,4 @@
+
 import Banner from '../components/banner/banner';
 import ControlBox from '../components/controlBox/controlBox';
 import Library from '../components/library/library';
@@ -9,7 +10,7 @@ import { useEffect, useState } from 'react';
 import SignInBox from '../components/signInBox/signInBox';
 import { useRecipes } from '../providers/recipeContext';
 
-import './Index.css'
+
 
 function Index() {
   const recipe = useRecipes();
@@ -24,9 +25,9 @@ function Index() {
   },[])
 
 
-  let banner_text = "There are no recipes to display or feature.";
+  let banner_text = "";
   let randomIdx = 0;
-  let selection = null;
+  let selection = {};
   let img = "";
 
   if (recentRecipes.length > 0) {
@@ -40,14 +41,15 @@ function Index() {
 
   return (
       <div>
-          <div className="grid-container padded">
+          <div className="container mx-auto px-6 flex flex-col gap-y-5">
             
-              <section id="featured-section">
+              <section className="flex justify-between gap-4 flex-col md:flex-row">
 
                   <Banner text={banner_text}/>
 
-                  <div className="card-wrapper">
-                      { (recentRecipes.length > 0) && <Card width="100%" height="100%" name={selection.name} type={selection.type} chef={selection.chef} img={img} obj={selection}/>}
+                  <div className="hidden lg:flex">
+                    { (recentRecipes.length === 0) && <Card width="300px" height="275px"/>}
+                    { (recentRecipes.length > 0) && <Card width="300px" height="275px" name={selection.name} type={selection.type} chef={selection.chef} img={img} obj={selection}/>}
                   </div>
                   
                   <ControlBox setDialog={setDialog}/>
@@ -55,9 +57,9 @@ function Index() {
 
               </section>
 
-              <section id="all-recipes">
+              <section id="all-recipes" className='flex flex-col gap-y-5'>
 
-                  <h1>There's more to explore</h1>
+                  <h1 className='font-bold text-2xl text-ninja-blue font-poppins'>There's more to explore</h1>
 
                   <Library/>
 
