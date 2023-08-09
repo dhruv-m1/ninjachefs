@@ -4,7 +4,7 @@
 
 const db = require('../config/db.config');
 const ai = require('../utils/ai');
-
+const fetch = require('node-fetch');
 const recipes = {};
 
 recipes.add = async(obj) => {
@@ -47,34 +47,31 @@ recipes.add = async(obj) => {
 
 }
 
-recipes.addThumbnail = async(obj) => {
+recipes.addImage = async(obj) => {
 
     return new Promise(async(resolve) => {
         try {
 
-            let newImg = {
-                recipeId: obj.idx,
-                thumbnail: Buffer.from(obj.img, "base64"),
-                format: obj.format
+            let newPendingSubmission = {
+                img_url: `https://imagedelivery.net/CwcWai9Vz5sYV9GCN-o2Vg/${obj.destination}`,
+                is_published: false
             }
     
-            const imageUpload = new FormData();
+            const submission = await db.PendingSubmission.create(newPendingSubmission);
 
-            
-
-            resolve({code: 201, url: `https://ninjachefs-api.dhruv.tech/api/v1/recipes/thumbnails/${obj.idx}`});
+            resolve({code: 201, submission_id: submission._id});
             
         } catch (error) {
             
             console.log(error);
-            resolve({ code: 500, msg: "Could not add image"});
+            resolve({ code: 500, msg: "Could not create submission."});
     
         }
     })
 
 }
 
-recipes.getThumbnail = async(idx) => {
+recipes.generateImage = async(idx) => {
 
     return new Promise(async(resolve) => {
         try {
@@ -113,26 +110,34 @@ recipes.get = async(args = {}) => {
     
 }
 
-recipes.delete = async(idx) => {
+recipes.delete = async(idx, image_id) => {
 
     try {
 
         await db.Recipe.deleteOne({ _id: idx });
 
-        let thumbnailStatus = '';
         try {
-            await db.Img.deleteOne({ recipeId: idx });
-            thumbnailStatus = 'Thumbnail was also deleted.'
-        } catch {
-            thumbnailStatus = 'Thumbnail was not found for this item.'
+            const url = `https://api.cloudflare.com/client/v4/accounts/${process.env.CLOUDFLARE_ID}/images/v1/${image_id}`;
+
+            const options = {
+            method: 'DELETE',
+            headers: {'Content-Type': 'application/json', 'X-Auth-Email': ''}
+            };
+
+            await fetch(url, options).then(res => res.json())
+
+        } catch (e) {
+            console.time("RECIPE IMAGE DELETE ERROR")
+            console.log(`[> RECIPE IMAGE DELETE ERROR DETAILS] ${e}`)
         }
         return {code: 200, msg: `Deleted item with _id ${idx}. ${thumbnailStatus}`};
 
     } catch (error) {
 
-        console.log(error);
+        console.time("RECIPE DELETE ERROR")
+        console.log(`[> RECIPE DELETE ERROR DETAILS] ${e}`)
         
-        return { code: 404, msg: "Could not delete item, please check the _id"};
+        return { code: 404, msg: "Could not delete item, please try again later."};
 
     }
 
