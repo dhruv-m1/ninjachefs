@@ -40,7 +40,7 @@ const recipeSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    cookingTime: {
+    cooking_time: {
         type: Number,
         required: true
     },
@@ -48,7 +48,7 @@ const recipeSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    imgURL: {
+    img_url: {
         type: String,
         required: false
     },
@@ -96,23 +96,23 @@ const recipeSchema = new mongoose.Schema({
 
 db.Recipe = mongoose.model("Recipe", recipeSchema);
 
-const imgSchema = new mongoose.Schema({
+const pendingSubmissionSchema = new mongoose.Schema({
     recipeId: {
         type: String,
-        required: true,
+        required: false,
         unique: true
     },
-    thumbnail: {
-        type: Buffer,
+    img_url: {
+        type: String,
         required: true
     },
-    format: {
-        type: String,
+    is_published: {
+        type: Boolean,
         required: true
     }
 });
 
-db.Img = mongoose.model("Img", imgSchema);
+db.PendingSubmission = mongoose.model("PendingSubmission", pendingSubmissionSchema);
 
 // Export
 

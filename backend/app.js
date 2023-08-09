@@ -36,9 +36,9 @@ const unauthenticated = (res) => {
     res.json({code: 401, msg: 'session expired or invalid'});
 }
 
-const uploader = multer({
+const upload = multer({
     storage: new imageCDN.CloudflareStorage(process.env.CLOUDFLARE_ID, process.env.CLOUDFLARE_TOKEN)
-});
+}).single("image");
 
 // Endpoints
 
@@ -114,7 +114,6 @@ app.delete('/api/v1/recipes/:idx', clerk.ClerkExpressWithAuth({}), async(req, re
 app.get('/api/v1/search/',async(req, res) => {
 
     const filters = (req.query.diet) ? {diet : req.query.diet}: {};
-    console.log(filters);
     const retrivedData = await search.query(req.query.q, filters, req.query.skip, req.query.limit);
     res.statusCode = retrivedData.code;
 
@@ -122,10 +121,23 @@ app.get('/api/v1/search/',async(req, res) => {
 
 })
 
-app.post('/api/v1/recipes/thumbnails/upload', uploader.single("img"), async(req, res) => {
+app.post('/api/v1/recipes/images/upload', async(req, res) => {
 
-    console.log(req.file);
-    res.json({status: 200});
+    upload(req, res, async(err) => {
+        if (err instanceof multer.MulterError) {
+            res.statusCode = 406;
+            res.json({status: 406, msg: "UNEXPECTED FILE: Please ensure the file is an image file & less than 10MB.", code: err.code});
+            return;
+        } else if (err) {
+            res.statusCode = 500;
+            res.json({status: 500, msg: "Internal Server Error, Please try again later.", code: err.code});
+            return;
+        }
+
+        const response = await recipes.addImage(req.file);
+        res.statusCode = response.code;
+        res.json(response);
+    })
 
 })
 
