@@ -9,7 +9,6 @@ const search = {};
 search.query = async(keywords, filters = {}, skip, limit) => {
 
     try {
-        // Add Safegaurds
 
         let querySpec = {
             $search: { index: "searchRecipes", text: { query: keywords, path: ['name', 'author', 'diet'], fuzzy: {} } },
@@ -18,7 +17,7 @@ search.query = async(keywords, filters = {}, skip, limit) => {
         if (filters.diet) querySpec.diet = filters.diet;
 
         let recipeData = []
-        recipeData = await db.Recipe.find(querySpec, null, { skip: skip, limit: limit });
+        recipeData = await db.Recipe.find(querySpec, ['name', 'img_url', 'author', 'diet'], { skip: skip, limit: limit });
 
         return {code: 200, data: recipeData};
 

@@ -98,7 +98,7 @@ recipes.get = async(args = {}) => {
 
         let recipeData = []
         if (args['idx']) recipeData = await db.Recipe.findOne({ _id: args['idx'] });
-        else recipeData = await db.Recipe.find().select('_id name preptime chef type img');
+        else recipeData = await db.Recipe.find().select('_id name author diet img_url').sort({_id: -1});
 
         return {code: 200, data: recipeData};
 
