@@ -36,28 +36,60 @@ const recipeSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    chef: {
+    author: {
         type: String,
         required: true
     },
-    preptime: {
+    cookingTime: {
         type: Number,
         required: true
     },
-    type: {
+    diet: {
         type: String,
         required: true
     },
-    img: {
+    imgURL: {
         type: String,
         required: false
     },
-    preplist: {
+    veggies: {
+        type: Array,
+        required: false
+    },
+    meat: {
+        type: Array,
+        required: false
+    },
+    dairy: {
+        type: Array,
+        required: false
+    },
+    other: {
         type: Array,
         required: false
     },
     steps: {
         type: Array,
+        required: true
+    },
+    allergies: {
+        type: Array,
+        required: true
+    },
+    intro: {
+        type: String,
+        required: true
+    },
+    desc: {
+        type: String,
+        required: true
+    },
+    health_score: {
+        type: Number,
+        required: true
+    },
+    health_reason: {
+        type: String,
         required: true
     }
 });

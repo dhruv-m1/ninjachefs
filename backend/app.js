@@ -9,9 +9,13 @@ const port = process.env.PORT || 8080;
 const host = process.env.HOST || '127.0.0.1';
 
 const recipes = require("./services/recipes");
-const db = require('./db/db.config');
+const search = require("./services/search");
 
+const db = require('./config/db.config');
 const app = express();
+
+const multer = require("multer");
+const imageCDN = require("multer-cloudflare-storage");
 
 // Universal Middleware
 
@@ -32,11 +36,15 @@ const unauthenticated = (res) => {
     res.json({code: 401, msg: 'session expired or invalid'});
 }
 
+const uploader = multer({
+    storage: new imageCDN.CloudflareStorage(process.env.CLOUDFLARE_ID, process.env.CLOUDFLARE_TOKEN)
+});
+
 // Endpoints
 
 app.get('/status',async(req, res) => {
 
-    res.json({status: 'UP'});
+    res.json({status: 'Services are operational'});
 
 })
 
@@ -58,11 +66,11 @@ app.get('/api/v1/recipes/:idx',async(req, res) => {
 
 })
 
-app.post('/api/v1/recipes', clerk.ClerkExpressRequireAuth({}), async(req, res) => {
+app.post('/api/v1/recipes', async(req, res) => {
 
-    console.table(req.auth)
+    //console.table(req.auth)
     
-    if (!req.auth.sessionId) return unauthenticated(res);
+    //if (!req.auth.sessionId) return unauthenticated(res);
 
     const response = await recipes.add(req.body);
     res.statusCode = response.code;
@@ -100,6 +108,24 @@ app.delete('/api/v1/recipes/:idx', clerk.ClerkExpressWithAuth({}), async(req, re
     const response = await recipes.delete(req.params.idx);
     res.statusCode = response.code;
     res.json(response);
+
+})
+
+app.get('/api/v1/search/',async(req, res) => {
+
+    const filters = (req.query.diet) ? {diet : req.query.diet}: {};
+    console.log(filters);
+    const retrivedData = await search.query(req.query.q, filters, req.query.skip, req.query.limit);
+    res.statusCode = retrivedData.code;
+
+    res.json(retrivedData.data);
+
+})
+
+app.post('/api/v1/recipes/thumbnails/upload', uploader.single("img"), async(req, res) => {
+
+    console.log(req.file);
+    res.json({status: 200});
 
 })
 
