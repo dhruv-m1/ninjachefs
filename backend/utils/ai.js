@@ -22,4 +22,19 @@ ai.gpt = ((inputBatch) => {
     })
 })
 
+ai.dalle = ((prompt) => {
+    return new Promise((resolve, reject) => {
+
+        aiConfig.interface.createImage({
+            prompt: prompt,
+            n: 1,
+            size: "1024x1024"
+        }).then((res) => {
+            const output = res.data.data;
+            resolve(output);
+        })
+
+    })
+})
+
 module.exports = ai;

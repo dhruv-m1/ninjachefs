@@ -52,20 +52,8 @@ const recipeSchema = new mongoose.Schema({
         type: String,
         required: false
     },
-    veggies: {
-        type: Array,
-        required: false
-    },
-    meat: {
-        type: Array,
-        required: false
-    },
-    dairy: {
-        type: Array,
-        required: false
-    },
-    other: {
-        type: Array,
+    ingredients: {
+        type: Object,
         required: false
     },
     steps: {
@@ -99,16 +87,27 @@ db.Recipe = mongoose.model("Recipe", recipeSchema);
 const pendingSubmissionSchema = new mongoose.Schema({
     recipeId: {
         type: String,
-        required: false,
-        unique: true
+        required: false
     },
     img_url: {
         type: String,
-        required: true
+        required: false
     },
-    is_published: {
+    is_pending: {
         type: Boolean,
         required: true
+    },
+    success: {
+        type: String,
+        required: true
+    },
+    stage: {
+        type: String,
+        required: true
+    },
+    log: {
+        type: String,
+        required: false
     }
 });
 

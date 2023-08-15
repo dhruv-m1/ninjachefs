@@ -17,6 +17,7 @@ const app = express();
 const multer = require("multer");
 const imageCDN = require("multer-cloudflare-storage");
 
+let startTime = null;
 // Universal Middleware
 
 app.use(express.json({limit: '50mb'}));
@@ -44,13 +45,18 @@ const upload = multer({
 
 app.get('/status',async(req, res) => {
 
-    res.json({status: 'Services are operational'});
+    if (startTime) {
+        res.json({code: 200, name: 'NinjaChefs + AI (API)', status: `Operational`, startTime: `${startTime.toLocaleString('en-CA')} (Server Time - UTC)`});
+    } else {
+        res.statusCode = 500;
+        res.json({code: 500, name: 'NinjaChefs + AI (API)', status: `Requires Attention`});
+    }
 
 })
 
-app.get('/api/v1/recipes',async(req, res) => {
+app.get('/api/v1/recipes/:skip/:limit',async(req, res) => {
 
-    const retrivedData = await recipes.get();
+    const retrivedData = await recipes.get({skip: req.params.skip, limit: req.params.limit});
     res.statusCode = retrivedData.code;
 
     res.json(retrivedData.data);
@@ -78,26 +84,23 @@ app.post('/api/v1/recipes', async(req, res) => {
 
 })
 
-app.post('/api/v1/recipes/thumbnails/', clerk.ClerkExpressWithAuth({}), async(req, res) => {
+app.post('/api/v1/recipes/images/upload', async(req, res) => {
 
-    if (!req.auth.sessionId) return unauthenticated(res);
-    
-    const response = await recipes.addThumbnail(req.body);
-    res.statusCode = response.code;
-    res.json(response);
+    upload(req, res, async(err) => {
+        if (err instanceof multer.MulterError) {
+            res.statusCode = 406;
+            res.json({code: 406, msg: "UNEXPECTED FILE: Please ensure the file is an image file & less than 10MB.", code: err.code});
+            return;
+        } else if (err) {
+            res.statusCode = 500;
+            res.json({code: 500, msg: "Internal Server Error, Please try again later.", code: err.code});
+            return;
+        }
 
-})
-
-app.get('/api/v1/recipes/thumbnails/:idx', async(req, res) => {
-    
-    const response = await recipes.getThumbnail(req.params.idx);
-
-    res.writeHead(200, {
-        'Content-Type': `image/${response.format}`,
-        'Content-Length': response.data.length
-    });
-
-    res.end(response.data);
+        const response = await recipes.addImage(req.file);
+        res.statusCode = response.code;
+        res.json(response);
+    })
 
 })
 
@@ -111,33 +114,13 @@ app.delete('/api/v1/recipes/:idx', clerk.ClerkExpressWithAuth({}), async(req, re
 
 })
 
-app.get('/api/v1/search/',async(req, res) => {
+app.get('/api/v1/search/:skip/:limit',async(req, res) => {
 
     const filters = (req.query.diet) ? {diet : req.query.diet}: {};
-    const retrivedData = await search.query(req.query.q, filters, req.query.skip, req.query.limit);
+    const retrivedData = await search.query(req.query.q, filters, req.params.skip, req.params.limit);
     res.statusCode = retrivedData.code;
 
     res.json(retrivedData.data);
-
-})
-
-app.post('/api/v1/recipes/images/upload', async(req, res) => {
-
-    upload(req, res, async(err) => {
-        if (err instanceof multer.MulterError) {
-            res.statusCode = 406;
-            res.json({status: 406, msg: "UNEXPECTED FILE: Please ensure the file is an image file & less than 10MB.", code: err.code});
-            return;
-        } else if (err) {
-            res.statusCode = 500;
-            res.json({status: 500, msg: "Internal Server Error, Please try again later.", code: err.code});
-            return;
-        }
-
-        const response = await recipes.addImage(req.file);
-        res.statusCode = response.code;
-        res.json(response);
-    })
 
 })
 
@@ -146,4 +129,5 @@ app.listen(port, host, async() => {
     await db.connect();
     console.log(`\x1b[32m → Connected.\x1b[0m`)
     console.log(`\x1b[32mNinjaChefs API listening on port ${port}\x1b[0m`)
+    startTime = new Date();
 })

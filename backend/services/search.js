@@ -1,5 +1,6 @@
 /* 
-    Service for searching recipes.
+    Service for searching.
+    This is segregated from recipe service as it will be used to search for author profiles as well in the future.
 */
 
 const db = require('../config/db.config');
