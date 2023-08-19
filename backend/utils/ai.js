@@ -12,7 +12,8 @@ ai.gpt = ((inputBatch) => {
         aiConfig.interface.createChatCompletion({
 
             model: aiConfig.models.gpt,
-            messages: inputBatch
+            messages: inputBatch,
+            temperature: 0
     
         }).then((res) => {
             const output = JSON.parse(res.data.choices[0].message.content);

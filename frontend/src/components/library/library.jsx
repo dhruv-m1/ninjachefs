@@ -26,9 +26,9 @@ export default function Library() {
                     width="300px" 
                     height="275px" 
                     name={recipe.name} 
-                    chef={recipe.chef} 
-                    type={recipe.type} 
-                    img={img} 
+                    chef={recipe.author} 
+                    type={recipe.diet} 
+                    img={`${recipe.img_url}/ncThumbnail`} 
                     obj={recipe}
                 />
             </li>

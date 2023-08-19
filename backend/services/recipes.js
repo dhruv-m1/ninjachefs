@@ -5,7 +5,7 @@
 const db = require('../config/db.config');
 const ai = require('../utils/ai');
 const asyncHandlers = require('../utils/asyncHandlers')
-const fetch = require('node-fetch');
+const axios = require("axios").default;
 
 const recipes = {};
 
@@ -122,7 +122,7 @@ recipes.get = async(args = {}) => {
 
         let recipeData = []
         if (args['idx']) recipeData = await db.Recipe.findOne({ _id: args['idx'] });
-        else recipeData = await db.Recipe.find().select('_id name author diet img_url').sort({_id: -1}).skip(args.skip).limit(args.limit);
+        else recipeData = await db.Recipe.find().select('_id name author diet img_url desc').sort({_id: -1}).skip(args.skip).limit(args.limit);
 
         return {code: 200, data: recipeData};
 
@@ -141,19 +141,21 @@ recipes.delete = async(idx, image_id) => {
         await db.Recipe.deleteOne({ _id: idx });
 
         try {
-            const url = `https://api.cloudflare.com/client/v4/accounts/${process.env.CLOUDFLARE_ID}/images/v1/${image_id}`;
 
             const options = {
-            method: 'DELETE',
-            headers: {'Content-Type': 'application/json', 'X-Auth-Key': process.env.CLOUDFLARE_TOKEN}
+                method: 'DELETE',
+                url: `https://api.cloudflare.com/client/v4/accounts/${process.env.CLOUDFLARE_ID}/images/v1/${image_id}`,
+                headers: {'Content-Type': 'application/json', Authorization: `Bearer ${process.env.CLOUDFLARE_TOKEN}`}
             };
 
-            await fetch(url, options).then(res => res.json())
+
+            await axios.request(options);
 
         } catch (e) {
             console.time("RECIPE IMAGE DELETE ERROR")
             console.log(`[> RECIPE IMAGE DELETE ERROR DETAILS] ${e}`)
         }
+        
         return {code: 200, msg: `Deleted item with _id ${idx}. ${thumbnailStatus}`};
 
     } catch (error) {

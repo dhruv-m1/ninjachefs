@@ -39,8 +39,9 @@ asyncHandlers.addRecipe = async(unprocessedData, obj) => {
 
             const submittedRecipe = await db.Recipe.create(newRecipe);
             await db.PendingSubmission.findOneAndUpdate({_id: obj.submission_id}, {
-                status_message: "Processed.",
+                stage: "AI Assisted Recipe Analysis",
                 is_pending: false,
+                success: true,
                 recipeId: submittedRecipe._id
             });
         } else {

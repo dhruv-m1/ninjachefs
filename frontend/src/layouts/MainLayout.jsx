@@ -2,6 +2,7 @@
     This layout encapsulates all main pages in the app.
 */
 
+import Footer from "../components/footer/footer";
 import Header from "../components/header/header";
 
 const MainLayout = ({ children }) => {
@@ -14,6 +15,9 @@ const MainLayout = ({ children }) => {
 
             {children}
 
+            <div className="padded">
+                <Footer/>
+            </div>
 
         </div>
     )

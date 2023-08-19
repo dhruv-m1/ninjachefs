@@ -10,7 +10,7 @@ export default function Card(props) {
             <div className={`font-poppins rounded-lg bg-white shadow-ninja card`} 
             style={{width: props.width, height: props.height}}>
                 
-                <div className="bg-gray-500 bg-cover h-[150px] w-[90%] relative left-[5%] top-[5%] rounded-[5px]"
+                <div className="bg-gray-500 bg-cover h-[150px] w-[90%] relative left-[5%] top-[5%] rounded-[5px] bg-center"
                  style={{backgroundImage: `url('${props.img}')`}}>
                 </div>
                 

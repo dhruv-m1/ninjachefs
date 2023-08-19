@@ -120,7 +120,7 @@ export const RecipeProvider = ({children}) => {
         return new Promise(async(resolve, reject) => {
 
             try {
-                const result = await fetch(`${BACKEND_URI}/api/v1/recipes`).then((rawData) => rawData.json())
+                const result = await fetch(`${BACKEND_URI}/api/v1/recipes/0/10`).then((rawData) => rawData.json())
                 setRecentRecipies(result);
                 resolve(result);
             } catch (e) {

@@ -12,10 +12,6 @@ body {
 
 }
 
-a {
-    text-decoration: none !important;
-}
-
 .grid-container {
     
     display: grid;

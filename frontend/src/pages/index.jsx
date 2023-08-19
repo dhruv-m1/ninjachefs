@@ -33,7 +33,7 @@ function Index() {
   if (recentRecipes.length > 0) {
     randomIdx = Math.abs(Math.round(Math.random() * (recentRecipes.length - 1)));
     selection = recentRecipes[randomIdx];
-    banner_text = `Delicious ${selection.name.toLowerCase()}. Ready in ${selection.preptime} mins only! Go check it out →`;
+    banner_text = `${selection.desc}`;
     if (selection.img != null) {
         img = selection.img;
     }
@@ -49,7 +49,7 @@ function Index() {
 
                   <div className="hidden lg:flex">
                     { (recentRecipes.length === 0) && <Card width="300px" height="275px"/>}
-                    { (recentRecipes.length > 0) && <Card width="300px" height="275px" name={selection.name} type={selection.type} chef={selection.chef} img={img} obj={selection}/>}
+                    { (recentRecipes.length > 0) && <Card width="300px" height="275px" name={selection.name} type={selection.diet} chef={selection.author} img={`${selection.img_url}/ncThumbnail`} obj={selection}/>}
                   </div>
                   
                   <ControlBox setDialog={setDialog}/>
