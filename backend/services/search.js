@@ -11,14 +11,27 @@ search.query = async(keywords, filters = {}, skip, limit) => {
 
     try {
 
-        let querySpec = {
-            $search: { index: "searchRecipes", text: { query: keywords, path: ['name', 'author', 'diet'], fuzzy: {} } },
-        }
+        let querySpec = [
+            {
+                $search: { index: "searchRecipes", count: { type: "total" }, text: { query: keywords, path: ['name', 'author', 'diet'], fuzzy: {} }},
+            },
+            { 
+                $skip : parseInt(skip)
+            },
+            {
+                $limit : parseInt(limit)
+            },
+            {
+                $project: { name: true, author: true, diet: true, img_url: true, meta: "$$SEARCH_META" }
+            }
+        ]
 
-        if (filters.diet) querySpec.diet = filters.diet;
+        console.log(querySpec)
 
         let recipeData = []
-        recipeData = await db.Recipe.find(querySpec, ['name', 'img_url', 'author', 'diet'], { skip: skip, limit: limit });
+        recipeData = await db.Recipe.aggregate([querySpec]);
+
+        console.log(recipeData)
 
         return {code: 200, data: recipeData};
 

@@ -9,7 +9,7 @@ export default function Footer() {
 
             <Link to="https://dhruv.tech"> <img  className="h-12 w-auto grayscale opacity-80 hover:opacity-100 hover:grayscale-0 transition-all ease-in-out duration-500" src={logo} alt="Dhruv 'D' Shaped Logo"/></Link>
 
-            <span class="h-6 w-0.5 bg-gray-400 hidden md:block" aria-hidden="true"></span>
+            <span className="h-6 w-0.5 bg-gray-400 hidden md:block" aria-hidden="true"></span>
 
             <p className='text-xs font-medium font-poppins text-gray-600 text-center md:text-left'>
 

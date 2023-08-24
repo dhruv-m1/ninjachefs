@@ -121,10 +121,20 @@ recipes.get = async(args = {}) => {
     try {
 
         let recipeData = []
+        let count = 0;
         if (args['idx']) recipeData = await db.Recipe.findOne({ _id: args['idx'] });
-        else recipeData = await db.Recipe.find().select('_id name author diet img_url desc').sort({_id: -1}).skip(args.skip).limit(args.limit);
 
-        return {code: 200, data: recipeData};
+        else {
+
+            recipeData = await db.Recipe.find()
+            .select('_id name author diet img_url desc').sort({_id: -1})
+            .skip(args.skip).limit(args.limit);
+
+            count = await db.Recipe.count();
+
+
+        }
+        return {code: 200, data: {count: count, recipes: recipeData}};
 
     } catch (error) {
         

@@ -13,19 +13,11 @@ import { useRecipes } from '../providers/recipeContext';
 
 
 function Index() {
-  const recipe = useRecipes();
-  const [recentRecipes, setRecentRecipies] = useState([]);
+  const recipes = useRecipes();
   const [dialog, setDialog] = useState(false);
 
-  useEffect(() => {
-    const loadRecipes = async() => {
-        setRecentRecipies(await recipe.get());
-    }
-    loadRecipes()
-  },[])
 
-
-  let banner_text = "";
+ /* let banner_text = "";
   let randomIdx = 0;
   let selection = {};
   let img = "";
@@ -37,7 +29,7 @@ function Index() {
     if (selection.img != null) {
         img = selection.img;
     }
-  }
+  }*/
 
   return (
       <div>
@@ -45,11 +37,11 @@ function Index() {
             
               <section className="flex justify-between gap-4 flex-col md:flex-row">
 
-                  <Banner text={banner_text}/>
+                  <Banner text={recipes.recent.list.length === 0 ? "" : recipes.recent.list[0].desc}/>
 
                   <div className="hidden lg:flex">
-                    { (recentRecipes.length === 0) && <Card width="300px" height="275px"/>}
-                    { (recentRecipes.length > 0) && <Card width="300px" height="275px" name={selection.name} type={selection.diet} chef={selection.author} img={`${selection.img_url}/ncThumbnail`} obj={selection}/>}
+                    { (recipes.recent.list.length === 0) && <Card width="300px" height="275px"/>}
+                    { (recipes.recent.list.length  > 0) && <Card width="300px" height="275px" name={recipes.recent.list[0].name} type={recipes.recent.list[0].diet} chef={recipes.recent.list[0].author} img={`${recipes.recent.list[0].img_url}/ncThumbnail`} obj={recipes.recent.list[0]}/>}
                   </div>
                   
                   <ControlBox setDialog={setDialog}/>

@@ -118,6 +118,7 @@ app.get('/api/v1/search/:skip/:limit',async(req, res) => {
 
     const filters = (req.query.diet) ? {diet : req.query.diet}: {};
     const retrivedData = await search.query(req.query.q, filters, req.params.skip, req.params.limit);
+    console.log(req.query.q);
     res.statusCode = retrivedData.code;
 
     res.json(retrivedData.data);
