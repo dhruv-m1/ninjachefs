@@ -7,28 +7,34 @@ export default function Card(props) {
     if (props.name) return (
         <Link to={`/recipe/view/${props.obj._id}`}>
 
-            <div className={`font-poppins rounded-lg bg-white shadow-ninja card`} 
-            style={{width: props.width, height: props.height}}>
+            <div className={`font-poppins rounded-lg bg-white shadow-ninja flex md:flex-col w-full h-full`}>
                 
-                <div className="bg-gray-500 bg-cover h-[150px] w-[90%] relative left-[5%] top-[5%] rounded-[5px] bg-center"
+                <div className="bg-gray-500 bg-cover h-full w-[30%] rounded-l-lg md:h-[150px] md:w-[90%] md:relative md:left-[5%] md:top-[5%] md:rounded-[5px] bg-center"
                  style={{backgroundImage: `url('${props.img}')`}}>
                 </div>
                 
-                <div className="font-poppins font-semibold text-lg h-[60px] w-[90%] ml-[5%] mt-[20px] 
-                text-ellipsis overflow-hidden text-ninja-blue">
+                <div className="w-[70%] md:w-full flex flex-col p-3 md:px-4 md:pt-0 md:mt-5 grow">
 
-                    <span>{props.name}</span>
+                    <div className="font-poppins font-semibold h-12 md:h-[54px] w-full
+                    overflow-hidden text-ninja-blue md:text-lg line-clamp-2 capitalize">
 
+                        <span>{props.name}</span>
+
+                    </div>
+
+                    <div className="grow hidden md:block"></div>
+
+                    <div className="flex flex-col md:flex-row">
+                        <span className="mt-4 md:mt-0 font-normal text-chefs-blue text-sm truncate grow">
+                            {props.chef}
+                        </span>
+                        
+                        <span className={`text-sm capitalize truncate
+                        ${styles[props.type]}` }>
+                            {props.type}
+                        </span>
+                    </div>
                 </div>
-
-                <span className="float-left relative top-2 left-[5%] font-normal text-chefs-blue text-sm ">
-                    {props.chef}
-                </span>
-                
-                <span className={`float-right relative right-[5%] top-2 text-sm text-right capitalize 
-                ${styles[props.type]}` }>
-                    {props.type}
-                </span>
 
             </div>
 

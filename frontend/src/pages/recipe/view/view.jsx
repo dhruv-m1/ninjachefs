@@ -23,7 +23,8 @@ export default function ViewRecipe() {
         
         const loadRecipe = async() => {
 
-            let recipe = await recipes.getSpecific(idx)
+            let recipe = await recipes.specific.get(idx);
+            console.log(recipe);
 
             if (recipe.health_score < 3) recipe.health_category = "Unhealthy";
             else if (recipe.health_score < 5) recipe.health_category = "Somewhat Unhealthy";

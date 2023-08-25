@@ -6,6 +6,7 @@ import { useState, useEffect, useRef } from 'react';
 export default function Library() {
 
     const recipes = useRecipes();
+    const searchInput = useRef();
 
     let query = "";
     let cardHeight = 275;
@@ -20,6 +21,7 @@ export default function Library() {
 
             let cardsPerRow = Math.floor(container.current.offsetWidth/(cardWidth + 16))
             recipes.config.setPageLength(cardsPerRow*2);
+            searchInput.current.value = recipes.search.keywords.current;
             await recipes.recent.get();
         }
 
@@ -66,10 +68,13 @@ export default function Library() {
 
             <section className='mb-5 flex gap-8'>
 
-                <div className='flex items-center h-10 grow bg-slate-300 text-ninja-blue font-semibold font-poppins rounded-lg py-1 px-3'>
+                <div className='flex items-center h-10 grow bg-slate-300 
+                text-ninja-blue font-semibold font-poppins rounded-lg py-1 px-3'>
+
                     <input type='search' 
                     className='h-full grow bg-white/0 focus:outline-none' 
                     placeholder='Search'
+                    ref={searchInput}
                     onChange={(e) => search(e.target.value)}/>
 
                     <div className='flex items-center h-10 bg-slate-300 text-ninja-blue font-medium font-poppins rounded-lg py-1 px-3'>
@@ -78,10 +83,10 @@ export default function Library() {
 
                 </div>
                 
-                <div className='w-[600px]'></div>
+                <div className='w-[300px] lg:w-[600px] hidden md:block'></div>
             </section>
 
-            <ul className='flex flex-wrap gap-4 list-none ml-0 pl-0 justify-center md:justify-start' ref={container}>
+            <div className='flex flex-col md:flex-row flex-wrap gap-4 list-none ml-0 pl-0 items-center md:items-start' ref={container}>
                 
                 {
                     recipes.search.isActive ?
@@ -90,7 +95,7 @@ export default function Library() {
                             recipes.search.results.map((recipe) => {
         
                                 return (
-                                    <li key={`library-search-card-${recipe._id}`}>
+                                    <div key={`library-search-card-${recipe._id}`}>
                                         <Card 
                                             width={`${cardWidth}px`} 
                                             height={`${cardHeight}px`} 
@@ -100,7 +105,7 @@ export default function Library() {
                                             img={`${recipe.img_url}/ncThumbnail`} 
                                             obj={recipe}
                                         />
-                                    </li>
+                                    </div>
                                 )
                             
                             }) : (recipes.search.isPending ? defaultState : "No Results"))
@@ -111,7 +116,7 @@ export default function Library() {
                             recipes.recent.list.map((recipe) => {
 
                                 return (
-                                    <li key={`library-recent-card-${recipe._id}`}>
+                                    <div key={`library-recent-card-${recipe._id}`} className='w-full h-32 md:w-[300px] md:h-[275px]'>
                                         <Card 
                                             width="300px" 
                                             height="275px" 
@@ -121,14 +126,14 @@ export default function Library() {
                                             img={`${recipe.img_url}/ncThumbnail`} 
                                             obj={recipe}
                                         />
-                                    </li>
+                                    </div>
                                 )
                             
                             }) : defaultState
                         
                     }
                 
-            </ul>
+            </div>
 
             <section className='flex justify-center font-bold mt-10'>
             

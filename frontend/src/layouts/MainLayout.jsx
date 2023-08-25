@@ -8,17 +8,12 @@ import Header from "../components/header/header";
 const MainLayout = ({ children }) => {
 
     return (
-        <div className="TEST">
-            <div className="padded">
-                <Header/>
-            </div>
+        <div className="container mx-auto px-6">
+            <Header/>
 
             {children}
 
-            <div className="padded">
-                <Footer/>
-            </div>
-
+            <Footer/>
         </div>
     )
 
