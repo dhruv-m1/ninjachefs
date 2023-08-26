@@ -54,7 +54,7 @@ app.get('/status',async(req, res) => {
 
 })
 
-app.get('/api/v1/recipes/:skip/:limit',async(req, res) => {
+app.get('/api/v1/recipes/:skip/:limit', async(req, res) => {
 
     const retrivedData = await recipes.get({skip: req.params.skip, limit: req.params.limit});
     res.statusCode = retrivedData.code;
@@ -111,6 +111,17 @@ app.delete('/api/v1/recipes/:idx', clerk.ClerkExpressWithAuth({}), async(req, re
     const response = await recipes.delete(req.params.idx);
     res.statusCode = response.code;
     res.json(response);
+
+})
+
+app.get('/api/v1/recipes/user/:skip/:limit', clerk.ClerkExpressWithAuth({}), async(req, res) => {
+
+    if (!req.auth.sessionId) return unauthenticated(res);
+
+    const retrivedData = await recipes.getByUser({userId: req.auth.userId, skip: req.params.skip, limit: req.params.limit});
+    res.statusCode = retrivedData.code;
+
+    res.json(retrivedData.data);
 
 })
 

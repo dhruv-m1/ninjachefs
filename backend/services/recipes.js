@@ -185,4 +185,31 @@ recipes.delete = async(idx, image_id) => {
 
 }
 
+recipes.getByUser = async({userId, limit, skip}) => {
+
+    try {
+
+        let recipeData = []
+        let count = 0;
+        let data = {};
+
+        console.log(userId)
+
+        recipeData = await db.Recipe.find({userId: userId})
+            .select('_id name author diet img_url desc').sort({_id: -1})
+            .skip(skip).limit(limit);
+
+            count = await db.Recipe.find({userId: userId}).count();
+            data = {count: count, recipes: recipeData}
+            
+        return {code: 200, data: data};
+
+    } catch (error) {
+        
+        return { code: 500, msg: "Could not retrive data from data store"};
+
+    }
+
+}
+
 module.exports = recipes;

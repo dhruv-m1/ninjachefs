@@ -32,10 +32,13 @@ export const RecipeProvider = ({children}) => {
 
     //* Recent
 
-    let setRecentList, setRecentCount;
+    let setRecentList, setRecentCount, setRecentUserList, setRecentUserCount;
 
     [recipes.recent.list, setRecentList] = useState([]);
-    [recipes.recent.count, setRecentCount] = useState(false);
+    [recipes.recent.count, setRecentCount] = useState(0);
+
+    [recipes.recent.userList, setRecentUserList] = useState([]);
+    [recipes.recent.userCount, setRecentUserCount] = useState(0);
 
     const recent = recipes.recent;
 
@@ -197,6 +200,50 @@ export const RecipeProvider = ({children}) => {
                 console.log(recipes.recent.list.concat(results))
 
                 setRecentList(recipes.recent.list.concat(results));
+
+                resolve();
+
+            } catch (error) {
+
+                resolve();
+
+            }
+        })
+    }
+
+    recipes.recent.getForUser = async(skip = 0, limit = config.pageLength.current, updateState = true) => {
+
+        return new Promise(async(resolve, reject) => {
+
+            try {
+                
+                const token = await session.getToken();
+                const result = await fetch(`${BACKEND_URI}/api/v1/recipes/user/${skip}/${limit}`, 
+                {"headers": { "Authorization": `Bearer ${token}`} }).then((raw) => raw.json())
+                
+                if (updateState) setRecentUserList(result.recipes);
+                setRecentUserCount(result.count);
+
+                resolve(result.recipes);
+
+            } catch (e) {
+                console.log(e);
+                alert('Could not load recipes, please check your internet connection and refresh the page');
+                
+            }
+            
+
+        })
+
+    }
+
+    recipes.recent.loadMoreForUser = async() => {
+        return new Promise(async(resolve) => {
+            try {
+                
+                const results = await recipes.recent.getForUser(recent.userList.length, config.pageLength.current, false);
+
+                setRecentUserList(recent.userList.concat(results));
 
                 resolve();
 

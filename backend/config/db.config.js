@@ -79,6 +79,10 @@ const recipeSchema = new mongoose.Schema({
     health_reason: {
         type: String,
         required: true
+    },
+    userId: {
+        type: String,
+        required: false
     }
 });
 

@@ -14,7 +14,7 @@ export default function Banner(props) {
                         {props.text && 
                             <h3 className="text-sm md:text-base lg:hidden">
                                 Take a look &nbsp;
-                                <i class="fa-solid fa-arrow-right"></i>
+                                <i className="fa-solid fa-arrow-right"></i>
                             </h3>
                         }
 
