@@ -111,29 +111,29 @@ export const RecipeProvider = ({children}) => {
                 });
 
                 res = await res.json()
-                data._id = res._id;
+                //data._id = res._id;
 
                 if (imgObj != null) {
 
-                imgObj.idx = res._id;
-                
-                let img = await fetch(`${BACKEND_URI}/api/v1/recipes/thumbnails`, {
-                    "method": "POST",
-                    "headers": {
-                        "Content-Type": "application/json",
-                        "Authorization": `Bearer ${token}`
-                    },
-                    "body": JSON.stringify(imgObj)
-                })
+                    imgObj.idx = res._id;
+                    
+                    let img = await fetch(`${BACKEND_URI}/api/v1/recipes/thumbnails`, {
+                        "method": "POST",
+                        "headers": {
+                            "Content-Type": "application/json",
+                            "Authorization": `Bearer ${token}`
+                        },
+                        "body": JSON.stringify(imgObj)
+                    })
 
-                img = await img.json()
-                data.img = img.url;
+                    img = await img.json()
+                    data.img = img.url;
 
                 }
 
                 recipes.recent.get();
 
-                resolve(data);
+                resolve(res);
             } catch (error) {
                 alert("Something went wrong while submitting the recipe, please try again!")
             }
