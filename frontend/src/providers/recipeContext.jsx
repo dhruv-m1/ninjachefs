@@ -71,7 +71,7 @@ export const RecipeProvider = ({children}) => {
 
     /* Defining mehtods of applicable services */
 
-    //* Action Service
+    //* IO Service
 
     recipes.io.add = async(data) => {
         return new Promise(async(resolve, reject) => {
@@ -79,27 +79,6 @@ export const RecipeProvider = ({children}) => {
             try {
 
                 const token = await session.getToken();
-                delete data.token;
-
-                let imgObj = null;
-                if (data.img != null) {
-
-                let parition = data.img.split(";base64,");
-
-                let format = parition[0].slice(-3);
-
-                if (format === 'peg') {
-                    
-                    format = 'jpg';
-                }
-
-                imgObj = {
-                    format: format,
-                    img: parition[1]
-                }
-
-                data.img = null;
-                }
 
                 let res = await fetch(`${BACKEND_URI}/api/v1/recipes`, {
                     "method": "POST",
@@ -111,25 +90,6 @@ export const RecipeProvider = ({children}) => {
                 });
 
                 res = await res.json()
-                //data._id = res._id;
-
-                if (imgObj != null) {
-
-                    imgObj.idx = res._id;
-                    
-                    let img = await fetch(`${BACKEND_URI}/api/v1/recipes/thumbnails`, {
-                        "method": "POST",
-                        "headers": {
-                            "Content-Type": "application/json",
-                            "Authorization": `Bearer ${token}`
-                        },
-                        "body": JSON.stringify(imgObj)
-                    })
-
-                    img = await img.json()
-                    data.img = img.url;
-
-                }
 
                 recipes.recent.get();
 
@@ -159,6 +119,42 @@ export const RecipeProvider = ({children}) => {
                 
                 alert("Couldn't delete recipe - please check your connection");
 
+            }
+
+        })
+
+    }
+
+    recipes.io.attachImage = async(image) => {
+
+        return new Promise(async(resolve, reject) => {
+            
+            try {
+
+                const token = await session.getToken();
+
+                const formData = new FormData();
+                formData.append("image", image);
+
+                let res = await fetch(`${BACKEND_URI}/api/v1/recipes/images/upload`, {
+                    "method": "POST",
+                    "headers": {
+                        "Authorization": `Bearer ${token}`
+                    },
+                    
+                    "body": formData
+                });
+
+                res = await res.json()
+
+                //recipes.recent.get();
+
+                resolve(res);
+
+            } catch (error) {
+                console.log(error)
+                alert("Something went wrong while uploading the image, please try again!")
+                reject();
             }
 
         })

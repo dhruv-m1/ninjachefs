@@ -27,9 +27,11 @@ recipes.add = async(obj) => {
             // Spam Analysis
 
             const spamAnalysis = await ai.gpt(prompt);
-    
+            
+            console.log(spamAnalysis);
+
             if (spamAnalysis.spam_score >= 5) {
-                resolve({ code: 200, msg: "Submission rejeced by spam filter. Please try again.", _id: addedRecipe._id})
+                resolve({ code: 200, msg: "Submission rejeced by spam filter. Please try again."})
                 return;
             }
 

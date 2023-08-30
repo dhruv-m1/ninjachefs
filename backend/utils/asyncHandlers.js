@@ -22,6 +22,7 @@ asyncHandlers.addRecipe = async(unprocessedData, obj) => {
         newRecipe.author = obj.author;
         newRecipe.cooking_time = obj.cookingTime;
         newRecipe.steps = obj.steps;
+        newRecipe.userId = obj.userId;
     
         let ingredients = newRecipe.ingredients;
 

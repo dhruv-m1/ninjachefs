@@ -7,6 +7,7 @@ import { useForm, useFieldArray } from "react-hook-form"
 export default function AddRecipe({form, setForm}) {
 
     const loadingDialog = useRef();
+    const loadingDialogMessage = useRef();
     const container = useRef();
     const navigate = useNavigate();
 
@@ -37,6 +38,15 @@ export default function AddRecipe({form, setForm}) {
         window.scrollTo(0, 0);
 
         let recipeObj = {}
+
+        if (data.image.length > 0) {
+
+            loadingDialogMessage.current.innerHTML = "Uploading Image..."
+            const imageUpload = await recipes.io.attachImage(data.image[0]);
+            recipeObj.submission_id = imageUpload.submission_id;
+
+        }
+
         recipeObj.name = data.name;
         recipeObj.cookingTime = data.cookingTime;
         recipeObj.author = "Dhruv Malik"
@@ -46,6 +56,7 @@ export default function AddRecipe({form, setForm}) {
             recipeObj.steps.push(step.step);
         }
 
+        loadingDialogMessage.current.innerHTML = "Validating Recipe..."
         const submission = await recipes.io.add(recipeObj);
 
         console.log(submission)
@@ -185,7 +196,7 @@ export default function AddRecipe({form, setForm}) {
                     </div>
 
                     <h2 className="font-bold text-xl text-ninja-blue">Add an image <small className="text-slate-400">(optional)</small></h2>
-                    <input type="file" id="myFile" name="filename" accept="image/png, image/jpeg"
+                    <input type="file" id="file" name="filename" accept="image/png, image/jpeg"
                     className="font-poppins font-semibold file:bg-slate-300 text-ninja-blue file:rounded-lg 
                     file:px-4 file:py-2 file:border-none hover:opacity-90 file:cursor-pointer file:mr-3" {...register("image")}/>
 
@@ -207,8 +218,8 @@ export default function AddRecipe({form, setForm}) {
                         
                         <i className="animate-spin fa-solid fa-circle-notch text-[#66bd94] text-2xl"></i>
                         
-                        <p className="font-poppins font-semibold text-slate-600">
-                            Validating Submission...
+                        <p className="font-poppins font-semibold text-slate-600" ref={loadingDialogMessage}>
+                            <small>This is taking longer than expected...</small>
                         </p>
                     </div>
                 </div>
