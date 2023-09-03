@@ -63,7 +63,7 @@ export default function AddRecipe({form, setForm}) {
 
         document.querySelector('body').style.overflowY = 'unset';
 
-        navigate(`/submission/${submission.submission_id}`);
+        navigate(`/recipe/submission/${submission.submission_id}`);
 
 
       }

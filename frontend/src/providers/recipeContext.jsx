@@ -111,13 +111,15 @@ export const RecipeProvider = ({children}) => {
                     (res) => res.json()
                 )
 
-                recipes.getRecent();
+                recent.get();
+                recent.getForUser();
                 
                 resolve(data.idx);
 
             } catch (error) {
                 
                 alert("Couldn't delete recipe - please check your connection");
+                reject();
 
             }
 
@@ -159,6 +161,33 @@ export const RecipeProvider = ({children}) => {
 
         })
 
+    }
+
+    recipes.io.getSubmissionStatus = async(idx) => {
+        return new Promise(async(resolve, reject) => {
+            
+            try {
+
+                const token = await session.getToken();
+
+                let res = await fetch(`${BACKEND_URI}/api/v1/submissions/${idx}`, {
+                    "method": "GET",
+                    "headers": {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`
+                    }
+                });
+
+                res = await res.json();
+
+                resolve(res);
+
+            } catch (error) {
+                console.log(error)
+                alert("Something went wrong while getting the status, please try again!")
+            }
+
+        })
     }
 
     //* Recent

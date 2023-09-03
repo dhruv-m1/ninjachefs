@@ -9,7 +9,7 @@ export default function Card(props) {
 
             <div className={`font-poppins rounded-lg bg-white shadow-ninja flex md:flex-col w-full h-full`}>
                 
-                <div className="bg-gray-500 bg-cover h-full w-[30%] rounded-l-lg md:h-[150px] md:w-[90%] md:relative md:left-[5%] md:top-[5%] md:rounded-[5px] bg-center"
+                <div className="bg-gray-500 bg-cover h-full w-[30%] rounded-l-lg md:h-[152px] md:w-[90%] md:relative md:left-[5%] md:top-[5%] md:rounded-[5px] bg-center"
                  style={{backgroundImage: `url('${props.img}')`}}>
                 </div>
                 
