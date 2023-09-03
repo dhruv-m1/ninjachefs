@@ -40,19 +40,24 @@ asyncHandlers.addRecipe = async(unprocessedData, obj) => {
 
             const submittedRecipe = await db.Recipe.create(newRecipe);
             await db.PendingSubmission.findOneAndUpdate({_id: obj.submission_id}, {
-                stage: "AI Assisted Recipe Analysis",
+                stage: "Done - Recipe analysis & writing metadata.",
                 is_pending: false,
                 success: true,
                 recipeId: submittedRecipe._id
             });
         } else {
+
+            await db.PendingSubmission.findOneAndUpdate({_id: obj.submission_id}, {
+                stage: "Visualising recipe & generating image..."
+            });
+
             asyncHandlers.generateRecipeImage(newRecipe, obj);
         }
 
     } catch (error) {
         console.log(error)
         await db.PendingSubmission.findOneAndUpdate({_id: obj.submission_id}, {
-            stage: "AI Assisted Recipe Analysis",
+            stage: "Error during recipe analysis & writing metadata.",
             is_pending: false,
             success: false,
             log: error
@@ -83,7 +88,7 @@ asyncHandlers.generateRecipeImage = async(newRecipe, obj) => {
 
         const submittedRecipe = await db.Recipe.create(newRecipe);
         await db.PendingSubmission.findOneAndUpdate({_id: obj.submission_id}, {
-            stage: "Image Generation",
+            stage: "Done - Visualising recipe & generating image...",
             is_pending: false,
             success: true,
             recipeId: submittedRecipe._id
@@ -91,7 +96,7 @@ asyncHandlers.generateRecipeImage = async(newRecipe, obj) => {
 
     } catch (error) {
         await db.PendingSubmission.findOneAndUpdate({_id: obj.submission_id}, {
-            stage: "Processed without Image Generation",
+            stage: "Processed without image generation",
             is_pending: false,
             success: true,
             log: error,

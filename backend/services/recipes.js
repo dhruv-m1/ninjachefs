@@ -20,7 +20,8 @@ recipes.add = async(obj) => {
             let stepsString = '';
             obj.steps.forEach((step, i) => stepsString += `[STEP ${i+1}] ${step} `);
     
-            const unprocessedData = `Recipe Name: ${obj.name}, Author: ${obj.author}, Steps: ${stepsString}`;
+            let unprocessedData = `Recipe Name: ${obj.name}, Author: ${obj.author}, Steps: ${stepsString}`;
+            unprocessedData = unprocessedData.replace(/[\u0000-\u001F\u007F-\u009F]/g, "");
             let promptTemplate = process.env.ADDRECIPE_GPT_PROMPTS_1;
             let prompt = JSON.parse(promptTemplate.replace('_RECIPE_DATA_', unprocessedData));
     
@@ -39,7 +40,7 @@ recipes.add = async(obj) => {
 
             if (obj.submission_id) { // Submission ID already exists (when user has submitted a cover image)
 
-                await db.PendingSubmission.findOneAndUpdate({_id: obj.submission_id}, {status_message: "AI Assist is analysing & formatting your recipe."});
+                await db.PendingSubmission.findOneAndUpdate({_id: obj.submission_id}, {status_message: "Analysing recipe and writing metadata..."});
                 obj.generateImage = false;
 
             } else { // No Submission ID; cover image also needs to be generated
@@ -47,7 +48,7 @@ recipes.add = async(obj) => {
                 let newPendingSubmission = {
                     is_pending: true,
                     success: true,
-                    stage: "AI Assisted Spam Review"
+                    stage: "Analysing recipe and writing metadata..."
                 }
 
                 const submission = await db.PendingSubmission.create(newPendingSubmission);
@@ -152,17 +153,20 @@ recipes.get = async(args = {}) => {
     
 }
 
-recipes.delete = async(idx, image_id) => {
+recipes.delete = async(idx) => {
 
     try {
 
-        await db.Recipe.deleteOne({ _id: idx });
+        const recipeData = await db.Recipe.findOne({ _id: idx });
 
         try {
 
+            if (!recipeData.img_url) return;
+
+            const imgInfo = recipeData.img_url.split('/');
             const options = {
                 method: 'DELETE',
-                url: `https://api.cloudflare.com/client/v4/accounts/${process.env.CLOUDFLARE_ID}/images/v1/${image_id}`,
+                url: `https://api.cloudflare.com/client/v4/accounts/${process.env.CLOUDFLARE_ID}/images/v1/${imgInfo[4]}`,
                 headers: {'Content-Type': 'application/json', Authorization: `Bearer ${process.env.CLOUDFLARE_TOKEN}`}
             };
 
@@ -174,12 +178,14 @@ recipes.delete = async(idx, image_id) => {
             console.log(`[> RECIPE IMAGE DELETE ERROR DETAILS] ${e}`)
         }
         
-        return {code: 200, msg: `Deleted item with _id ${idx}. ${thumbnailStatus}`};
+        await db.Recipe.deleteOne({ _id: idx });
+
+        return {code: 200, msg: `Deleted item with _id ${idx}.`};
 
     } catch (error) {
 
         console.time("RECIPE DELETE ERROR")
-        console.log(`[> RECIPE DELETE ERROR DETAILS] ${e}`)
+        console.log(`[> RECIPE DELETE ERROR DETAILS] ${error}`)
         
         return { code: 404, msg: "Could not delete item, please try again later."};
 
