@@ -59,8 +59,6 @@ export default function AddRecipe({form, setForm}) {
         loadingDialogMessage.current.innerHTML = "Validating Recipe..."
         const submission = await recipes.io.add(recipeObj);
 
-        console.log(submission)
-
         document.querySelector('body').style.overflowY = 'unset';
 
         navigate(`/recipe/submission/${submission.submission_id}`);

@@ -90,7 +90,7 @@ export default function ViewRecipe() {
             <section className='flex flex-col md:flex-row z-10'>
                 <section className='grow flex justify-center md:justify-start items-center text-white'>
 
-                    <div className='flex flex-col gap-2'>
+                    <div className='flex flex-col gap-2 capitalize'>
                         <div className='h-8 md:hidden'></div>
                         <h1 className='font-semibold font-poppins text-xl'>{currentRecipe.name}</h1>
                         <h2 className='font-medium font-poppins text-lg italic'>By {currentRecipe.author}</h2>
@@ -176,6 +176,10 @@ export default function ViewRecipe() {
                                 <p>{ currentRecipe.allergies.length > 0 ? "[List]" : "We didn't find any common food allergens in this recipe. However, if you are cooking for a guest, we recommend asking them about any allergies that they may have."}</p>
                             </div>
 
+                        </section>
+
+                        <section className='italic font-poppins font-medium text-slate-500 text-sm'>
+                            <p>Disclaimer: AI Insights are experimental and may, at times, contain inaccurate or controversial information.</p>
                         </section>
 
                         <h3 className='text-ninja-blue font-bold text-2xl'>What you'll need</h3>
