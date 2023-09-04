@@ -4,7 +4,7 @@
 
 const db = require('../config/db.config');
 const ai = require('../utils/ai');
-const asyncHandlers = require('../utils/asyncHandlers')
+const asyncHandlers = require('../utils/asyncHandlers/asyncHandlers')
 const axios = require("axios").default;
 
 const recipes = {};

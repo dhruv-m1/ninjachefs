@@ -2,14 +2,14 @@
  * Utility for realtime data processing after a HTTP response is served.
  */
 
-const ai = require("./ai");
-const db = require("../config/db.config");
-
+const ai = require("../ai");
+const db = require("../../config/db.config");
+const helpers = require("./helpers");
 const axios = require("axios").default;
 
 const asyncHandlers = {}
 
-asyncHandlers.addRecipe = async(unprocessedData, obj) => {
+asyncHandlers.addRecipe = async(unprocessedData, obj, retries = 0) => {
 
     try {
 
@@ -17,22 +17,33 @@ asyncHandlers.addRecipe = async(unprocessedData, obj) => {
         const prompt = JSON.parse(promptTemplate.replace('_RECIPE_DATA_', unprocessedData));
     
         let newRecipe = await ai.gpt(prompt);
-    
+        
+        if (!helpers.isRecipeOutputValid(newRecipe)) throw new Error("Validation Failed.");
+
         newRecipe.name = obj.name;
         newRecipe.author = obj.author;
         newRecipe.cooking_time = obj.cookingTime;
         newRecipe.steps = obj.steps;
         newRecipe.userId = obj.userId;
-    
-        let ingredients = newRecipe.ingredients;
+        
+        newRecipe.ingredients.meat.push({
+            name: 'eggs',
+            steps: []
+        });
 
-        if (ingredients.meat.length == 0 && ingredients.dairy.length == 0) {
-            newRecipe.diet = "Vegan";
-        } else if (ingredients.meat.length == 0) {
-            newRecipe.diet = "Vegetarian";
-        } else {
-            newRecipe.diet = "Non-Vegetarian";
-        }
+        newRecipe.ingredients.dairy.push({
+            name: 'milk',
+            steps: [2]
+        });
+
+        let santisedIngredients = await helpers.validateAndSanitiseIngredients(newRecipe.ingredients, newRecipe.steps);
+
+        console.log("ST: " + santisedIngredients);
+
+        if (!santisedIngredients.valid) throw new Error("Invalid Ingredients.")
+
+        newRecipe.ingredients = santisedIngredients.list;
+        newRecipe.diet = helpers.getRecipeDietType(newRecipe.ingredients);
 
         if (!obj.generateImage) {
             const submissionData = await db.PendingSubmission.findOne({_id: obj.submission_id});
@@ -45,6 +56,7 @@ asyncHandlers.addRecipe = async(unprocessedData, obj) => {
                 success: true,
                 recipeId: submittedRecipe._id
             });
+
         } else {
 
             await db.PendingSubmission.findOneAndUpdate({_id: obj.submission_id}, {
@@ -55,7 +67,17 @@ asyncHandlers.addRecipe = async(unprocessedData, obj) => {
         }
 
     } catch (error) {
+
+
         console.log(error)
+
+        if (retries < 1) {
+
+            asyncHandlers.addRecipe(unprocessedData, obj, retries+1);
+            return;
+
+        }
+
         await db.PendingSubmission.findOneAndUpdate({_id: obj.submission_id}, {
             stage: "Error during recipe analysis & writing metadata.",
             is_pending: false,
