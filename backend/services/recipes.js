@@ -1,67 +1,104 @@
 /* 
-    Data Store 
+    Service for adding, deleting & viewing recipes.
 */
 
-const fs = require('fs').promises;
-
-const db = require('../db/db.config');
+const db = require('../config/db.config');
+const ai = require('../utils/ai');
+const asyncHandlers = require('../utils/asyncHandlers/asyncHandlers')
+const axios = require("axios").default;
 
 const recipes = {};
 
 recipes.add = async(obj) => {
 
-    try {
+    return new Promise(async(resolve) => {
 
-        let newRecipe = {
-            name: obj.name,
-            chef: obj.chef,
-            preptime: parseInt(obj.preptime),
-            type: obj.type.toLowerCase(),
-            preplist: obj.preplist,
-            steps: obj.steps
+        try {
+            
+            // Preparing Prompt
+
+            let stepsString = '';
+            obj.steps.forEach((step, i) => stepsString += `[STEP ${i+1}] ${step} `);
+    
+            let unprocessedData = `Recipe Name: ${obj.name}, Author: ${obj.author}, Steps: ${stepsString}`;
+            unprocessedData = unprocessedData.replace(/[\u0000-\u001F\u007F-\u009F]/g, "");
+            let promptTemplate = process.env.ADDRECIPE_GPT_PROMPTS_1;
+            let prompt = JSON.parse(promptTemplate.replace('_RECIPE_DATA_', unprocessedData));
+    
+            // Spam Analysis
+
+            const spamAnalysis = await ai.gpt(prompt);
+            
+            console.log(spamAnalysis);
+
+            if (spamAnalysis.spam_score >= 5) {
+                resolve({ code: 200, msg: "Submission rejeced by spam filter. Please try again."})
+                return;
+            }
+
+            // Initiating background processing chain, if submission is not spam.
+
+            if (obj.submission_id) { // Submission ID already exists (when user has submitted a cover image)
+
+                await db.PendingSubmission.findOneAndUpdate({_id: obj.submission_id}, {status_message: "Analysing recipe and writing metadata..."});
+                obj.generateImage = false;
+
+            } else { // No Submission ID; cover image also needs to be generated
+                
+                let newPendingSubmission = {
+                    is_pending: true,
+                    success: true,
+                    stage: "Analysing recipe and writing metadata..."
+                }
+
+                const submission = await db.PendingSubmission.create(newPendingSubmission);
+
+                obj.submission_id = submission._id;
+                obj.generateImage = true;
+
+            }
+
+            asyncHandlers.addRecipe(unprocessedData, obj);
+
+            resolve({code: 200, msg: "Submission sent for further processing.", submission_id: obj.submission_id})
+            
+        } catch (error) {
+            console.log(error)
+            return { code: 500, msg: "Could not add item"};
+    
         }
 
-        let addedRecipe = await db.Recipe.create(newRecipe);
-
-        return { code: 201, msg: "Item added", _id: addedRecipe._id};
-        
-    } catch (error) {
-        
-        return { code: 500, msg: "Could not add item"};
-
-    }
+    })
 
 }
 
-recipes.addThumbnail = async(obj) => {
+recipes.addImage = async(obj) => {
 
     return new Promise(async(resolve) => {
         try {
 
-            let newImg = {
-                recipeId: obj.idx,
-                thumbnail: Buffer.from(obj.img, "base64"),
-                format: obj.format
+            let newPendingSubmission = {
+                img_url: `https://imagedelivery.net/CwcWai9Vz5sYV9GCN-o2Vg/${obj.destination}`,
+                is_pending: true,
+                success: true,
+                stage: "User Image Upload"
             }
-    
-            await db.Img.create(newImg);
+            
+            const submission = await db.PendingSubmission.create(newPendingSubmission);
 
-            await db.Recipe.updateOne({ _id: obj.idx }, 
-                { "img":`https://ninjachefs-api.dhruv.tech/api/v1/recipes/thumbnails/${obj.idx}`});
-
-            resolve({code: 201, url: `https://ninjachefs-api.dhruv.tech/api/v1/recipes/thumbnails/${obj.idx}`});
+            resolve({code: 201, submission_id: submission._id});
             
         } catch (error) {
             
             console.log(error);
-            resolve({ code: 500, msg: "Could not add image"});
+            resolve({ code: 500, msg: "Could not create submission."});
     
         }
     })
 
 }
 
-recipes.getThumbnail = async(idx) => {
+recipes.generateImage = async(idx) => {
 
     return new Promise(async(resolve) => {
         try {
@@ -87,10 +124,26 @@ recipes.get = async(args = {}) => {
     try {
 
         let recipeData = []
-        if (args['idx']) recipeData = await db.Recipe.findOne({ _id: args['idx'] });
-        else recipeData = await db.Recipe.find().select('_id name preptime chef type img');
+        let count = 0;
+        let data = {};
 
-        return {code: 200, data: recipeData};
+        if (args['idx']) { 
+            
+            recipeData = await db.Recipe.findOne({ _id: args['idx'] });
+            data = recipeData
+
+        } else {
+
+            recipeData = await db.Recipe.find()
+            .select('_id name author diet img_url desc').sort({_id: -1})
+            .skip(args.skip).limit(args.limit);
+
+            count = await db.Recipe.count();
+            data = {count: count, recipes: recipeData}
+
+        }
+
+        return {code: 200, data: data};
 
     } catch (error) {
         
@@ -104,22 +157,64 @@ recipes.delete = async(idx) => {
 
     try {
 
+        const recipeData = await db.Recipe.findOne({ _id: idx });
+
+        try {
+
+            if (!recipeData.img_url) return;
+
+            const imgInfo = recipeData.img_url.split('/');
+            const options = {
+                method: 'DELETE',
+                url: `https://api.cloudflare.com/client/v4/accounts/${process.env.CLOUDFLARE_ID}/images/v1/${imgInfo[4]}`,
+                headers: {'Content-Type': 'application/json', Authorization: `Bearer ${process.env.CLOUDFLARE_TOKEN}`}
+            };
+
+
+            await axios.request(options);
+
+        } catch (e) {
+            console.time("RECIPE IMAGE DELETE ERROR")
+            console.log(`[> RECIPE IMAGE DELETE ERROR DETAILS] ${e}`)
+        }
+        
         await db.Recipe.deleteOne({ _id: idx });
 
-        let thumbnailStatus = '';
-        try {
-            await db.Img.deleteOne({ recipeId: idx });
-            thumbnailStatus = 'Thumbnail was also deleted.'
-        } catch {
-            thumbnailStatus = 'Thumbnail was not found for this item.'
-        }
-        return {code: 200, msg: `Deleted item with _id ${idx}. ${thumbnailStatus}`};
+        return {code: 200, msg: `Deleted item with _id ${idx}.`};
 
     } catch (error) {
 
-        console.log(error);
+        console.time("RECIPE DELETE ERROR")
+        console.log(`[> RECIPE DELETE ERROR DETAILS] ${error}`)
         
-        return { code: 404, msg: "Could not delete item, please check the _id"};
+        return { code: 404, msg: "Could not delete item, please try again later."};
+
+    }
+
+}
+
+recipes.getByUser = async({userId, limit, skip}) => {
+
+    try {
+
+        let recipeData = []
+        let count = 0;
+        let data = {};
+
+        console.log(userId)
+
+        recipeData = await db.Recipe.find({userId: userId})
+            .select('_id name author diet img_url desc').sort({_id: -1})
+            .skip(skip).limit(limit);
+
+            count = await db.Recipe.find({userId: userId}).count();
+            data = {count: count, recipes: recipeData}
+            
+        return {code: 200, data: data};
+
+    } catch (error) {
+        
+        return { code: 500, msg: "Could not retrive data from data store"};
 
     }
 

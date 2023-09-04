@@ -36,51 +36,86 @@ const recipeSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    chef: {
+    author: {
         type: String,
         required: true
     },
-    preptime: {
+    cooking_time: {
         type: Number,
         required: true
     },
-    type: {
+    diet: {
         type: String,
         required: true
     },
-    img: {
+    img_url: {
         type: String,
         required: false
     },
-    preplist: {
-        type: Array,
+    ingredients: {
+        type: Object,
         required: false
     },
     steps: {
         type: Array,
         required: true
+    },
+    allergies: {
+        type: Array,
+        required: true
+    },
+    intro: {
+        type: String,
+        required: true
+    },
+    desc: {
+        type: String,
+        required: true
+    },
+    health_score: {
+        type: Number,
+        required: true
+    },
+    health_reason: {
+        type: String,
+        required: true
+    },
+    userId: {
+        type: String,
+        required: false
     }
 });
 
 db.Recipe = mongoose.model("Recipe", recipeSchema);
 
-const imgSchema = new mongoose.Schema({
+const pendingSubmissionSchema = new mongoose.Schema({
     recipeId: {
         type: String,
-        required: true,
-        unique: true
+        required: false
     },
-    thumbnail: {
-        type: Buffer,
+    img_url: {
+        type: String,
+        required: false
+    },
+    is_pending: {
+        type: Boolean,
         required: true
     },
-    format: {
+    success: {
         type: String,
         required: true
+    },
+    stage: {
+        type: String,
+        required: true
+    },
+    log: {
+        type: String,
+        required: false
     }
 });
 
-db.Img = mongoose.model("Img", imgSchema);
+db.PendingSubmission = mongoose.model("PendingSubmission", pendingSubmissionSchema);
 
 // Export
 
