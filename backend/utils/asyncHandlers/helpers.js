@@ -102,7 +102,11 @@ helpers.validateAndSanitiseIngredients = async(ingredients, steps) => {
                 }
 
             }
+
+            unusedIngredients.sort((val1, val2) => val2 - val1 );
+
             console.log(unusedIngredients);
+            
             for (let index of unusedIngredients) {
                 console.log(index);
                 let r = ingredients[list].splice(index, 1);

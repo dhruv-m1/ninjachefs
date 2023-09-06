@@ -173,7 +173,7 @@ export default function ViewRecipe() {
                                 <h4 className='font-semibold mt-1 mb-2 text-xl'>
                                     { currentRecipe.allergies.length > 0 ? "Warning" : "No Common Allergens"}
                                 </h4>
-                                <p>{ currentRecipe.allergies.length > 0 ? "[List]" : "We didn't find any common food allergens in this recipe. However, if you are cooking for a guest, we recommend asking them about any allergies that they may have."}</p>
+                                <p>{ currentRecipe.allergies.length > 0 ? "This recipe may not be suitable for individuals with allergic tendencies to the following items: " + currentRecipe.allergies.join(", ") : "We didn't find any common food allergens in this recipe. However, if you are cooking for a guest, we recommend asking them about any allergies that they may have."}</p>
                             </div>
 
                         </section>

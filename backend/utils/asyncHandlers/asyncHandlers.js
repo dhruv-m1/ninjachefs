@@ -31,6 +31,11 @@ asyncHandlers.addRecipe = async(unprocessedData, obj, retries = 0) => {
             steps: []
         });
 
+        newRecipe.ingredients.meat.push({
+            name: 'eggs',
+            steps: [1]
+        });
+
         newRecipe.ingredients.dairy.push({
             name: 'milk',
             steps: [2]
