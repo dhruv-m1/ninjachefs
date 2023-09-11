@@ -2,7 +2,7 @@
     Utility for accessing Open AI models
 */
 
-const aiConfig = require('../config/ai.config');
+import aiConfig from '../config/ai.config.js';
 
 const ai = {};
 
@@ -38,4 +38,4 @@ ai.dalle = ((prompt) => {
     })
 })
 
-module.exports = ai;
+export default ai;

@@ -4,7 +4,7 @@
 
 
 const submissions = {};
-const db = require('../config/db.config');
+import db from "../config/db.config.js";
 
 submissions.status = (id) => {
     return new Promise(async(resolve, reject) => {
@@ -22,6 +22,6 @@ submissions.status = (id) => {
     });
 }
 
-module.exports = submissions;
+export default submissions;
 
 // TODO: submissions.user() - list of pending & failed submissions for a particular user.

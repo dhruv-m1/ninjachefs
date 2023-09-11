@@ -3,7 +3,7 @@
     This is segregated from recipe service as it will be used to search for author profiles as well in the future.
 */
 
-const db = require('../config/db.config');
+import db from '../config/db.config.js';
 
 const search = {};
 
@@ -43,4 +43,4 @@ search.query = async(keywords, filters = {}, skip, limit) => {
 
 }
 
-module.exports = search;
+export default search;

@@ -8,6 +8,7 @@
     "start": "node app"
   },
   "keywords": [],
+  "type": "module",
   "author": "",
   "license": "ISC",
   "dependencies": {

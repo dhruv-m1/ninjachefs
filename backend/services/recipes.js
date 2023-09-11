@@ -2,10 +2,10 @@
     Service for adding, deleting & viewing recipes.
 */
 
-const db = require('../config/db.config');
-const ai = require('../utils/ai');
-const asyncHandlers = require('../utils/asyncHandlers/asyncHandlers')
-const axios = require("axios").default;
+import db from '../config/db.config.js';
+import ai from '../utils/ai.js';
+import asyncHandlers from '../utils/asyncHandlers/asyncHandlers.js'
+import axios from 'axios';
 
 const recipes = {};
 
@@ -220,4 +220,4 @@ recipes.getByUser = async({userId, limit, skip}) => {
 
 }
 
-module.exports = recipes;
+export default recipes;

@@ -2,10 +2,10 @@
  * Utility for realtime data processing after a HTTP response is served.
  */
 
-const ai = require("../ai");
-const db = require("../../config/db.config");
-const helpers = require("./helpers");
-const axios = require("axios").default;
+import ai from "../ai.js";
+import db from "../../config/db.config.js";
+import helpers from "./helpers.js";
+import axios from "axios";
 
 const asyncHandlers = {}
 
@@ -132,4 +132,4 @@ asyncHandlers.generateRecipeImage = async(newRecipe, obj) => {
     }
 }
 
-module.exports = asyncHandlers;
+export default asyncHandlers;
