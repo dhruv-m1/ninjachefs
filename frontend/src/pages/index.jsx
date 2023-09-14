@@ -14,7 +14,6 @@ import { useRecipes } from '../providers/recipeContext';
 
 function Index() {
   const recipes = useRecipes();
-  const [dialog, setDialog] = useState(false);
 
   return (
       <div>
@@ -47,7 +46,7 @@ function Index() {
                     </div>
                   </div>
                   
-                  <ControlBox setDialog={setDialog}/>
+                  <ControlBox/>
                   
 
               </section>
@@ -61,8 +60,6 @@ function Index() {
               </section>
         </div>
 
-          <FormModal/>
-          <SignInBox dialog={dialog} setDialog={setDialog}/>
       </div>
   );
 }

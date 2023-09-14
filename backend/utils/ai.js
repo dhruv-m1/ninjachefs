@@ -13,7 +13,7 @@ ai.gpt = ((inputBatch) => {
 
             model: aiConfig.models.gpt,
             messages: inputBatch,
-            temperature: 0
+            temperature: 0.5
     
         }).then((res) => {
             const output = JSON.parse(res.data.choices[0].message.content);

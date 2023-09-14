@@ -2,12 +2,12 @@ import { useRef } from "react";
 import { useRecipes } from "../../../providers/recipeContext"
 import { useNavigate  } from "react-router-dom";
 
-import { useForm, useFieldArray } from "react-hook-form"
+import { useForm, useFieldArray } from "react-hook-form";
+import { useDialogs } from '../../../providers/dialogContext';
 
 export default function AddRecipe({form, setForm}) {
 
-    const loadingDialog = useRef();
-    const loadingDialogMessage = useRef();
+    const dialogs = useDialogs();
     const container = useRef();
     const navigate = useNavigate();
 
@@ -33,15 +33,11 @@ export default function AddRecipe({form, setForm}) {
       const onSubmit = async(data) => {
         console.log(data);
 
-        loadingDialog.current.open = true;
-        document.querySelector('body').style.overflowY = 'hidden';
-        window.scrollTo(0, 0);
-
         let recipeObj = {}
 
         if (data.image.length > 0) {
 
-            loadingDialogMessage.current.innerHTML = "Uploading Image..."
+            dialogs.showLoading("Uploading Image...");
             const imageUpload = await recipes.io.attachImage(data.image[0]);
             recipeObj.submission_id = imageUpload.submission_id;
 
@@ -56,10 +52,15 @@ export default function AddRecipe({form, setForm}) {
             recipeObj.steps.push(step.step);
         }
 
-        loadingDialogMessage.current.innerHTML = "Validating Recipe..."
+        dialogs.showLoading("Validating Recipe...");
         const submission = await recipes.io.add(recipeObj);
 
-        document.querySelector('body').style.overflowY = 'unset';
+        if (submission.spam) {
+            dialogs.showMessage("Spam Policy Violation", `${submission.msg} Please make nessesary corrections and try again.`);
+            return;
+        }
+
+        dialogs.close();
 
         navigate(`/recipe/submission/${submission.submission_id}`);
 
@@ -209,19 +210,6 @@ export default function AddRecipe({form, setForm}) {
                 </form>
 
             </section>
-
-            <dialog ref={loadingDialog} className="absolute backdrop-blur-md bg-slate-600/30 h-full w-[100vw] right-0 top-0 z-20">
-                <div className="flex justify-center items-center h-full">
-                    <div className="bg-white shadow-chef h-32 w-80 rounded-lg flex justify-center items-center gap-3">
-                        
-                        <i className="animate-spin fa-solid fa-circle-notch text-[#66bd94] text-2xl"></i>
-                        
-                        <p className="font-poppins font-semibold text-slate-600" ref={loadingDialogMessage}>
-                            <small>This is taking longer than expected...</small>
-                        </p>
-                    </div>
-                </div>
-            </dialog>
 
         </main>
 

@@ -61,6 +61,7 @@ helpers.validateAndSanitiseIngredients = async(ingredients, steps) => {
 
         const lists = ['veggies', 'dairy', 'meat', 'other'];
 
+        console.log("I L : "+ingredients);
         console.log(ingredients);
 
         for (let list of lists) {
@@ -87,9 +88,12 @@ helpers.validateAndSanitiseIngredients = async(ingredients, steps) => {
                 let ingredient = ingredients[list][i];
                 let isUsed = false;
 
+                console.log(ingredients[list][i])
+                console.log(ingredient)
+
                 for (let step of ingredient.steps) {
 
-                    if (steps[step-1].includes(ingredient.name)) {
+                    if (steps[step-1].toLowerCase().includes(ingredient.name.toLowerCase())) {
                         isUsed = true;
                         break;
                     }

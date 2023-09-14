@@ -3,29 +3,30 @@ import { useRecipes } from '../../../providers/recipeContext';
 import { useParams, useNavigate } from "react-router-dom";
 
 import { useUser } from '@clerk/clerk-react';
+import { useDialogs } from '../../../providers/dialogContext';
 
 export default function ViewRecipe() {
 
     const recipes = useRecipes();
     const userData = useUser();
-    let { idx } = useParams(); 
+    let { idx } = useParams();
+
     const navigate = useNavigate();
 
     const loadingDialog = useRef();
     let [currentRecipe, setCurrentRecipe] = useState({});
     let [user, setUser] = useState({id: "unset"});
 
+    const dialogs = useDialogs();
+
     const deleteAction = async() => {
 
-        if (!window.confirm(`Are you sure you want to delete "${currentRecipe.name}"?\n\nPress OK to confirm.`)) return;
+        if (!await dialogs.awaitConfirmation("Confirmation Required", `Are you sure you want to delete "${currentRecipe.name}"?`)) return;
 
-        loadingDialog.current.open = true;
-        document.querySelector('body').style.overflowY = 'hidden';
-        window.scrollTo(0, 0);
+        dialogs.showLoading("Deleting...");
 
         await recipes.io.delete({idx: currentRecipe._id})
-        alert(`Your recipe "${currentRecipe.name}" has been deleted.`);
-        document.querySelector('body').style.overflowY = 'unset';
+        dialogs.showMessage("Confirmation", `Your recipe "${currentRecipe.name}" has been deleted.`);
 
         navigate('/account/recipes');
     }

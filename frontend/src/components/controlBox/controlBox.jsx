@@ -1,20 +1,15 @@
 import { SignedIn, SignedOut } from "@clerk/clerk-react";
 import { Link } from "react-router-dom";
+import { useDialogs } from "../../providers/dialogContext";
 
 
 export default function ControlBox({ setDialog }) {
 
+    let dialogs = useDialogs();
+
     const openSignInDialog = () => {
-        setDialog(true);
+        dialogs.showAuth();
     }
-
-    const openModal = () => {
-        window.scrollTo({ top: 0, left: 0});
-        document.querySelector('.add-item-modal-wrapper').style.display = 'unset';
-        document.querySelector('body').style.overflowY = 'hidden';
-    }
-
-
 
     return (
         <div className="bg-[#D6F4EF] rounded-[10px] md:h-[275px] md:w-[300px] py-[20px] px-[30px] flex flex-col items-center">

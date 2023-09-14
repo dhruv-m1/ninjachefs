@@ -32,7 +32,7 @@ recipes.add = async(obj) => {
             console.log(spamAnalysis);
 
             if (spamAnalysis.spam_score >= 5) {
-                resolve({ code: 200, msg: "Submission rejeced by spam filter. Please try again."})
+                resolve({ code: 200, spam: true, msg: `${spamAnalysis.score_reason}`});
                 return;
             }
 
