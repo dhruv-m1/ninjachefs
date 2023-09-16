@@ -54,9 +54,7 @@ export default function ViewRecipe() {
         else recipe.health_category = "Healthy";
 
         let stepWiseIngredients = []
-        let ingredients = []
-
-        ingredients = ingredients.concat(recipe.ingredients.veggies, recipe.ingredients.dairy, recipe.ingredients.meat, recipe.ingredients.other);
+        let ingredients = recipe.ingredients;
         
         for (let i = 0; i < recipe.steps.length; i++) {
 
@@ -77,6 +75,10 @@ export default function ViewRecipe() {
         }
 
         recipe.stepWiseIngredients = stepWiseIngredients;
+        recipe.veggies = ingredients.filter((ingredient) => ingredient.category.toLowerCase() === 'veggies');
+        recipe.meats = ingredients.filter((ingredient) => ingredient.category.toLowerCase() === 'meat');
+        recipe.dairy = ingredients.filter((ingredient) => ingredient.category.toLowerCase() === 'dairy');
+        recipe.others = ingredients.filter((ingredient) => ingredient.category.toLowerCase() === 'other');
 
         setCurrentRecipe(recipe);
     }
@@ -185,12 +187,12 @@ export default function ViewRecipe() {
 
                         <h3 className='text-ninja-blue font-bold text-2xl'>What you'll need</h3>
 
-                        {currentRecipe.ingredients.veggies.length > 0 ? 
+                        {currentRecipe.veggies.length > 0 ? 
                             (
                             <>
                                 <h4 className='text-ninja-blue font-bold text-lg'>Veggies & Fruits</h4>
                                 <ul className='flex flex-wrap gap-x-6 gap-y-3 font-poppins'>
-                                    {currentRecipe.ingredients.veggies.map((ingredient, i) => (
+                                    {currentRecipe.veggies.map((ingredient, i) => (
                                         <li className="text-ninja-blue font-medium text-md bg-white 
                                         border-2 border-ninja-blue/25 border-dashed
                                         shadow-chef py-5 px-3 text-center min-w-[175px] rounded-2xl" 
@@ -204,12 +206,12 @@ export default function ViewRecipe() {
                             : null
                         }
 
-                        {currentRecipe.ingredients.dairy.length > 0 ? 
+                        {currentRecipe.dairy.length > 0 ? 
                             (
                             <>
                                 <h4 className='text-ninja-blue font-bold text-lg'>Dairy</h4>
                                 <ul className='flex flex-wrap gap-x-6 gap-y-3 font-poppins'>
-                                    {currentRecipe.ingredients.dairy.map((ingredient, i) => (
+                                    {currentRecipe.dairy.map((ingredient, i) => (
                                         <li className="text-ninja-blue font-medium text-md bg-white 
                                         border-2 border-ninja-blue/25 border-dashed
                                         shadow-chef py-5 px-3 text-center min-w-[175px] rounded-2xl" 
@@ -223,12 +225,12 @@ export default function ViewRecipe() {
                             : null
                         }
                         
-                        {currentRecipe.ingredients.meat.length > 0 ? 
+                        {currentRecipe.meats.length > 0 ? 
                             (
                             <>
                                 <h4 className='text-ninja-blue font-bold text-lg'>Meat & Eggs</h4>
                                 <ul className='flex flex-wrap gap-x-6 gap-y-3 font-poppins'>
-                                    {currentRecipe.ingredients.meat.map((ingredient, i) => (
+                                    {currentRecipe.meats.map((ingredient, i) => (
                                         <li className="text-ninja-blue font-medium text-md bg-white 
                                         border-2 border-ninja-blue/25 border-dashed
                                         shadow-chef py-5 px-3 text-center min-w-[175px] rounded-2xl" 
@@ -242,12 +244,12 @@ export default function ViewRecipe() {
                             : null
                         }
 
-                        {currentRecipe.ingredients.other.length > 0 ? 
+                        {currentRecipe.others.length > 0 ? 
                             (
                             <>
                                 <h4 className='text-ninja-blue font-bold text-lg'>Spices, condiments, nuts & everything else</h4>
                                 <ul className='flex flex-wrap gap-x-6 gap-y-3 font-poppins'>
-                                    {currentRecipe.ingredients.other.map((ingredient, i) => (
+                                    {currentRecipe.others.map((ingredient, i) => (
                                         <li className="text-ninja-blue font-medium text-md bg-white 
                                         border-2 border-ninja-blue/25 border-dashed
                                         shadow-chef py-5 px-3 text-center min-w-[175px] rounded-2xl" 

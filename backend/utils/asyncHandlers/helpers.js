@@ -41,6 +41,10 @@ helpers.isRecipeOutputValid = (output) => {
             prop: "health_reason",
             type: String
         
+        },
+        {
+            prop: "prompt",
+            type: String
         }
     ]
 
@@ -59,68 +63,60 @@ helpers.validateAndSanitiseIngredients = async(ingredients, steps) => {
 
     return new Promise (resolve => {
 
-        const lists = ['veggies', 'dairy', 'meat', 'other'];
+        // Validation
 
-        console.log("I L : "+ingredients);
-        console.log(ingredients);
+        const schema = ['name', 'steps', 'category'];
 
-        for (let list of lists) {
+        if (!typeof(ingredients) === Array) {
+            
+            resolve({valid: false});
+            return;
 
-            // Validation
-            if (!Object.hasOwn(ingredients, list)) { 
-                console.log("A")
+        }
+
+        for (let property of schema) {
+
+            if (!Object.hasOwn(ingredients[0], property)) { 
+                
                 resolve({valid: false});
                 return;
 
-            } else if (!typeof(ingredients[list]) === Array) {
-                console.log("B")
-                resolve({valid: false});
-                return;
-
-            }
-
-            // Sanitisation
-
-            let unusedIngredients = [];
-
-            for (let i = 0; i < ingredients[list].length; i++) {
-
-                let ingredient = ingredients[list][i];
-                let isUsed = false;
-
-                console.log(ingredients[list][i])
-                console.log(ingredient)
-
-                for (let step of ingredient.steps) {
-
-                    if (steps[step-1].toLowerCase().includes(ingredient.name.toLowerCase())) {
-                        isUsed = true;
-                        break;
-                    }
-
-                }
-
-                if (!isUsed) {
-                    unusedIngredients.push(i);
-                    console.log("Removable: " + ingredient.name);
-                }
-
-            }
-
-            unusedIngredients.sort((val1, val2) => val2 - val1 );
-
-            console.log(unusedIngredients);
-
-            for (let index of unusedIngredients) {
-                console.log(index);
-                let r = ingredients[list].splice(index, 1);
-                console.log("R")
-                console.log(r)
-                console.log("L")
-                console.log(ingredients[list]);
             }
 
         }
+
+        if (!typeof(ingredients.steps) === Array) {
+            
+            resolve({valid: false});
+            return;
+
+        }
+
+        // Sanitisation
+
+        let unusedIngredients = [];
+
+        for (let i = 0; i < ingredients.length; i++) {
+
+            let ingredient = ingredients[i];
+            let isUsed = false;
+
+            for (let step of ingredient.steps) {
+
+                if (steps[step-1].toLowerCase().includes(ingredient.name.toLowerCase())) {
+                    isUsed = true;
+                    break;
+                }
+
+            }
+
+            if (!isUsed) unusedIngredients.push(i);
+
+        }
+
+        unusedIngredients.sort((val1, val2) => val2 - val1 );
+
+        for (let index of unusedIngredients) ingredients.splice(index, 1);
         
         resolve({valid: true, list: ingredients});
 
@@ -130,13 +126,14 @@ helpers.validateAndSanitiseIngredients = async(ingredients, steps) => {
 
 helpers.getRecipeDietType = (ingredients) => {
 
-    if (ingredients.meat.length == 0 && ingredients.dairy.length == 0) {
-        return "Vegan";
-    } else if (ingredients.meat.length == 0) {
-        return "Vegetarian";
-    } else {
-        return "Non-Vegetarian";
-    }
+    const meat = ingredients.filter((ingredient) => ingredient.category.toLowerCase() === 'meat');
+    const dairy = ingredients.filter((ingredient) => ingredient.category.toLowerCase() === 'dairy');
+
+    if (meat.length == 0 && dairy.length == 0) return "Vegan";
+    
+    if (meat.length == 0) return "Vegetarian";
+    
+    return "Non-Vegetarian";
 
 }
 
