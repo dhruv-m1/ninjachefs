@@ -2,8 +2,10 @@
     This layout encapsulates all main pages in the app.
 */
 
+import Dialog from "../components/dialog/dialog";
 import Footer from "../components/footer/footer";
 import Header from "../components/header/header";
+import { DialogProvider } from "../providers/dialogContext";
 
 const MainLayout = ({ children }) => {
 
@@ -11,7 +13,10 @@ const MainLayout = ({ children }) => {
         <div className="container mx-auto px-6">
             <Header/>
 
-            {children}
+            <DialogProvider>
+                {children}
+                <Dialog/>
+            </DialogProvider>
 
             <Footer/>
         </div>

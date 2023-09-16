@@ -2,11 +2,11 @@
     OpenAI SDK Setup
 */
 
-const openAI = require('openai');
+import { OpenAIApi, Configuration } from 'openai';
 
 // API Config
-const OpenAI = new openAI.OpenAIApi(
-    new openAI.Configuration({
+const OpenAI = new OpenAIApi(
+    new Configuration({
         apiKey: process.env.OPENAI_KEY
     })
 )
@@ -20,4 +20,4 @@ aiConfig.models = {
 
 aiConfig.interface = OpenAI;
 
-module.exports = aiConfig;
+export default aiConfig;

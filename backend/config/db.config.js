@@ -2,8 +2,8 @@
     Database Setup
 */
 
-require('dotenv').config();
-const mongoose = require("mongoose");
+import 'dotenv/config';
+import mongoose from 'mongoose';
 
 const db = {};
 
@@ -119,4 +119,4 @@ db.PendingSubmission = mongoose.model("PendingSubmission", pendingSubmissionSche
 
 // Export
 
-module.exports = db;
+export default db;

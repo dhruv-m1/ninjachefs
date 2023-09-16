@@ -2,10 +2,10 @@
     Service for adding, deleting & viewing recipes.
 */
 
-const db = require('../config/db.config');
-const ai = require('../utils/ai');
-const asyncHandlers = require('../utils/asyncHandlers/asyncHandlers')
-const axios = require("axios").default;
+import db from '../config/db.config.js';
+import ai from '../utils/ai.js';
+import asyncHandlers from '../utils/asyncHandlers/asyncHandlers.js'
+import axios from 'axios';
 
 const recipes = {};
 
@@ -22,7 +22,7 @@ recipes.add = async(obj) => {
     
             let unprocessedData = `Recipe Name: ${obj.name}, Author: ${obj.author}, Steps: ${stepsString}`;
             unprocessedData = unprocessedData.replace(/[\u0000-\u001F\u007F-\u009F]/g, "");
-            let promptTemplate = process.env.ADDRECIPE_GPT_PROMPTS_1;
+            let promptTemplate = process.env.ADDRECIPE_SPAM_PROMPT;
             let prompt = JSON.parse(promptTemplate.replace('_RECIPE_DATA_', unprocessedData));
     
             // Spam Analysis
@@ -32,7 +32,7 @@ recipes.add = async(obj) => {
             console.log(spamAnalysis);
 
             if (spamAnalysis.spam_score >= 5) {
-                resolve({ code: 200, msg: "Submission rejeced by spam filter. Please try again."})
+                resolve({ code: 200, spam: true, msg: `${spamAnalysis.score_reason}`});
                 return;
             }
 
@@ -40,7 +40,7 @@ recipes.add = async(obj) => {
 
             if (obj.submission_id) { // Submission ID already exists (when user has submitted a cover image)
 
-                await db.PendingSubmission.findOneAndUpdate({_id: obj.submission_id}, {status_message: "Analysing recipe and writing metadata..."});
+                await db.PendingSubmission.findOneAndUpdate({_id: obj.submission_id}, {stage: "Identifying Ingredients..."});
                 obj.generateImage = false;
 
             } else { // No Submission ID; cover image also needs to be generated
@@ -48,7 +48,7 @@ recipes.add = async(obj) => {
                 let newPendingSubmission = {
                     is_pending: true,
                     success: true,
-                    stage: "Analysing recipe and writing metadata..."
+                    stage: "Identifying Ingredients..."
                 }
 
                 const submission = await db.PendingSubmission.create(newPendingSubmission);
@@ -58,7 +58,7 @@ recipes.add = async(obj) => {
 
             }
 
-            asyncHandlers.addRecipe(unprocessedData, obj);
+            asyncHandlers.addRecipe(stepsString, obj);
 
             resolve({code: 200, msg: "Submission sent for further processing.", submission_id: obj.submission_id})
             
@@ -81,7 +81,7 @@ recipes.addImage = async(obj) => {
                 img_url: `https://imagedelivery.net/CwcWai9Vz5sYV9GCN-o2Vg/${obj.destination}`,
                 is_pending: true,
                 success: true,
-                stage: "User Image Upload"
+                stage: "Image Uploaded by User"
             }
             
             const submission = await db.PendingSubmission.create(newPendingSubmission);
@@ -220,4 +220,4 @@ recipes.getByUser = async({userId, limit, skip}) => {
 
 }
 
-module.exports = recipes;
+export default recipes;

@@ -2,22 +2,47 @@
  * Utility for realtime data processing after a HTTP response is served.
  */
 
-const ai = require("../ai");
-const db = require("../../config/db.config");
-const helpers = require("./helpers");
-const axios = require("axios").default;
+import ai from "../ai.js";
+import db from "../../config/db.config.js";
+import helpers from "./helpers.js";
+import axios from "axios";
 
 const asyncHandlers = {}
 
-asyncHandlers.addRecipe = async(unprocessedData, obj, retries = 0) => {
+asyncHandlers.addRecipe = async(stepsString, obj, retries = 0) => {
 
     try {
 
-        const promptTemplate = obj.generateImage ? process.env.ADDRECIPE_GPT_PROMPTS_3 : process.env.ADDRECIPE_GPT_PROMPTS_2;
-        const prompt = JSON.parse(promptTemplate.replace('_RECIPE_DATA_', unprocessedData));
+        let unprocessedData = `Recipe Name: ${obj.name}, Author: ${obj.author}, Steps: ${stepsString}`;
+        unprocessedData = unprocessedData.replace(/[\u0000-\u001F\u007F-\u009F]/g, "");
+
+        let promptTemplate = process.env.ADDRECIPE_INGREDIENTS_PROMPT;
+        let prompt = JSON.parse(promptTemplate.replace('_RECIPE_DATA_', unprocessedData.replace()));
+
+        let ingredients = await ai.gpt(prompt);
+
+        let santisedIngredients = await helpers.validateAndSanitiseIngredients(ingredients, obj.steps);
+
+        if (!santisedIngredients.valid) throw new Error("Invalid Ingredients.")
+
+        await db.PendingSubmission.findOneAndUpdate({_id: obj.submission_id}, {
+            stage: "Analysing recipe & writing metadata..."
+        });
+
+        let ingredientString = '';
+        santisedIngredients.list.forEach((ingredient, i) => ingredientString += `(${i+1}) ${ingredient} `);
+        
+        unprocessedData = `Recipe Name: ${obj.name}, Author: ${obj.author}, Ingredients: ${ingredientString} Steps: ${stepsString}`;
+        unprocessedData = unprocessedData.replace(/[\u0000-\u001F\u007F-\u009F]/g, "");
+
+        promptTemplate = process.env.ADDRECIPE_METADATA_PROMPT;
+        prompt = JSON.parse(promptTemplate.replace('_RECIPE_DATA_', unprocessedData));
     
         let newRecipe = await ai.gpt(prompt);
         
+        newRecipe.ingredients = santisedIngredients.list;
+        newRecipe.diet = helpers.getRecipeDietType(newRecipe.ingredients);
+
         if (!helpers.isRecipeOutputValid(newRecipe)) throw new Error("Validation Failed.");
 
         newRecipe.name = obj.name;
@@ -25,27 +50,9 @@ asyncHandlers.addRecipe = async(unprocessedData, obj, retries = 0) => {
         newRecipe.cooking_time = obj.cookingTime;
         newRecipe.steps = obj.steps;
         newRecipe.userId = obj.userId;
-        
-        newRecipe.ingredients.meat.push({
-            name: 'eggs',
-            steps: []
-        });
-
-        newRecipe.ingredients.dairy.push({
-            name: 'milk',
-            steps: [2]
-        });
-
-        let santisedIngredients = await helpers.validateAndSanitiseIngredients(newRecipe.ingredients, newRecipe.steps);
-
-        console.log("ST: " + santisedIngredients);
-
-        if (!santisedIngredients.valid) throw new Error("Invalid Ingredients.")
-
-        newRecipe.ingredients = santisedIngredients.list;
-        newRecipe.diet = helpers.getRecipeDietType(newRecipe.ingredients);
 
         if (!obj.generateImage) {
+
             const submissionData = await db.PendingSubmission.findOne({_id: obj.submission_id});
             newRecipe.img_url = submissionData.img_url;
 
@@ -57,14 +64,15 @@ asyncHandlers.addRecipe = async(unprocessedData, obj, retries = 0) => {
                 recipeId: submittedRecipe._id
             });
 
-        } else {
+            return;
 
-            await db.PendingSubmission.findOneAndUpdate({_id: obj.submission_id}, {
-                stage: "Visualising recipe & generating image..."
-            });
-
-            asyncHandlers.generateRecipeImage(newRecipe, obj);
         }
+
+        await db.PendingSubmission.findOneAndUpdate({_id: obj.submission_id}, {
+            stage: "Visualising recipe & generating image..."
+        });
+
+        asyncHandlers.generateRecipeImage(newRecipe, obj);
 
     } catch (error) {
 
@@ -73,13 +81,13 @@ asyncHandlers.addRecipe = async(unprocessedData, obj, retries = 0) => {
 
         if (retries < 1) {
 
-            asyncHandlers.addRecipe(unprocessedData, obj, retries+1);
+            asyncHandlers.addRecipe(stepsString, obj, retries+1);
             return;
 
         }
 
         await db.PendingSubmission.findOneAndUpdate({_id: obj.submission_id}, {
-            stage: "Error during recipe analysis & writing metadata.",
+            stage: "Error during recipe analysis.",
             is_pending: false,
             success: false,
             log: error
@@ -127,4 +135,4 @@ asyncHandlers.generateRecipeImage = async(newRecipe, obj) => {
     }
 }
 
-module.exports = asyncHandlers;
+export default asyncHandlers;

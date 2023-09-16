@@ -14,7 +14,6 @@ import { useRecipes } from '../providers/recipeContext';
 
 function Index() {
   const recipes = useRecipes();
-  const [dialog, setDialog] = useState(false);
 
   return (
       <div>
@@ -42,12 +41,12 @@ function Index() {
 
                   <div className="hidden lg:flex">
                     <div className='w-[300px] h-[275px]'>
-                    { (recipes.recent.list.length === 0) && <Card/>}
+                    { (recipes.recent.list.length === 0) && <Card width="300px" height="275px"/>}
                     { (recipes.recent.list.length  > 0) && <Card name={recipes.recent.list[0].name} type={recipes.recent.list[0].diet} chef={recipes.recent.list[0].author} img={`${recipes.recent.list[0].img_url}/ncThumbnail`} obj={recipes.recent.list[0]}/>}
                     </div>
                   </div>
                   
-                  <ControlBox setDialog={setDialog}/>
+                  <ControlBox/>
                   
 
               </section>
@@ -61,8 +60,6 @@ function Index() {
               </section>
         </div>
 
-          <FormModal/>
-          <SignInBox dialog={dialog} setDialog={setDialog}/>
       </div>
   );
 }

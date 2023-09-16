@@ -2,22 +2,22 @@
     Entrypoint - NinjaChefs Backend
 */
 
-const express = require('express');
-const Clerk = require('@clerk/clerk-sdk-node/cjs/instance').default;
+import express from 'express';
+import { Clerk } from '@clerk/clerk-sdk-node';
 
 const port = process.env.PORT || 8080;
 const host = process.env.HOST || '127.0.0.1';
 
-const recipes = require("./services/recipes");
-const search = require("./services/search");
+import recipes from './services/recipes.js';
+import search from './services/search.js';
 
-const submissions = require("./services/submissions");
+import submissions from './services/submissions.js'
 
-const db = require('./config/db.config');
+import db from './config/db.config.js';
 const app = express();
 
-const multer = require("multer");
-const imageCDN = require("multer-cloudflare-storage");
+import multer from 'multer';
+import {CloudflareStorage} from 'multer-cloudflare-storage';
 const clerk = new Clerk({ apiKey: process.env.CLERK_API_KEY });
 
 let startTime = null;
@@ -42,7 +42,7 @@ const unauthenticated = (res) => {
 }
 
 const upload = multer({
-    storage: new imageCDN.CloudflareStorage(process.env.CLOUDFLARE_ID, process.env.CLOUDFLARE_TOKEN)
+    storage: new CloudflareStorage(process.env.CLOUDFLARE_ID, process.env.CLOUDFLARE_TOKEN)
 }).single("image");
 
 // Endpoints
