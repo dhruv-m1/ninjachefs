@@ -1,6 +1,6 @@
 # NinjaChefs + AI
 
-Web application, with AI assist features, for facilitating easy sharing of recipies on the internet.
+Web application that leverages generative AI to simplify online recipe sharing.
 
 🌐 See a live demo at: [ninjachefs.dhruv.tech](https://go.dhruv.tech/p/ninjachefs)
 
