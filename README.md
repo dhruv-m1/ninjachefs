@@ -2,9 +2,11 @@
 
 Web application, with AI assist features, for facilitating easy sharing of recipies on the internet.
 
-🌐 Demo: [ninjachefs.dhruv.tech](https://go.dhruv.tech/p/ninjachefs)
+🌐 See a live demo at: [ninjachefs.dhruv.tech](https://go.dhruv.tech/p/ninjachefs)
 
-![NinjaChefs Flow (1)](https://github.com/dhruv-tech/ninjachefs/assets/26849655/1b71b025-57f4-48de-aa55-9e4032116d93)
+🍽️ Sample recipes for testing the demo can be found [here.](https://github.com/dhruv-tech/ninjachefs/wiki)
+
+<img src="https://github.com/dhruv-tech/ninjachefs/assets/26849655/5b1c885d-72ca-416d-988c-07f68267540f" alt="screenshot of ninjachefs homepage" height="375">
 
 ## Features
 
