@@ -18,7 +18,7 @@ Web application, with AI assist features, for facilitating easy sharing of recip
 
 * View recipes shared by yourself.
 
-* Pagination whereever a list/grid of recipes is displayed.
+* Pagination wherever a list/grid of recipes is displayed.
 
 * Add recipes with AI Assist
   * AI Assist provides the following fuctionality:
