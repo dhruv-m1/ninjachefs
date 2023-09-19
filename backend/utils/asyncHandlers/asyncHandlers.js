@@ -30,7 +30,7 @@ asyncHandlers.addRecipe = async(stepsString, obj, retries = 0) => {
         });
 
         let ingredientString = '';
-        santisedIngredients.list.forEach((ingredient, i) => ingredientString += `(${i+1}) ${ingredient} `);
+        santisedIngredients.list.forEach((ingredient, i) => ingredientString += `(${i+1}) ${ingredient.name} `);
         
         unprocessedData = `Recipe Name: ${obj.name}, Author: ${obj.author}, Ingredients: ${ingredientString} Steps: ${stepsString}`;
         unprocessedData = unprocessedData.replace(/[\u0000-\u001F\u007F-\u009F]/g, "");
