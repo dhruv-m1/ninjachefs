@@ -20,6 +20,7 @@ export default function Library() {
         const loadRecipes = async() => {
 
             let cardsPerRow = Math.floor(container.current.offsetWidth/(cardWidth + 16))
+            if (cardsPerRow === 1) cardsPerRow = 3;
             recipes.config.setPageLength(cardsPerRow*2);
             searchInput.current.value = recipes.search.keywords.current;
             await recipes.recent.get();

@@ -79,14 +79,14 @@ export default function AddRecipe({form, setForm}) {
 
             <section className="py-5 flex flex-col gap-5">
 
-                <div className="bg-yellow-100 font-medium text-yellow-900 py-3 px-4 rounded-xl flex items-center gap-2 w-[95%]">
+                <div className="bg-yellow-100 font-medium text-yellow-900 py-3 px-4 rounded-xl flex flex-col md:flex-row md:items-center gap-2 md:w-[95%]">
 
-                    <p className="font-semibold w-56">
+                    <p className="font-semibold shrink-0 md:mr-1">
                         <i className="fa-solid fa-triangle-exclamation"/>&thinsp;
                         Spam Policy
                     </p>
 
-                    <p className="text-sm mt-1">
+                    <p className="text-sm md:mt-1">
                         Please submit valid food recipes only - this helps maintain a pleasant experiance for everyone and
                         ensure that things work as intended. Expletives are strictly prohibited.
                         <b> If you are testing the application, you may consider&nbsp;
@@ -99,7 +99,7 @@ export default function AddRecipe({form, setForm}) {
 
                 </div>
 
-                <form className="flex flex-col gap-3 w-[95%]" onSubmit={handleSubmit(onSubmit)}>
+                <form className="flex flex-col gap-3 md:w-[95%]" onSubmit={handleSubmit(onSubmit)}>
                     <h2 className="font-bold text-xl text-ninja-blue mt-1">What are we cooking, today?</h2>
                     {errors.name && 
                         <p className="bg-red-100 text-red-900 text-sm font-medium rounded-lg px-3 py-2">
@@ -138,9 +138,9 @@ export default function AddRecipe({form, setForm}) {
 
                     <h2 className="font-bold text-xl text-ninja-blue mt-1">Cooking Steps</h2>
                     
-                    <div className="bg-[#D6F4EF] font-medium text-[#00654B] py-3 px-4 rounded-xl flex items-center gap-2 mb-1">
+                    <div className="bg-[#D6F4EF] font-medium text-[#00654B] py-3 px-4 rounded-xl flex flex-col md:flex-row md:items-center gap-2 mb-1">
 
-                        <p className="font-semibold w-32">
+                        <p className="font-semibold shrink-0 md:mr-1">
                             <i className="fa-solid fa-bolt"/>&thinsp;
                             AI Assist
                         </p>

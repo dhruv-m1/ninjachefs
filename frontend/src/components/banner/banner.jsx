@@ -18,9 +18,9 @@ export default function Banner(props) {
                             </h3>
                         }
 
-                        {!props.text && <div className="mt-1 h-7 w-96 rounded-lg bg-[#7e818c] animate-pulse"></div>}
-                        {!props.text && <div className="mt-1 h-7 w-64 rounded-lg bg-[#7e818c] animate-pulse"></div>}
-                        {!props.text && <div className="md:hidden mt-1 h-7 w-64 rounded-lg bg-[#7e818c] animate-pulse"></div>}
+                        {!props.text && <div className="mt-1 h-7 w-[96%] xl:w-[82%] rounded-lg bg-[#7e818c] animate-pulse"></div>}
+                        {!props.text && <div className="mt-1 h-7 w-[64%] rounded-lg bg-[#7e818c] animate-pulse"></div>}
+                        {!props.text && <div className="md:hidden mt-1 h-7 w-[64%] rounded-lg bg-[#7e818c] animate-pulse"></div>}
 
                     </div>
                 </Link>
