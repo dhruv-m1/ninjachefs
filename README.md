@@ -10,13 +10,11 @@ Web application that leverages generative AI to simplify online recipe sharing.
 
 ## Features
 
-* Publiclly view shared recipes.
+* Publicly view shared recipes.
 
-* Fuzzy search recipes by name, author or diet.
+* Search recipes by name, author or diet (fuzzy).
 
 * Authenticate with 3rd party OAuth providers or a local username and password.
-
-* View recipes shared by yourself.
 
 * Pagination wherever a list/grid of recipes is displayed.
 
@@ -33,9 +31,9 @@ Web application that leverages generative AI to simplify online recipe sharing.
 
 * Background processing of recipe submissions with polling-based status updates.
 
-* Delete your recipes.
-
-* Make corrections on certain AI generated elements of your recipes (under development)
+* Manage recipes shared by yourself
+  * Delete your recipes.
+  * Make corrections on certain AI generated elements of your recipes (under development)
 
 ## Tech Stack
 
