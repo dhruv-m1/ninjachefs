@@ -40,7 +40,7 @@ recipes.add = async(obj) => {
 
             if (obj.submission_id) { // Submission ID already exists (when user has submitted a cover image)
 
-                await db.PendingSubmission.findOneAndUpdate({_id: obj.submission_id}, {stage: "Identifying Ingredients..."});
+                await db.PendingSubmission.findOneAndUpdate({_id: obj.submission_id}, {stage: "Identifying & sorting ingredients..."});
                 obj.generateImage = false;
 
             } else { // No Submission ID; cover image also needs to be generated
@@ -48,7 +48,7 @@ recipes.add = async(obj) => {
                 let newPendingSubmission = {
                     is_pending: true,
                     success: true,
-                    stage: "Identifying Ingredients..."
+                    stage: "Identifying & sorting ingredients..."
                 }
 
                 const submission = await db.PendingSubmission.create(newPendingSubmission);

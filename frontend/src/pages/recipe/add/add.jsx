@@ -89,8 +89,11 @@ export default function AddRecipe({form, setForm}) {
                     <p className="text-sm mt-1">
                         Please submit valid food recipes only - this helps maintain a pleasant experiance for everyone and
                         ensure that things work as intended. Expletives are strictly prohibited.
-                        <b> If you are testing the application, you may consider copy-pasting a recipe from&nbsp;
-                        <a href="https://github.com/dhruv-tech" className="underline" target="_blank" rel="noreferrer">here.</a><br/></b>
+                        <b> If you are testing the application, you may consider&nbsp;
+                            <a href="https://github.com/dhruv-tech/ninjachefs/wiki" className="underline" target="_blank" rel="noreferrer">
+                                copy-pasting a recipe from here.
+                            </a>
+                        </b>
 
                     </p>
 
