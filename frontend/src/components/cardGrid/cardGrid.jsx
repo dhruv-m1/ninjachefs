@@ -13,7 +13,8 @@ export default function CardGrid({list, total, initFunction, loadMoreFunction, n
 
     const loadRecipes = async() => {
 
-        let cardsPerRow = Math.floor(container.current.offsetWidth/(316))
+        let cardsPerRow = Math.floor(container.current.offsetWidth/(316));
+        if (cardsPerRow === 1) cardsPerRow = 3;
         recipes.config.setPageLength(cardsPerRow*2);
 
         await initFunction();
