@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useRecipes } from "../../providers/recipeContext"
 import { useUser } from "@clerk/clerk-react";
 
-import CardGrid from "../../components/cardGrid/cardGrid";
+import CardGrid from '../../components/recipe_discovery/CardGrid';
 
 export default function AccountRecipes() {
 

@@ -1,7 +1,5 @@
-import { Link } from 'react-router-dom';
-import logo from '../../assets/logo.svg';
-import { SignIn, SignedIn, SignedOut, useUser } from "@clerk/clerk-react";
-import { useDialogs } from '../../providers/dialogContext';
+import { SignIn, SignedIn, SignedOut } from "@clerk/clerk-react";
+import { useDialogs } from '../../../providers/dialogContext';
 import { useEffect, useRef } from 'react';
 
 export default function Dialog() {

@@ -1,6 +1,6 @@
-import { Link } from "react-router-dom";
 
-export default function Banner(props) {
+
+export default function RecipeBanner(props) {
 
     return (
             <div className="bg-ninja-blue rounded-3xl py-5 px-7 text-white font-poppins grow">

@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import styles from "./card.module.css";
 
 
 export default function Card(props) {
@@ -29,10 +28,23 @@ export default function Card(props) {
                             {props.chef}
                         </span>
                         
-                        <span className={`text-sm capitalize truncate
-                        ${styles[props.type]}` }>
-                            {props.type}
-                        </span>
+                        {props.type.toLowerCase() === 'vegetarian' &&
+                            <span className="text-sm capitalize truncate text-[#119C72]">
+                                Vegetarian
+                            </span>
+                        }
+
+                        {props.type.toLowerCase() === 'non-vegetarian' &&
+                            <span className="text-sm capitalize truncate text-[#9c1a11]">
+                                Non-Vegetarian
+                            </span>
+                        }
+
+                        {props.type.toLowerCase() === 'vegan' &&
+                            <span className="text-sm capitalize truncate text-[#2f9c11]">
+                                Vegan
+                            </span>
+                        }
                     </div>
                 </div>
 
@@ -68,7 +80,5 @@ export default function Card(props) {
     
         </Link>
     );
-
-    
 
   }

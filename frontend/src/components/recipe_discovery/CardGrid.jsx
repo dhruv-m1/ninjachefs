@@ -1,4 +1,4 @@
-import Card from '../card/card';
+import Card from './Card';
 
 import { useRecipes } from '../../providers/recipeContext';
 import { useState, useEffect, useRef } from 'react';

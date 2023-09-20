@@ -2,9 +2,9 @@
     This layout encapsulates all main pages in the app.
 */
 
-import Dialog from "../components/dialog/dialog";
-import Footer from "../components/footer/footer";
-import Header from "../components/header/header";
+import Dialog from "../components/communication/Dialog/dialog";
+import Footer from "../components/navigation/Footer";
+import Header from "../components/navigation/Header";
 import { DialogProvider } from "../providers/dialogContext";
 
 const MainLayout = ({ children }) => {

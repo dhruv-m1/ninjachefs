@@ -1,13 +1,8 @@
 
-import Banner from '../components/banner/banner';
-import ControlBox from '../components/controlBox/controlBox';
-import Library from '../components/library/library';
-
-import FormModal from '../components/formModal/formModal';
-import Card from '../components/card/card';
-import { useEffect, useState } from 'react';
-
-import SignInBox from '../components/signInBox/signInBox';
+import FeaturedBanner from '../components/navigation/FeaturedBanner'
+import ControlBox from '../components/navigation/ControlBox';
+import Library from '../components/recipe_discovery/Library';
+import Card from '../components/recipe_discovery/Card';
 import { useRecipes } from '../providers/recipeContext';
 
 
@@ -24,11 +19,11 @@ function Index() {
                 {
                   recipes.recent.list.length === 0 ?
 
-                  <Banner/>
+                  <FeaturedBanner/>
 
                   :
 
-                  <Banner
+                  <FeaturedBanner
 
                   author={recipes.recent.list[0].author}
                   id={recipes.recent.list[0]._id}
