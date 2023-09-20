@@ -1,30 +1,74 @@
 
 
-export default function RecipeBanner(props) {
+export default function RecipeBanner({ currentRecipe }) {
 
     return (
-            <div className="bg-ninja-blue rounded-3xl py-5 px-7 text-white font-poppins grow">
-                <Link to={`/recipe/view/${props.id}`}>
-                    <div className="flex flex-col grow gap-y-2 font-poppins">
-                        <h1 className="font-semibold text-lg md:text-2xl font-poppins">Featured</h1>
+           <>
+            <div className="bg-ninja-blue h-80 md:h-72 w-full absolute right-0 z-0" aria-hidden />
 
-                        {props.name && <h2 className="lg:hidden font-medium md:text-xl capitalize">{props.author}'s {props.name}</h2>}
-                        {props.text && <h2 className="italic font-medium text-sm md:text-base lg:text-lg">{props.text}</h2>}
+            <section className='flex flex-col md:flex-row z-10'>
+                <section className='grow flex justify-center md:justify-start items-center text-white'>
 
-                        {props.text && 
-                            <h3 className="text-sm md:text-base lg:hidden">
-                                Take a look &nbsp;
-                                <i className="fa-solid fa-arrow-right"></i>
-                            </h3>
-                        }
+                    {
+                        currentRecipe.name &&
+                        <div className='flex flex-col gap-2 capitalize'>
+                            <div className='h-8 md:hidden'></div>
+                            <h1 className='font-semibold font-poppins text-xl'>{currentRecipe.name}</h1>
+                            <h2 className='font-medium font-poppins text-lg italic'>By {currentRecipe.author}</h2>
+                            <div className='h-0 md:h-8'></div>
+                        </div>
+                    }
+                    
 
-                        {!props.text && <div className="mt-1 h-7 w-[96%] xl:w-[82%] rounded-lg bg-[#7e818c] animate-pulse"></div>}
-                        {!props.text && <div className="mt-1 h-7 w-[64%] rounded-lg bg-[#7e818c] animate-pulse"></div>}
-                        {!props.text && <div className="md:hidden mt-1 h-7 w-[64%] rounded-lg bg-[#7e818c] animate-pulse"></div>}
+                    {
+                    
+                        !currentRecipe.name && 
+                        <div className="flex flex-col gap-2 w-full items-center md:items-start">
+                            <div className='h-8 md:hidden'></div>
+                            <div className="h-7 w-[70%] rounded-lg bg-[#7e818c] animate-pulse"></div>
+                            <div className="h-7 w-[32%] rounded-lg bg-[#7e818c] animate-pulse"></div>
+                            <div className='h-0 md:h-8'></div>
+                        </div>
+                    
+                    }
+                    
+                </section>
 
+                {
+                    
+                    currentRecipe.name && 
+                    <section className='bg-slate-300 w-full h-60 md:h-80 md:w-[50%] bg-cover bg-center rounded-xl 
+                    mt-5 shadow-ninja' style={{backgroundImage: `url('${currentRecipe.img_url}/ncHeader')`}}>
+                    </section>
+                
+                }
+
+                {
+                    
+                    !currentRecipe.name && 
+                    <section className='bg-slate-300 w-full h-60 md:h-80 md:w-[50%] bg-cover bg-center rounded-xl 
+                    mt-5 shadow-ninja animate-pulse'>
+                    </section>
+                
+                }
+
+            </section>
+
+            {
+                currentRecipe.name &&
+                <section className='relative top-[-20px] md:absolute md:top-[22.6rem] flex gap-3 font-poppins z-10 justify-center md:justify-start text-ninja-blue'>
+                    <div className='shadow-ninja bg-white py-2 px-3 rounded-2xl'>
+                        <p className='font-semibold capitalize'>
+                            <i className="fa-solid fa-clock"></i>&nbsp;
+                            {currentRecipe.cooking_time} mins
+                        </p>
                     </div>
-                </Link>
-            </div>
+                    <div className='shadow-ninja bg-white py-2 px-3 rounded-2xl'>
+                        <p className='font-semibold capitalize'>{currentRecipe.diet}</p>
+                    </div>
+                </section>
+            }
+           </>
         
     );
 }
