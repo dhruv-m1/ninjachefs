@@ -5,7 +5,7 @@ export default function RecipeInsights({ currentRecipe }) {
     return (
            <>
 
-            <section className='font-medium text-ninja-blue flex gap-5 mb-2 flex-col md:flex-row'>
+            <section className='font-medium font-poppins text-ninja-blue flex gap-5 mb-2 flex-col md:flex-row'>
                 
                 {
                     currentRecipe.health_category &&

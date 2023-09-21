@@ -67,7 +67,7 @@ export default function ViewRecipe() {
             
             <RecipeBanner currentRecipe={currentRecipe} />
 
-            <article className='container mx-auto flex flex-col gap-4'>
+            <article className='container mx-auto flex flex-col gap-4 font-poppins'>
             
 
             {
