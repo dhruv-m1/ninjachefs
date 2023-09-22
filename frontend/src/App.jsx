@@ -1,4 +1,4 @@
-import './App.css';
+
 import Index from './pages/index.jsx';
 import { RecipeProvider } from './providers/recipeContext';
 
@@ -19,7 +19,7 @@ const clerkPubKey = process.env.REACT_APP_CLERK_PUBLISHABLE_KEY;
 function App() {
 
   return (
-    <div className="App">
+    <div className="App bg-[#FBFCFF]">
       <ClerkProvider publishableKey={clerkPubKey}>
         <RecipeProvider>
           <BrowserRouter>

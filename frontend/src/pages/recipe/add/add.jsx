@@ -4,6 +4,12 @@ import { useNavigate  } from "react-router-dom";
 
 import { useForm, useFieldArray } from "react-hook-form";
 import { useDialogs } from '../../../providers/dialogContext';
+import SpamBanner from "../../../components/communication/SpamBanner";
+import AIAssistBanner from "../../../components/communication/AIAssistBanner";
+import RecipeTitleInput from "../../../components/recipe_manipulation/RecipeTitleInput";
+import RecipeTimeInput from "../../../components/recipe_manipulation/RecipeTimeInput";
+import RecipeStepsInput from "../../../components/recipe_manipulation/RecipeStepsInput";
+import RecipeImageInput from "../../../components/recipe_manipulation/RecipeImageInput";
 
 export default function AddRecipe({form, setForm}) {
 
@@ -31,7 +37,6 @@ export default function AddRecipe({form, setForm}) {
       const recipes = useRecipes();
 
       const onSubmit = async(data) => {
-        console.log(data);
 
         let recipeObj = {}
 
@@ -45,7 +50,6 @@ export default function AddRecipe({form, setForm}) {
 
         recipeObj.name = data.name;
         recipeObj.cookingTime = data.cookingTime;
-        recipeObj.author = "Dhruv Malik"
         recipeObj.steps = [];
 
         for (let step of data.steps) {
@@ -79,128 +83,27 @@ export default function AddRecipe({form, setForm}) {
 
             <section className="py-5 flex flex-col gap-5">
 
-                <div className="bg-yellow-100 font-medium text-yellow-900 py-3 px-4 rounded-xl flex flex-col md:flex-row md:items-center gap-2 md:w-[95%]">
-
-                    <p className="font-semibold shrink-0 md:mr-1">
-                        <i className="fa-solid fa-triangle-exclamation"/>&thinsp;
-                        Spam Policy
-                    </p>
-
-                    <p className="text-sm md:mt-1">
-                        Please submit valid food recipes only - this helps maintain a pleasant experiance for everyone and
-                        ensure that things work as intended. Expletives are strictly prohibited.
-                        <b> If you are testing the application, you may consider&nbsp;
-                            <a href="https://github.com/dhruv-tech/ninjachefs/wiki" className="underline" target="_blank" rel="noreferrer">
-                                copy-pasting a recipe from here.
-                            </a>
-                        </b>
-
-                    </p>
-
-                </div>
+                <SpamBanner/>
 
                 <form className="flex flex-col gap-3 md:w-[95%]" onSubmit={handleSubmit(onSubmit)}>
+
                     <h2 className="font-bold text-xl text-ninja-blue mt-1">What are we cooking, today?</h2>
-                    {errors.name && 
-                        <p className="bg-red-100 text-red-900 text-sm font-medium rounded-lg px-3 py-2">
-                            <i className="fa-solid fa-circle-exclamation"/>&nbsp; {errors.name?.message}
-                        </p>
-                    }
-                    <input
-                        type='text' 
-                        className='h-full grow focus:outline-none flex items-center h-10 grow capitalize
-                        bg-slate-300 text-ninja-blue font-semibold font-poppins rounded-lg py-2 px-3' 
-                        placeholder='Title'
-                        {...register("name", {
-                            required: "Please provide a title for the recipe."
-                        })}
-                        
-                    />
+
+                    <RecipeTitleInput register={register} errors={errors}/>
 
                     <h2 className="font-bold text-xl text-ninja-blue mt-1">How long would this take to cook?</h2>
-                    {errors.cookingTime && 
-                        <p className="bg-red-100 text-red-900 text-sm font-medium rounded-lg px-3 py-2">
-                            <i className="fa-solid fa-circle-exclamation"/>&nbsp; {errors.cookingTime?.message}
-                        </p>
-                    }
-                    <input
-                        type='number'
-                        min='2'
-                        max='720'
-                        className='h-full grow focus:outline-none flex items-center h-10 grow
-                        bg-slate-300 text-ninja-blue font-semibold font-poppins rounded-lg py-2 px-3' 
-                        placeholder='Cooking time (mins)'
-                        {...register("cookingTime", {
-                            required: "Cooking time is required."
-                        })}
-                    />
 
+                    <RecipeTimeInput register={register} errors={errors}/>
 
                     <h2 className="font-bold text-xl text-ninja-blue mt-1">Cooking Steps</h2>
                     
-                    <div className="bg-[#D6F4EF] font-medium text-[#00654B] py-3 px-4 rounded-xl flex flex-col md:flex-row md:items-center gap-2 mb-1">
+                    <AIAssistBanner/>
 
-                        <p className="font-semibold shrink-0 md:mr-1">
-                            <i className="fa-solid fa-bolt"/>&thinsp;
-                            AI Assist
-                        </p>
-
-                        <p className="text-sm">
-                            Time for teamwork. Simply write out the steps & AI Assist will take care of writing the
-                             ingredient list, introduction and more. If you don't have an image to upload, it will
-                              generate one for you too. 
-                        </p>
-
-                    </div>
-                    {errors.steps && 
-                        <p className="bg-red-100 text-red-900 text-sm font-medium rounded-lg px-3 py-2">
-                            <i className="fa-solid fa-circle-exclamation"/>&nbsp;
-                             At least 3 steps are required for submitting a recipe.
-                        </p>
-                    }
-                    {fields.map((field, index) => {
-                        
-                        let placeholder = "What's next?";
-
-                        if (index === 0) placeholder = "How do we start this recipe?"
-
-                        return (
-                        
-                        <div className="flex gap-1" key={field.id}>
-                            <textarea
-                                className='h-full grow focus:outline-none flex items-center h-12 grow
-                                bg-slate-300 text-ninja-blue font-semibold font-poppins rounded-lg py-2 px-3 mb-1' 
-                                placeholder={placeholder}
-                                {...register(`steps.${index}.step`)} 
-                            />
-
-                            { index !== 0 && 
-                                <button 
-                                    type='button' 
-                                    onClick={() => remove(index)}
-                                    className='font-poppins font-semibold bg-slate-300 
-                                    text-ninja-blue rounded-lg hover:opacity-90 cursor-pointer 
-                                    px-3 py-2 mb-1'
-                                >
-                                    <i className="fa-solid fa-trash"></i>
-
-                                </button>
-                            }
-                        </div>
-
-                        )
-                    })}
-
-                    <div>
-                        <button type='button' onClick={() => append({step: ""})} className='float-right w-36 font-poppins font-semibold bg-slate-300 text-ninja-blue rounded-lg hover:opacity-90 cursor-pointer px-4 py-2'>
-                            <i className="fa-solid fa-plus"></i> Add Step
-                        </button>
-                    </div>
+                    <RecipeStepsInput register={register} errors={errors} fields={fields} append={append} remove={remove}/>
 
                     <h2 className="font-bold text-xl text-ninja-blue">Add an image <small className="text-slate-400">(optional)</small></h2>
-                    <input type="file" id="file" name="filename" accept="image/png, image/jpeg"
-                    className="font-poppins font-semibold file:bg-slate-300 text-ninja-blue file:rounded-lg 
-                    file:px-4 file:py-2 file:border-none hover:opacity-90 file:cursor-pointer file:mr-3" {...register("image")}/>
+                    
+                    <RecipeImageInput register={register} />
 
                     <div>
                         <button className="float-right w-[250px] h-[50px] mt-[16px] bg-[#0F7556] rounded-[10px] font-poppins font-bold text-[17px] text-center text-white hover:opacity-90 cursor-pointer" 
