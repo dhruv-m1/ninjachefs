@@ -34,6 +34,13 @@ export default function ViewRecipe() {
         navigate('/account/recipes');
     }
 
+    const editAction = async() => {
+
+        dialogs.showLoading("Unlocking Recipe...");
+
+        navigate('/recipe/edit/' + idx);
+    }
+
     useEffect(()=> {
 
         window.scrollTo(0, 0);
@@ -73,15 +80,21 @@ export default function ViewRecipe() {
             {
                 (user.id === currentRecipe?.userId) && 
                 <section className='relative flex justify-between items-center bg-green-100 
-                px-3 py-2 md:mt-[-15px] rounded-lg md:w-[49%] flex-col md:flex-row gap-2'>
+                px-3 py-2 md:mt-[-15px] rounded-lg md:w-[49%] flex-col lg:flex-row gap-2'>
                     <h2 className='text-green-800 font-bold text-lg font-poppins'>
                         <i className="fa-solid fa-lock text-lg mr-1"></i>
                         Ownership Controls
                     </h2>
-                    <button className="bg-[#0F7556] px-3 py-2 rounded-lg font-poppins font-semibold text-center text-white hover:opacity-90 cursor-pointer" type="button" onClick={deleteAction}>
-                        <i className="fa-solid fa-trash"/>&nbsp;
-                        Delete
-                    </button>
+                    <div className='flex gap-2'>
+                        <button className="bg-[#0F7556] px-3 py-2 rounded-lg font-poppins font-semibold text-center text-white hover:opacity-90 cursor-pointer" type="button" onClick={editAction}>
+                            <span className="fa-solid fa-pen-to-square"></span>&nbsp;
+                            Edit
+                        </button>
+                        <button className="bg-[#0F7556] px-3 py-2 rounded-lg font-poppins font-semibold text-center text-white hover:opacity-90 cursor-pointer" type="button" onClick={deleteAction}>
+                            <i className="fa-solid fa-trash"/>&nbsp;
+                            Delete
+                        </button>
+                    </div>
 
                 </section>
                 

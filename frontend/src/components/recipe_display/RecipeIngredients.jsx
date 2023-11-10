@@ -39,7 +39,7 @@ export default function RecipeIngredients({ currentRecipe }) {
                     <ul className='flex flex-wrap gap-x-6 gap-y-3 font-poppins'>
                         {veggies.map((ingredient, i) => (
                             <li className="text-ninja-blue font-medium text-md bg-white 
-                            border-2 border-ninja-blue/25 border-dashed
+                            border-2 border-ninja-blue/25 border-dashed lowercase
                             shadow-chef py-5 px-3 text-center min-w-[175px] rounded-2xl" 
                             key={`${currentRecipe._id}-veggies-${i}`}>
                                 {ingredient.name}
@@ -58,7 +58,7 @@ export default function RecipeIngredients({ currentRecipe }) {
                     <ul className='flex flex-wrap gap-x-6 gap-y-3 font-poppins'>
                         {dairy.map((ingredient, i) => (
                             <li className="text-ninja-blue font-medium text-md bg-white 
-                            border-2 border-ninja-blue/25 border-dashed
+                            border-2 border-ninja-blue/25 border-dashed lowercase
                             shadow-chef py-5 px-3 text-center min-w-[175px] rounded-2xl" 
                             key={`${currentRecipe._id}-diary-${i}`}>
                                 {ingredient.name}
@@ -77,7 +77,7 @@ export default function RecipeIngredients({ currentRecipe }) {
                     <ul className='flex flex-wrap gap-x-6 gap-y-3 font-poppins'>
                         {meats.map((ingredient, i) => (
                             <li className="text-ninja-blue font-medium text-md bg-white 
-                            border-2 border-ninja-blue/25 border-dashed
+                            border-2 border-ninja-blue/25 border-dashed lowercase
                             shadow-chef py-5 px-3 text-center min-w-[175px] rounded-2xl" 
                             key={`${currentRecipe._id}-meat-${i}`}>
                                 {ingredient.name}
@@ -96,7 +96,7 @@ export default function RecipeIngredients({ currentRecipe }) {
                     <ul className='flex flex-wrap gap-x-6 gap-y-3 font-poppins'>
                         {others.map((ingredient, i) => (
                             <li className="text-ninja-blue font-medium text-md bg-white 
-                            border-2 border-ninja-blue/25 border-dashed
+                            border-2 border-ninja-blue/25 border-dashed lowercase
                             shadow-chef py-5 px-3 text-center min-w-[175px] rounded-2xl" 
                             key={`${currentRecipe._id}-other-${i}`}>
                                 {ingredient.name}

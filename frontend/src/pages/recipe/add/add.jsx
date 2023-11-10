@@ -99,7 +99,7 @@ export default function AddRecipe({form, setForm}) {
                     
                     <AIAssistBanner/>
 
-                    <RecipeStepsInput register={register} errors={errors} fields={fields} append={append} remove={remove}/>
+                    <RecipeStepsInput register={register} errors={errors} fields={fields} append={append} remove={remove} identifier=".step"/>
 
                     <h2 className="font-bold text-xl text-ninja-blue">Add an image <small className="text-slate-400">(optional)</small></h2>
                     

@@ -10,6 +10,7 @@ import { ClerkProvider, SignedIn } from "@clerk/clerk-react";
 import AddRecipe from './pages/recipe/add/add.jsx';
 import AccountRecipes from './pages/account/recipes';
 import RecipeSubmission from './pages/recipe/submission/RecipeSubmission';
+import RecipeEdit from './pages/recipe/edit/RecipeEdit.jsx';
 
 if (!process.env.REACT_APP_CLERK_PUBLISHABLE_KEY) {
   throw new Error("Missing Publishable Key")
@@ -28,6 +29,7 @@ function App() {
                 <Route index element={<Index/>} />
                 <Route path='/recipe/view/:idx' element={<ViewRecipe/>} />
                 <Route path='/recipe/add' element={<SignedIn><AddRecipe/></SignedIn>} />
+                <Route path='/recipe/edit/:idx' element={<SignedIn><RecipeEdit/></SignedIn>} />
                 <Route path='/account/recipes' element={<SignedIn><AccountRecipes/></SignedIn>} />
                 <Route path='/recipe/submission/:idx' element={<RecipeSubmission/>} />
               </Routes>
