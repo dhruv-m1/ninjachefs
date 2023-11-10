@@ -18,7 +18,7 @@ export default function Dialog() {
         };
 
         element.current.open = true;
-        window.scrollTo(0, 0);
+        //window.scrollTo(0, 0);
 
     }, [dialogs, element]);
 
