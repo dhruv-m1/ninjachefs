@@ -18,6 +18,10 @@ ai.gpt = ((inputBatch) => {
         }).then((res) => {
             const output = JSON.parse(res.data.choices[0].message.content);
             resolve(output);
+        }).catch((err) => {
+            console.log("Failed to generate or parse output from GPT-3.")
+            console.log(err)
+            reject(err);
         })
 
     })
