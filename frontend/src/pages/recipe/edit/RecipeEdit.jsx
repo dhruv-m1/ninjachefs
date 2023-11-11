@@ -15,6 +15,7 @@ import { useParams } from "react-router-dom";
 import { DevTool } from '@hookform/devtools';
 import RecipeEditDietIndicator from "../../../components/communication/RecipeEditDietIndicator";
 import { useUser } from '@clerk/clerk-react';
+import ManualModeBanner from "../../../components/communication/ManualModeBanner";
 
 export default function RecipeEdit({form, setForm}) {
 
@@ -138,7 +139,7 @@ export default function RecipeEdit({form, setForm}) {
 
             <section className="py-5 flex flex-col gap-5">
 
-                <SpamBanner/>
+                <ManualModeBanner></ManualModeBanner>
 
                 <form className="flex flex-col gap-3 md:w-[95%]" onSubmit={handleSubmit(onSubmit)}>
 
@@ -151,13 +152,13 @@ export default function RecipeEdit({form, setForm}) {
                     <RecipeTimeInput register={register} errors={errors}/>
 
                     <label className="font-bold text-xl text-ninja-blue mt-1">
-                        <small className="fa-solid fa-wand-magic-sparkles"></small>&nbsp;
+                        <small className="fa-solid fa-bolt"></small>&nbsp;
                         Short Description <small className="text-slate-400">(used when featured)</small>
                     </label>
                     
                     <input
                         type='text' 
-                        className='focus:outline-none flex items-center h-10 grow capitalize
+                        className='focus:outline-none focus:ring-0 border-0 flex items-center h-10 grow
                         bg-slate-300 text-ninja-blue font-semibold font-poppins rounded-lg py-2 px-3' 
                         placeholder="What's this recipe about?"
                         {...register("desc", {
@@ -167,12 +168,12 @@ export default function RecipeEdit({form, setForm}) {
                     />
 
                     <label className="font-bold text-xl text-ninja-blue mt-1">
-                        <small className="fa-solid fa-wand-magic-sparkles"></small>&nbsp;
+                        <small className="fa-solid fa-bolt"></small>&nbsp;
                         Introduction
                     </label>
 
                     <textarea
-                        className='focus:outline-none flex items-center h-20 grow
+                        className='focus:outline-none focus:ring-0 border-0 flex items-center h-20 grow
                         bg-slate-300 text-ninja-blue font-semibold font-poppins rounded-lg py-2 px-3 mb-1' 
                         placeholder="How would you introduce this recipe?"
                         {...register("intro", {
@@ -180,15 +181,15 @@ export default function RecipeEdit({form, setForm}) {
                         })} 
                     />
 
-                    <label className="font-bold text-xl text-ninja-blue mt-1">
-                        <small className="fa-solid fa-wand-magic-sparkles"></small>&nbsp;
+                    <label className="font-bold text-xl text-ninja-blue mt-1" id="ingredientLabel">
+                        <small className="fa-solid fa-bolt"></small>&nbsp;
                         Ingredients
                     </label>
 
                     <RecipeIngredientsInput register={register} errors={errors} fields={ingredients.fields} append={ingredients.append} remove={ingredients.remove} steps={steps}/>
 
                     <label className="font-bold text-xl text-ninja-blue mt-1">
-                        <small className="fa-solid fa-wand-magic-sparkles"></small>&nbsp;
+                        <small className="fa-solid fa-bolt"></small>&nbsp;
                         Dietary Classification
                     </label>
 
@@ -196,20 +197,20 @@ export default function RecipeEdit({form, setForm}) {
 
                     <label className="font-bold text-xl text-ninja-blue mt-1">Cooking Steps</label>
 
-                    <RecipeStepsInput register={register} errors={errors} fields={steps.fields} append={steps.append} remove={steps.remove}/>
+                    <RecipeStepsInput register={register} errors={errors} fields={steps.fields} append={steps.append} remove={steps.remove} watch={watch()}/>
 
                     <label className="font-bold text-xl text-ninja-blue">Replace Image</label>
                     
                     <RecipeImageInput register={register} />
 
-                    <div className="flex gap-2 justify-end">
-                        <button className="w-[250px] h-[50px] mt-[16px] bg-slate-300 text-ninja-blue rounded-[10px] font-poppins font-bold text-[17px] text-center hover:opacity-90 cursor-pointer" 
+                    <div className="flex flex-col md:flex-row gap-2 justify-end">
+                        <button className="md:w-[250px] h-[50px] mt-[16px] bg-slate-300 text-ninja-blue rounded-[10px] font-poppins font-bold text-[17px] text-center hover:opacity-90 cursor-pointer" 
                         type="button" onClick={cancelEdit}>
                             <i className="fa-solid fa-ban"></i>&nbsp;
                             Cancel
                         </button>
 
-                        <button className="w-[250px] h-[50px] mt-[16px] bg-[#0F7556] rounded-[10px] font-poppins font-bold text-[17px] text-center text-white hover:opacity-90 cursor-pointer" 
+                        <button className="md:w-[250px] h-[50px] md:mt-[16px] bg-[#0F7556] rounded-[10px] font-poppins font-bold text-[17px] text-center text-white hover:opacity-90 cursor-pointer" 
                         type="submit">
                             <i className="fa-regular fa-floppy-disk"></i>&nbsp;
                             Save Changes

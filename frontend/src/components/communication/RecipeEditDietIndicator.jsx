@@ -8,6 +8,7 @@ export default function RecipeEditDietIndicator({watch}) {
     
     let diet = useRef(null);
     useEffect(() => {
+
         const ingredients = watch.ingredients;
 
         if (!ingredients) return;
@@ -33,7 +34,7 @@ export default function RecipeEditDietIndicator({watch}) {
             </p>
             <input
                 type='text' 
-                className='focus:outline-none flex items-center h-10 grow capitalize cursor-not-allowed
+                className='focus:outline-none focus:ring-0 border-0 flex items-center h-10 grow capitalize cursor-not-allowed
                 bg-slate-300 text-gray-500 italic font-semibold font-poppins rounded-lg py-2 px-3' 
                 placeholder="(auto-computed)"
                 ref={diet}

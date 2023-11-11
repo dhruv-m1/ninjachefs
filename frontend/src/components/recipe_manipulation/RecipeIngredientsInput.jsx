@@ -32,12 +32,12 @@ export default function RecipeIngredientsInput({register, errors, fields, append
                 return (
                 
                 <div className="flex flex-col gap-2 bg-white p-3 shadow-ninja rounded-xl border-2 border-slate-300 border-dashed" key={field.id}>
-                    <div className="flex gap-2">
+                    <div className="flex flex-col md:flex-row gap-2">
                         <div className="grow font-poppins font-semibold flex flex-col gap-1">
                             <label>Name</label>
                             <input
 
-                                className='focus:outline-none flex items-center h-10 w-full capitalize bg-slate-300 text-ninja-blue font-semibold font-poppins rounded-lg py-2 px-3'
+                                className='focus:outline-none focus:ring-0 border-0 flex items-center h-10 w-full capitalize bg-slate-300 text-ninja-blue font-semibold font-poppins rounded-lg py-2 px-3'
                                 type="text"
                                 placeholder="Name"
                                 required
@@ -46,21 +46,21 @@ export default function RecipeIngredientsInput({register, errors, fields, append
                             />
                         </div>
                         
-                        <div className="min-w-[350px] font-poppins font-semibold flex flex-col gap-1">
+                        <div className="md:min-w-[350px] font-poppins font-semibold flex flex-col gap-1">
                             <label>Category</label>
                             <select
 
-                                className='focus:outline-none flex items-center h-10 capitalize bg-slate-300 text-ninja-blue font-semibold font-poppins rounded-lg py-2 px-3'
+                                className='focus:outline-none focus:ring-0 border-0 flex items-center h-10 capitalize bg-slate-300 text-ninja-blue font-semibold font-poppins rounded-lg py-2 px-3'
                                 type="text"
                                 placeholder="Category"
                                 selected={field.category}
                                 {...register(`ingredients.${index}.category`)}
 
                             >
-                                <option value="veggies">Fruits & Veggies</option>
-                                <option value="meat">Meat</option>
-                                <option value="dairy">Dairy</option>
-                                <option value="other">Other</option>
+                                <option className="font-semibold" value="veggies">Fruits & Veggies</option>
+                                <option className="font-semibold" value="meat">Meat & Eggs</option>
+                                <option className="font-semibold" value="dairy">Dairy</option>
+                                <option className="font-semibold" value="other">Other</option>
 
                             </select>
                         </div>
@@ -72,11 +72,12 @@ export default function RecipeIngredientsInput({register, errors, fields, append
                             <label className="font-semibold">Stepwise Usage</label>
                             <div className="flex gap-2 font-medium">
                                 {steps.fields.map((step, i) => {
-                                    console.log(index)
+                                    
                                     return (
                                         <label for={`ingredients.${index}.steps`}>
                                             <input 
                                                 type="checkbox"
+                                                className="bg-slate-300 border-0 text-[#00ae82] rounded-sm focus:ring-0"
                                                 value={i+1}
                                                 {...register(`ingredients.${index}.steps`, {required: true})}
                                                 />

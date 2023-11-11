@@ -18,7 +18,7 @@ export default function RecipeTimeInput({register, errors}) {
                 min='5'
                 max='720'
                 onwheel="return false;"
-                className='focus:outline-none flex items-center h-10 grow
+                className='focus:outline-none focus:ring-0 border-0 flex items-center h-10 grow
                 bg-slate-300 text-ninja-blue font-semibold font-poppins rounded-lg py-2 px-3' 
                 placeholder='Cooking time (mins)'
                 {...register("cookingTime", {
