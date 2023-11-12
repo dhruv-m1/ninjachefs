@@ -2,9 +2,18 @@
 
 *Web application that leverages generative AI to simplify online recipe sharing.*
 
-Sharing recipes online is tedious, often involving a lot more than just writing the recipe - such as preparing a detailed ingredient list, writing an introduction, taking an appetising picture and much more. 
+## Premise & Purpose
 
-NinjaChefs, with AI, attempts to eliminate this 'red tape' from online recipe sharing and faciliate the sharing of recipes by helping the user focus on 'just the recipe'. 
+Sharing recipes online is tedious, and often involves a lot more than just writing the recipe - such as preparing a detailed ingredient list, writing an introduction, taking an appetising picture and a lot more.
+
+NinjaChefs, with AI, attempts to eliminate this 'barrier to entry' from online recipe sharing and make it accessible by helping the user focus on just the recipe. 
+
+Making recipe sharing accessible is important because it helps us prevent the loss of traditional household/regional recipes (which may hold cultural or ecological significance) due to lack of documentation.
+
+
+While this project is currently only a proof of concept, I hope to adapt it into a framework or CMS plugin for recipe sharing (as appropriate) as the cost of using Generative AI comes down over time.
+
+## Try it out
 
 🌐 See a live demo at: [ninjachefs.dhruv.tech](https://go.dhruv.tech/p/ninjachefs)
 
