@@ -21,7 +21,8 @@ asyncHandlers.addRecipe = async(stepsString, obj, retries = 0) => {
 
         let ingredients = await ai.gpt(prompt);
 
-        let santisedIngredients = await helpers.validateAndSanitiseIngredients(ingredients, obj.steps);
+        await helpers.validateIngredients(ingredients);
+        let santisedIngredients = await helpers.sanitiseIngredients(ingredients, obj.steps);
 
         if (!santisedIngredients.valid) throw new Error("Invalid Ingredients.")
 

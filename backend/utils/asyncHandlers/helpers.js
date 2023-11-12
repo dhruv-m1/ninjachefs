@@ -130,7 +130,7 @@ helpers.isRecipeOutputValid = (output, targetSchema = 'aiAssist') => {
 
 }
 
-helpers.validateAndSanitiseIngredients = async(ingredients, steps) => {
+helpers.validateIngredients = async(ingredients) => {
 
     return new Promise (resolve => {
 
@@ -162,6 +162,16 @@ helpers.validateAndSanitiseIngredients = async(ingredients, steps) => {
             return;
 
         }
+        
+        resolve({valid: true});
+
+    })
+
+}
+
+helpers.sanitiseIngredients = async(ingredients, steps) => {
+
+    return new Promise (resolve => {
 
         // Sanitisation
 

@@ -4,7 +4,7 @@ import { useNavigate  } from "react-router-dom";
 
 import { useForm, useFieldArray } from "react-hook-form";
 import { useDialogs } from '../../../providers/dialogContext';
-import SpamBanner from "../../../components/communication/SpamBanner";
+import RecipeDescriptionInput from "../../../components/recipe_manipulation/RecipeDescriptionInput";
 import RecipeIngredientsInput from "../../../components/recipe_manipulation/RecipeIngredientsInput";
 import RecipeTitleInput from "../../../components/recipe_manipulation/RecipeTitleInput";
 import RecipeTimeInput from "../../../components/recipe_manipulation/RecipeTimeInput";
@@ -16,6 +16,7 @@ import { DevTool } from '@hookform/devtools';
 import RecipeEditDietIndicator from "../../../components/communication/RecipeEditDietIndicator";
 import { useUser } from '@clerk/clerk-react';
 import ManualModeBanner from "../../../components/communication/ManualModeBanner";
+import RecipeIntroductionInput from "../../../components/recipe_manipulation/RecipeIntroductionInput";
 
 export default function RecipeEdit({form, setForm}) {
 
@@ -156,30 +157,14 @@ export default function RecipeEdit({form, setForm}) {
                         Short Description <small className="text-slate-400">(used when featured)</small>
                     </label>
                     
-                    <input
-                        type='text' 
-                        className='focus:outline-none focus:ring-0 border-0 flex items-center h-10 grow
-                        bg-slate-300 text-ninja-blue font-semibold font-poppins rounded-lg py-2 px-3' 
-                        placeholder="What's this recipe about?"
-                        {...register("desc", {
-                            required: "Please provide a description for the recipe."
-                        })}
-                
-                    />
+                    <RecipeDescriptionInput register={register} errors={errors}/>
 
                     <label className="font-bold text-xl text-ninja-blue mt-1">
                         <small className="fa-solid fa-bolt"></small>&nbsp;
                         Introduction
                     </label>
 
-                    <textarea
-                        className='focus:outline-none focus:ring-0 border-0 flex items-center h-20 grow
-                        bg-slate-300 text-ninja-blue font-semibold font-poppins rounded-lg py-2 px-3 mb-1' 
-                        placeholder="How would you introduce this recipe?"
-                        {...register("intro", {
-                            required: "Please provide a descripton for the recipe."
-                        })} 
-                    />
+                    <RecipeIntroductionInput register={register} errors={errors} />
 
                     <label className="font-bold text-xl text-ninja-blue mt-1" id="ingredientLabel">
                         <small className="fa-solid fa-bolt"></small>&nbsp;

@@ -56,7 +56,7 @@ export default function AddRecipe({form, setForm}) {
             recipeObj.steps.push(step.step);
         }
 
-        dialogs.showLoading("Validating Recipe...");
+        dialogs.showLoading("Enforcing Spam Policy...");
         const submission = await recipes.io.add(recipeObj);
 
         if (submission.spam) {

@@ -136,7 +136,9 @@ recipes.update = async(obj) => {
 
             // use helper to validate and sanitise ingredients
 
-            if (!helpers.validateAndSanitiseIngredients(obj.ingredients, obj.steps)) throw new Error("Validation Failed.");
+            let areIngredientsValid = await helpers.validateIngredients(obj.ingredients, obj.steps);
+
+            if (!areIngredientsValid) throw new Error("Validation Failed.");
 
             // use helper to get diet type
 
