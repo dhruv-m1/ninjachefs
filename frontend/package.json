@@ -41,6 +41,8 @@
     ]
   },
   "devDependencies": {
+    "@hookform/devtools": "^4.3.1",
+    "@tailwindcss/forms": "^0.5.7",
     "tailwindcss": "^3.3.3"
   }
 }

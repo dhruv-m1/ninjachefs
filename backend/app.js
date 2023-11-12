@@ -90,6 +90,20 @@ app.post('/api/v1/recipes', clerk.expressWithAuth({}), async(req, res) => {
 
 })
 
+app.put('/api/v1/recipes', clerk.expressWithAuth({}), async(req, res) => {
+    
+    if (!req.auth.sessionId) return unauthenticated(res);
+
+    const user = await clerk.users.getUser(req.auth.userId);
+    req.body.author = `${user.firstName} ${user.lastName}`;
+    req.body.userId = user.id;
+
+    const response = await recipes.update(req.body);
+    res.statusCode = response.code;
+    res.json(response);
+
+})
+
 app.post('/api/v1/recipes/images/upload', clerk.expressWithAuth({}), async(req, res) => {
 
     if (!req.auth.sessionId) return unauthenticated(res);
@@ -107,6 +121,31 @@ app.post('/api/v1/recipes/images/upload', clerk.expressWithAuth({}), async(req, 
         }
 
         const response = await recipes.addImage(req.file);
+        res.statusCode = response.code;
+        res.json(response);
+    })
+
+})
+
+app.put('/api/v1/recipes/images/upload/:idx', clerk.expressWithAuth({}), async(req, res) => {
+
+    if (!req.auth.sessionId) return unauthenticated(res);
+
+    upload(req, res, async(err) => {
+
+        if (err instanceof multer.MulterError) {
+            res.statusCode = 406;
+            res.json({code: 406, msg: "UNEXPECTED FILE: Please ensure the file is an image file & less than 10MB.", code: err.code});
+            return;
+        } else if (err) {
+
+            console.log(err);
+            res.statusCode = 500;
+            res.json({code: 500, msg: "Internal Server Error, Please try again later.", code: err.code});
+            return;
+        }
+
+        const response = await recipes.updateImage(req.file, req.params.idx, req.auth.userId);
         res.statusCode = response.code;
         res.json(response);
     })

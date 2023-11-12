@@ -21,7 +21,8 @@ asyncHandlers.addRecipe = async(stepsString, obj, retries = 0) => {
 
         let ingredients = await ai.gpt(prompt);
 
-        let santisedIngredients = await helpers.validateAndSanitiseIngredients(ingredients, obj.steps);
+        await helpers.validateIngredients(ingredients);
+        let santisedIngredients = await helpers.sanitiseIngredients(ingredients, obj.steps);
 
         if (!santisedIngredients.valid) throw new Error("Invalid Ingredients.")
 
@@ -133,6 +134,42 @@ asyncHandlers.generateRecipeImage = async(newRecipe, obj) => {
             recipeId: submittedRecipe._id
         });
     }
+}
+
+asyncHandlers.updateRecipeInsights = async(stepsString, obj, retries = 0) => {
+
+    try {
+
+        let unprocessedData = `Recipe Name: ${obj.name}, Author: ${obj.author}, Steps: ${stepsString}`;
+        unprocessedData = unprocessedData.replace(/[\u0000-\u001F\u007F-\u009F]/g, "");
+
+        let promptTemplate = process.env.ADDRECIPE_INSIGHTS_ONLY_PROMPT;
+        let prompt = JSON.parse(promptTemplate.replace('_RECIPE_DATA_', unprocessedData));
+    
+        let updatedInsights = await ai.gpt(prompt);
+
+        if (!helpers.isRecipeOutputValid(updatedInsights, 'insights')) throw new Error("Validation Failed.");
+
+        console.log(updatedInsights);
+        console.log(obj._id)
+        await db.Recipe.findOneAndUpdate({_id: obj._id}, {
+            allergies: updatedInsights.allergies,
+            health_reason: updatedInsights.health_reason,
+            health_score: updatedInsights.health_score
+        });
+
+    } catch (error) {
+
+        console.log(error)
+
+        if (retries < 1) {
+
+            asyncHandlers.updateRecipeInsights(stepsString, obj, retries+1);
+            return;
+
+        }
+    }
+
 }
 
 export default asyncHandlers;

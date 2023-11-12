@@ -4,6 +4,7 @@ import { useNavigate  } from "react-router-dom";
 
 import { useParams } from "react-router-dom";
 import { useUser } from "@clerk/clerk-react";
+import { useDialogs } from "../../../providers/dialogContext";
 
 export default function RecipeSubmission() {
 
@@ -14,9 +15,9 @@ export default function RecipeSubmission() {
     const statusMessage = useRef();
     const [state, setState] = useState("loading");
     const { idx } = useParams();
+    const dialogs = useDialogs();
 
     useEffect(() => {
-
         if (user.isLoaded) getStatus();
 
     }, [user])
@@ -28,6 +29,7 @@ export default function RecipeSubmission() {
         if (status.is_pending === true) {
             setTimeout(() => getStatus(), 4500);
         } else if (status.success === "true") {
+            dialogs.showMessage("Review your submission", "Your submission has been successfully processed by AI Assist. Please review the completed recipe, and use the 'Edit' button to manually make any corrections or changes.");
             navigate(`/recipe/view/${status.recipeId}`);
         } else {
             setState("error");

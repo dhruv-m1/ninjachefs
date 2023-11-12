@@ -2,11 +2,11 @@
  * Displays all steps for a given recipe with associated ingredients.
  */
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 export default function RecipeSteps({ currentRecipe }) {
 
-    let [stepWiseIngredients, setStepWiseIngredients] = useState([]);
+    let stepWiseIngredients = useRef([]);
 
     let [isLoaded, setIsLoaded] = useState(false);
 
@@ -35,7 +35,7 @@ export default function RecipeSteps({ currentRecipe }) {
             processedIngredientsData.push(stepIngredients);
         }
 
-        setStepWiseIngredients(processedIngredientsData)
+        stepWiseIngredients.current = processedIngredientsData;
         setIsLoaded(true);
 
     }, [currentRecipe])
@@ -57,10 +57,10 @@ export default function RecipeSteps({ currentRecipe }) {
                         <div className='flex flex-col bg-white shadow-chef rounded-[30px]'>
 
                             {
-                                stepWiseIngredients[index] !== '' &&
+                                stepWiseIngredients.current[index] !== '' &&
                                 <div className='flex flex-col min-h-[40px] font-semibold justify-center px-5 my-3'>
-                                <h3 className='text-slate-500'>You'll need to get hold of</h3>
-                                <span className='font-medium capitalize'>{stepWiseIngredients[index]}</span>
+                                    <h3 className='text-slate-500'>You'll need to get hold of</h3>
+                                    <span className='font-medium capitalize'>{stepWiseIngredients.current[index]}</span>
                                 </div>
                             }
 

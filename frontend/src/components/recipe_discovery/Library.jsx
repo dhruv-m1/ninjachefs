@@ -73,7 +73,7 @@ export default function Library() {
                 text-ninja-blue font-semibold font-poppins rounded-lg py-1 px-3'>
 
                     <input type='search' 
-                    className='h-full grow bg-white/0 focus:outline-none' 
+                    className='h-full grow bg-white/0 focus:outline-none focus:ring-0 border-0' 
                     placeholder='Search'
                     ref={searchInput}
                     onChange={(e) => search(e.target.value)}/>

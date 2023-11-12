@@ -190,6 +190,73 @@ export const RecipeProvider = ({children}) => {
         })
     }
 
+    recipes.io.update = async(data) => {
+        return new Promise(async(resolve, reject) => {
+            
+            try {
+
+                const token = await session.getToken();
+
+                let res = await fetch(`${BACKEND_URI}/api/v1/recipes`, {
+                    "method": "PUT",
+                    "headers": {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`
+                    },
+                    "body": JSON.stringify(data)
+                });
+
+                res = await res.json()
+
+                recipes.recent.get();
+
+                resolve(res);
+            } catch (error) {
+                alert("Something went wrong while updatting the recipe, please try again!")
+            }
+
+        })
+    }
+
+
+    recipes.io.updateImage = async(image, idx) => { 
+
+        return new Promise(async(resolve, reject) => {
+
+            try {
+
+                const token = await session.getToken();
+
+                const formData = new FormData();
+
+                formData.append("image", image);
+
+                let res = await fetch(`${BACKEND_URI}/api/v1/recipes/images/upload/${idx}`, {
+
+                    "method": "PUT",
+                    "headers": {
+                        "Authorization": `Bearer ${token}`
+                    },
+                    
+                    "body": formData
+                });
+
+                res = await res.json()
+
+                //recipes.recent.get();
+
+                resolve(res);
+
+            } catch (error) {
+                console.log(error)
+                alert("Something went wrong while updating the image, please try again!")
+                reject();
+            }
+
+        })
+
+    }
+
     //* Recent
 
     recipes.recent.get = async(skip = 0, limit = config.pageLength.current, updateState = true) => {

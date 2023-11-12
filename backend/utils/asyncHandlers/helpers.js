@@ -4,62 +4,133 @@
 
 const helpers = {};
 
-helpers.isRecipeOutputValid = (output) => {
+helpers.isRecipeOutputValid = (output, targetSchema = 'aiAssist') => {
 
-    const schema = [
+    let schemaOptions = {
 
-        {
-            prop: "ingredients",
-            type: Object
-        
-        },
-        {
-            prop: "diet",
-            type: String
-        
-        },
-        {
-            prop: "allergies",
-            type: Array
-        },
-        {
-            prop: "intro",
-            type: String
-        
-        },
-        {
-            prop: "desc",
-            type: String
-        
-        },
-        {
-            prop: "health_score",
-            type: Number
-        
-        },
-        {
-            prop: "health_reason",
-            type: String
-        
-        },
-        {
-            prop: "prompt",
-            type: String
+        aiAssist: [
+
+            {
+                prop: "ingredients",
+                type: Object
+            
+            },
+            {
+                prop: "diet",
+                type: String
+            
+            },
+            {
+                prop: "allergies",
+                type: Array
+            },
+            {
+                prop: "intro",
+                type: String
+            
+            },
+            {
+                prop: "desc",
+                type: String
+            
+            },
+            {
+                prop: "health_score",
+                type: Number
+            
+            },
+            {
+                prop: "health_reason",
+                type: String
+            
+            },
+            {
+                prop: "prompt",
+                type: String
+            }
+        ],
+
+        userUpdate: [
+
+            {
+                prop: "ingredients",
+                type: Object
+            
+            },
+            {
+                prop: "diet",
+                type: String
+            
+            },
+            {
+                prop: "intro",
+                type: String
+            
+            },
+            {
+                prop: "desc",
+                type: String
+            
+            },
+            {
+                prop: "name",
+                type: String
+            
+            },
+            {
+                prop: "cooking_time",
+                type: Number
+            
+            },
+            {
+                prop: "steps",
+                type: Array
+            
+            }
+
+        ],
+
+        insights: [
+            {
+                prop: "allergies",
+                type: Array
+            },
+            {
+                prop: "health_score",
+                type: Number
+            
+            },
+            {
+                prop: "health_reason",
+                type: String
+            
+            }
+        ]
+
+    }
+
+    try {
+
+        let schema = schemaOptions[targetSchema];
+
+        for (let schemaItem of schema) {
+
+            if (!Object.hasOwn(output, schemaItem.prop)) return false;
+
+            else if (!typeof(output[schemaItem.prop]) === schemaItem.type) return false;
+
+            else return true;
         }
-    ]
 
-    for (let schemaItem of schema) {
-
-        if (!Object.hasOwn(output, schemaItem.prop)) return false;
-
-        else if (!typeof(output[schemaItem.prop]) === schemaItem.type) return false;
-
-        else return true;
+    } catch (error) {
+        
+        console.log("[at helpers.isRecipeOutputValid]: " + error);
+        return false;
     }
 
 }
 
-helpers.validateAndSanitiseIngredients = async(ingredients, steps) => {
+helpers.validateIngredients = async(ingredients) => {
 
     return new Promise (resolve => {
 
@@ -91,6 +162,16 @@ helpers.validateAndSanitiseIngredients = async(ingredients, steps) => {
             return;
 
         }
+        
+        resolve({valid: true});
+
+    })
+
+}
+
+helpers.sanitiseIngredients = async(ingredients, steps) => {
+
+    return new Promise (resolve => {
 
         // Sanitisation
 
