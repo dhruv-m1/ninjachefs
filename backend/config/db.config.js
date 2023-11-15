@@ -113,7 +113,7 @@ const pendingSubmissionSchema = new mongoose.Schema({
         type: String,
         required: false
     }
-});
+}, { timestamps: true });
 
 db.PendingSubmission = mongoose.model("PendingSubmission", pendingSubmissionSchema);
 
