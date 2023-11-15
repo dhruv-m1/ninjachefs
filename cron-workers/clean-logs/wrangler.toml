@@ -1,0 +1,7 @@
+name = "ninjachefs-clean-logs"
+main = "src/index.js"
+compatibility_date = "2023-11-14"
+
+[triggers]
+crons = [ "30 3 * * *" ]
+

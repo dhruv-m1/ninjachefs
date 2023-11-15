@@ -1,0 +1,15 @@
+{
+  "name": "clean-success-logs",
+  "version": "0.0.0",
+  "devDependencies": {
+    "wrangler": "3.15.0"
+  },
+  "private": true,
+  "scripts": {
+    "start": "wrangler dev",
+    "deploy": "wrangler deploy"
+  },
+  "dependencies": {
+    "realm-web": "^2.0.0"
+  }
+}
