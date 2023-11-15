@@ -1,5 +1,5 @@
 /*
-	CloudFlare Worker to clean up the success logs in pendingSubmissiobs
+	CloudFlare Worker to clean up pending submission logs
  */
 
 import actions from './actions';
@@ -18,7 +18,7 @@ export default {
 			let user = await realm.logIn(credentials);
 
 			let client = user.mongoClient('mongodb-atlas');
-			const collection = client.db('ninjarecipies').collection('pendingsubmissions');
+			const collection = client.db(env.REALM_DB).collection('pendingsubmissions');
 
 			console.log('... Connected to Realm.');
 			console.log("[START CALL CHAIN]");
