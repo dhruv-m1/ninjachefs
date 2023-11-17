@@ -52,7 +52,7 @@ The web application is compatible with the latest versions of:
     * Identify whether the recipe is non-vegetarian, vegetarian or vegan.
     * Visualise and generate a cover image for the recipe if none is uploaded (GPT 3.5 & DALL-E 2)
       
- * Background processing of recipe submissions with polling-based status updates.
+ * Asynchronous processing of recipe submissions with polling-based status updates.
 
 ### Manage your recipes
 
