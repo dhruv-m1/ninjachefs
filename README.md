@@ -2,13 +2,13 @@
 
 *Web application that leverages generative AI to simplify online recipe sharing.*
 
-📑 For technical documentation, click [here](https://dhruv-tech.gitbook.io/ninjachefs-+-ai-technical-docs/).
+📑 For **technical documentation**, click [here](https://dhruv-tech.gitbook.io/ninjachefs-+-ai-technical-docs/).
 
 ## Try it out
 
-🌐 See a live demo at: [ninjachefs.dhruv.tech](https://go.dhruv.tech/p/ninjachefs)
+🌐 See a **live demo** at: [ninjachefs.dhruv.tech](https://go.dhruv.tech/p/ninjachefs)
 
-🍽️ Sample recipes for testing the demo can be found [here.](https://github.com/dhruv-tech/ninjachefs/wiki)
+🍽️ **Sample recipes** for testing the demo can be found [here.](https://github.com/dhruv-tech/ninjachefs/wiki)
 
 <img src="https://github.com/dhruv-tech/ninjachefs/assets/26849655/5b1c885d-72ca-416d-988c-07f68267540f" alt="screenshot of ninjachefs homepage" height="375">
 
