@@ -2,7 +2,7 @@
 
 *Web application that leverages generative AI to simplify online recipe sharing.*
 
-📑 For **technical documentation**, click [here](https://dhruv-tech.gitbook.io/ninjachefs-+-ai-technical-docs/).
+📑 For **technical documentation**, click [here](https://dhruv-tech.gitbook.io/ninjachefs).
 
 ## Try it out
 
