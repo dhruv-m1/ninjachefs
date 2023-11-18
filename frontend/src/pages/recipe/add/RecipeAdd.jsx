@@ -11,7 +11,7 @@ import RecipeTimeInput from "../../../components/recipe_manipulation/RecipeTimeI
 import RecipeStepsInput from "../../../components/recipe_manipulation/RecipeStepsInput";
 import RecipeImageInput from "../../../components/recipe_manipulation/RecipeImageInput";
 
-export default function AddRecipe({form, setForm}) {
+export default function RecipeAdd({form, setForm}) {
 
     const dialogs = useDialogs();
     const container = useRef();

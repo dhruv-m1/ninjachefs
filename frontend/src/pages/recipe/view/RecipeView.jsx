@@ -9,7 +9,7 @@ import RecipeInsights from '../../../components/recipe_display/RecipeInsights';
 import RecipeIngredients from '../../../components/recipe_display/RecipeIngredients';
 import RecipeSteps from '../../../components/recipe_display/RecipeSteps';
 
-export default function ViewRecipe() {
+export default function RecipeView() {
 
     const recipes = useRecipes();
     const userData = useUser();
@@ -31,7 +31,7 @@ export default function ViewRecipe() {
         await recipes.io.delete({idx: currentRecipe._id})
         dialogs.showMessage("Confirmation", `Your recipe "${currentRecipe.name}" has been deleted.`);
 
-        navigate('/account/recipes');
+        navigate('/account/myrecipes');
     }
 
     const editAction = async() => {

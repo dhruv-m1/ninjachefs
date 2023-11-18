@@ -4,9 +4,9 @@
 
 import db from '../config/db.config.js';
 import ai from '../utils/ai.js';
-import asyncHandlers from '../utils/asyncHandlers/asyncHandlers.js'
+import asyncHandlers from '../utils/asyncHandlers.js'
 import axios from 'axios';
-import helpers from '../utils/asyncHandlers/helpers.js';
+import helpers from '../utils/helpers.js';
 const recipes = {};
 
 recipes.add = async(obj) => {

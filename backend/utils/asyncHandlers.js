@@ -2,8 +2,8 @@
  * Utility for realtime data processing after a HTTP response is served.
  */
 
-import ai from "../ai.js";
-import db from "../../config/db.config.js";
+import ai from "./ai.js";
+import db from "../config/db.config.js";
 import helpers from "./helpers.js";
 import axios from "axios";
 

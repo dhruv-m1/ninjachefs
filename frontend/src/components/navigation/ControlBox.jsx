@@ -21,7 +21,7 @@ export default function ControlBox({ setDialog }) {
                     type="button">Add Recipe</button>
                 </Link>
 
-                <Link to="/account/recipes">
+                <Link to="/account/myrecipes">
                     <button className="w-[250px] h-[50px] mt-[10px] bg-[#0F7556] 
                     rounded-[10px] font-poppins font-bold text-[17px] text-center 
                     text-white hover:opacity-90 cursor-pointer" 

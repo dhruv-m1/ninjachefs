@@ -1,10 +1,10 @@
 import { useEffect } from "react";
-import { useRecipes } from "../../providers/recipeContext"
+import { useRecipes } from "../../../providers/recipeContext"
 import { useUser } from "@clerk/clerk-react";
 
-import CardGrid from '../../components/recipe_discovery/CardGrid';
+import CardGrid from '../../../components/recipe_discovery/CardGrid';
 
-export default function AccountRecipes() {
+export default function AccountMyRecipes() {
 
     const userData = useUser();
     const recipes = useRecipes();
