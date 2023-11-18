@@ -1,70 +1,51 @@
-# Getting Started with Create React App
+# 🖥 Frontend
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Jump to
 
-## Available Scripts
+* [Getting Started](readme.md#getting-started)
+* [Prerequisites](readme.md#prerequisites)
+* [Deployment](readme.md#deployment)
 
-In the project directory, you can run:
+## Getting Started
 
-### `npm start`
+Running the frontend locally requires the installation of [Node.js (Version 10+)](https://nodejs.org/en/download/).
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+To run the project, [fulfill all prerequisites](readme.md#prerequisites) and `cd` into the `/frontend` folder.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Create a [`.env` file](https://stackoverflow.com/questions/49579028/adding-an-env-file-to-a-react-project), at root-level, containing the requisite environment variables mentioned [above](readme.md#environment-variables).
 
-### `npm test`
+Subsequently, install dependencies by running:
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```bash
+npm install
+```
 
-### `npm run build`
+The frontend can be started locally using:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```bash
+npm start
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Prerequisites
+You'll need to setup a clerk instance and setup environment variables  to run the app.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+For up-to-date information on environment variables and setting up a clerk instance, please see the [documentation](https://dhruv-tech.gitbook.io/ninjachefs/frontend#prerequisites).
 
-### `npm run eject`
+## Deployment
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Use any static site hosting service like Vercel, Cloudflare Pages or DigitalOcean App Platform to deploy the app by specifying the [basic configuration](readme.md#basic-configuration) details below and setting up [environment variables](readme.md#environment-variables).&#x20;
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+The guides below detail this process:
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+* [Vercel](https://vercel.com/guides/deploying-react-with-vercel)
+* [Cloudflare Pages](https://developers.cloudflare.com/pages/framework-guides/deploy-a-react-site/)
+* [DigitialOcean](https://www.digitalocean.com/community/tutorials/how-to-deploy-a-react-application-to-digitalocean-app-platform)&#x20;
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+### Configuration Details
 
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+| Property               | Value           | Addl. Details       |
+| ---------------------- | --------------- | ------------------- |
+| Framework              | `React`         | `Version 18.1.0`    |
+| Build Command          | `npm run build` | `Node Version >=10` |
+| Build output directory | `/build`        |                     |
+| Root directory         | `/frontend`     |                     |
