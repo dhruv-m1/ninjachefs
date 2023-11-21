@@ -111,12 +111,12 @@ app.post('/api/v1/recipes/images/upload', clerk.expressWithAuth({}), async(req, 
     upload(req, res, async(err) => {
         if (err instanceof multer.MulterError) {
             res.statusCode = 406;
-            res.json({code: 406, msg: "UNEXPECTED FILE: Please ensure the file is an image file & less than 10MB.", code: err.code});
+            res.json({code: 406, msg: "UNEXPECTED FILE: Please ensure the file is an image file & less than 10MB."});
             return;
         } else if (err) {
             console.log(err);
             res.statusCode = 500;
-            res.json({code: 500, msg: "Internal Server Error, Please try again later.", code: err.code});
+            res.json({code: 500, msg: "Internal Server Error, Please try again later."});
             return;
         }
 
@@ -130,7 +130,7 @@ app.post('/api/v1/recipes/images/upload', clerk.expressWithAuth({}), async(req, 
 app.put('/api/v1/recipes/images/upload/:idx', clerk.expressWithAuth({}), async(req, res) => {
 
     if (!req.auth.sessionId) return unauthenticated(res);
-
+//fix
     upload(req, res, async(err) => {
 
         if (err instanceof multer.MulterError) {
