@@ -9,7 +9,7 @@ description: Quick Start Guide
 All scheduled workers (cron jobs) used in the project, have been developed on the **CloudFlare Workers** platform.
 
 The application currently uses only one worker, and its purpose and requirements can be found in its specific guide, located here:
-* [clean-logs](/clean-logs/README.md)
+* [chuck-NORRIS](./chuck-NORRIS/README.md)
 
 ## Running Locally
 
