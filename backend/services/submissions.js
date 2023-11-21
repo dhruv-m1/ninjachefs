@@ -23,5 +23,3 @@ submissions.status = (id) => {
 }
 
 export default submissions;
-
-// TODO: submissions.user() - list of pending & failed submissions for a particular user.

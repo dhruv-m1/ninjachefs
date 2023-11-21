@@ -3,13 +3,14 @@
 */
 
 import db from '../config/db.config.js';
-import ai from '../utils/ai.js';
+
+import { prompts, ai } from '../config/ai.config.js';
 import asyncHandlers from '../utils/asyncHandlers.js'
 import axios from 'axios';
 import helpers from '../utils/helpers.js';
 const recipes = {};
 
-recipes.add = async(obj) => {
+recipes.add = async(input) => {
 
     return new Promise(async(resolve) => {
 
@@ -18,12 +19,11 @@ recipes.add = async(obj) => {
             // Preparing Prompt
 
             let stepsString = '';
-            obj.steps.forEach((step, i) => stepsString += `[STEP ${i+1}] ${step} `);
+            input.steps.forEach((step, i) => stepsString += `[STEP ${i+1}] ${step} `);
     
-            let unprocessedData = `Recipe Name: ${obj.name}, Author: ${obj.author}, Steps: ${stepsString}`;
-            unprocessedData = unprocessedData.replace(/[\u0000-\u001F\u007F-\u009F]/g, "");
-            let promptTemplate = process.env.ADDRECIPE_SPAM_PROMPT;
-            let prompt = JSON.parse(promptTemplate.replace('_RECIPE_DATA_', unprocessedData));
+            let unprocessedData = `Recipe Name: ${input.name}, Author: ${input.author}, Steps: ${stepsString}`;
+            
+            let prompt = [prompts.recipeObject, prompts.recipeSpamCheck, prompts.recipeContext(unprocessedData)];
     
             // Spam Analysis
 
@@ -38,10 +38,10 @@ recipes.add = async(obj) => {
 
             // Initiating background processing chain, if submission is not spam.
 
-            if (obj.submission_id) { // Submission ID already exists (when user has submitted a cover image)
+            if (input.submission_id) { // Submission ID already exists (when user has submitted a cover image)
 
-                await db.PendingSubmission.findOneAndUpdate({_id: obj.submission_id}, {stage: "Identifying & sorting ingredients..."});
-                obj.generateImage = false;
+                await db.PendingSubmission.findOneAndUpdate({_id: input.submission_id}, {stage: "Identifying & sorting ingredients..."});
+                input.generateImage = false;
 
             } else { // No Submission ID; cover image also needs to be generated
                 
@@ -53,14 +53,14 @@ recipes.add = async(obj) => {
 
                 const submission = await db.PendingSubmission.create(newPendingSubmission);
 
-                obj.submission_id = submission._id;
-                obj.generateImage = true;
+                input.submission_id = submission._id;
+                input.generateImage = true;
 
             }
 
-            asyncHandlers.addRecipe(stepsString, obj);
+            asyncHandlers.addRecipe(stepsString, input);
 
-            resolve({code: 200, msg: "Submission sent for further processing.", submission_id: obj.submission_id})
+            resolve({code: 200, msg: "Submission sent for further processing.", submission_id: input.submission_id})
             
         } catch (error) {
             console.log(error)
@@ -72,13 +72,13 @@ recipes.add = async(obj) => {
 
 }
 
-recipes.addImage = async(obj) => {
+recipes.addImage = async(input) => {
 
     return new Promise(async(resolve) => {
         try {
 
             let newPendingSubmission = {
-                img_url: `https://imagedelivery.net/CwcWai9Vz5sYV9GCN-o2Vg/${obj.destination}`,
+                img_url: `https://imagedelivery.net/CwcWai9Vz5sYV9GCN-o2Vg/${input.destination}`,
                 is_pending: true,
                 success: true,
                 stage: "Image Uploaded by User"
@@ -98,7 +98,7 @@ recipes.addImage = async(obj) => {
 
 }
 
-recipes.update = async(obj) => {
+recipes.update = async(input) => {
 
     return new Promise(async(resolve) => {
 
@@ -106,26 +106,23 @@ recipes.update = async(obj) => {
 
             // fetch old recipe data
 
-            const oldRecipe = await db.Recipe.findOne({_id: obj._id});
+            const oldRecipe = await db.Recipe.findOne({_id: input._id});
 
             // check if recipe belongs to user
 
-            if (oldRecipe.userId !== obj.userId) throw new Error("401");
+            if (oldRecipe.userId !== input.userId) throw new Error("401");
             
             // Preparing Prompt
 
             let stepsString = '';
-            obj.steps.forEach((step, i) => stepsString += `[STEP ${i+1}] ${step} `);
+            input.steps.forEach((step, i) => stepsString += `[STEP ${i+1}] ${step} `);
     
-            let unprocessedData = `Recipe Name: ${obj.name}, Author: ${obj.author}, Steps: ${stepsString}`;
-            unprocessedData = unprocessedData.replace(/[\u0000-\u001F\u007F-\u009F]/g, "");
-
-            let promptTemplate = process.env.ADDRECIPE_SPAM_PROMPT;
-            let prompt = JSON.parse(promptTemplate.replace('_RECIPE_DATA_', unprocessedData));
+            const unprocessedData = `Recipe Name: ${input.name}, Author: ${input.author}, Steps: ${stepsString}`;
+            const instruction = [prompts.recipeObject, prompts.recipeSpamCheck, prompts.recipeContext(unprocessedData)];
     
             // Spam Analysis
 
-            const spamAnalysis = await ai.gpt(prompt);
+            const spamAnalysis = await ai.gpt(instruction);
             
             console.log(spamAnalysis);
 
@@ -136,39 +133,42 @@ recipes.update = async(obj) => {
 
             // use helper to validate and sanitise ingredients
 
-            let areIngredientsValid = await helpers.validateIngredients(obj.ingredients, obj.steps);
+            let areIngredientsValid = await helpers.validateIngredients(input.ingredients, input.steps);
 
             if (!areIngredientsValid) throw new Error("Validation Failed.");
 
             // use helper to get diet type
 
-            obj.diet = helpers.getRecipeDietType(obj.ingredients);
+            input.diet = helpers.getRecipeDietType(input.ingredients);
+            console.log(input.diet);
+            console.log(input.ingredients);
 
             // use helper to validate recipe output
 
-            if (!helpers.isRecipeOutputValid(obj)) throw new Error("Validation Failed.");
+            if (!helpers.isRecipeOutputValid(input)) throw new Error("Validation Failed.");
 
             // update steps, ingredients, name, desc, intro, cooking_time
 
-            await db.Recipe.findOneAndUpdate({_id: obj._id}, {
-                steps: obj.steps,
-                ingredients: obj.ingredients,
-                name: obj.name,
-                desc: obj.desc,
-                intro: obj.intro,
-                cooking_time: obj.cookingTime
+            await db.Recipe.findOneAndUpdate({_id: input._id}, {
+                steps: input.steps,
+                ingredients: input.ingredients,
+                name: input.name,
+                desc: input.desc,
+                intro: input.intro,
+                cooking_time: input.cookingTime,
+                diet: input.diet
             });
 
             // compare old recipe data with new recipe data
 
-            let areStepsChanged = oldRecipe.steps.toString() !== obj.steps.toString();
-            let areIngredientsChanged = oldRecipe.ingredients.toString() !== obj.ingredients.toString();
+            let areStepsChanged = oldRecipe.steps.toString() !== input.steps.toString();
+            let areIngredientsChanged = oldRecipe.ingredients.toString() !== input.ingredients.toString();
 
             // Initiating background processing chain to update insights, if steps or ingredients have changed.
 
             if (areStepsChanged || areIngredientsChanged) {
 
-                asyncHandlers.updateRecipeInsights(stepsString, obj);
+                asyncHandlers.updateRecipeInsights(stepsString, input);
 
             }
 
@@ -192,7 +192,7 @@ recipes.update = async(obj) => {
 
 }
 
-recipes.updateImage = async(obj, idx, userId) => {
+recipes.updateImage = async(input, idx, userId) => {
 
     return new Promise(async(resolve) => {
         try {
@@ -201,7 +201,7 @@ recipes.updateImage = async(obj, idx, userId) => {
 
             if (recipe.userId !== userId) throw new Error("401");
 
-            await db.Recipe.findOneAndUpdate({_id: idx}, {img_url: `https://imagedelivery.net/CwcWai9Vz5sYV9GCN-o2Vg/${obj.destination}`});
+            await db.Recipe.findOneAndUpdate({_id: idx}, {img_url: `https://imagedelivery.net/CwcWai9Vz5sYV9GCN-o2Vg/${input.destination}`});
 
             // Delete old image from cloudflare
 

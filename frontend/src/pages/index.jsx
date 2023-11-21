@@ -25,10 +25,10 @@ function Index() {
 
                   <FeaturedBanner
 
-                  author={recipes.recent.list[0].author}
-                  id={recipes.recent.list[0]._id}
-                  name={recipes.recent.list[0].name}
-                  text={recipes.recent.list[0].desc}
+                    author={recipes.recent.list[0].author}
+                    id={recipes.recent.list[0]._id}
+                    name={recipes.recent.list[0].name}
+                    text={recipes.recent.list[0].desc}
                   
                   />
                 }

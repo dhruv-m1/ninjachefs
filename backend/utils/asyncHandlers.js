@@ -2,63 +2,67 @@
  * Utility for realtime data processing after a HTTP response is served.
  */
 
-import ai from "./ai.js";
+import { prompts, ai } from "../config/ai.config.js";
 import db from "../config/db.config.js";
 import helpers from "./helpers.js";
 import axios from "axios";
 
 const asyncHandlers = {}
 
-asyncHandlers.addRecipe = async(stepsString, obj, retries = 0) => {
+asyncHandlers.addRecipe = async(stepsString, input, retries = 0) => {
 
     try {
 
-        let unprocessedData = `Recipe Name: ${obj.name}, Author: ${obj.author}, Steps: ${stepsString}`;
-        unprocessedData = unprocessedData.replace(/[\u0000-\u001F\u007F-\u009F]/g, "");
+        let unprocessedData = `Recipe Name: ${input.name}, Author: ${input.author}, Steps: ${stepsString}`;
 
-        let promptTemplate = process.env.ADDRECIPE_INGREDIENTS_PROMPT;
-        let prompt = JSON.parse(promptTemplate.replace('_RECIPE_DATA_', unprocessedData.replace()));
+        let instructions = [
+            prompts.recipeIngredientsArray, 
+            prompts.recipeIngredients, 
+            prompts.recipeContext(unprocessedData)
+        ];
 
-        let ingredients = await ai.gpt(prompt);
+        let ingredients = await ai.gpt(instructions);
 
         await helpers.validateIngredients(ingredients);
-        let santisedIngredients = await helpers.sanitiseIngredients(ingredients, obj.steps);
+        let santisedIngredients = await helpers.sanitiseIngredients(ingredients, input.steps);
 
         if (!santisedIngredients.valid) throw new Error("Invalid Ingredients.")
 
-        await db.PendingSubmission.findOneAndUpdate({_id: obj.submission_id}, {
+        await db.PendingSubmission.findOneAndUpdate({_id: input.submission_id}, {
             stage: "Analysing recipe & writing metadata..."
         });
 
         let ingredientString = '';
         santisedIngredients.list.forEach((ingredient, i) => ingredientString += `(${i+1}) ${ingredient.name} `);
         
-        unprocessedData = `Recipe Name: ${obj.name}, Author: ${obj.author}, Ingredients: ${ingredientString} Steps: ${stepsString}`;
-        unprocessedData = unprocessedData.replace(/[\u0000-\u001F\u007F-\u009F]/g, "");
+        unprocessedData = `Recipe Name: ${input.name}, Author: ${input.author}, Ingredients: ${ingredientString} Steps: ${stepsString}`;
 
-        promptTemplate = process.env.ADDRECIPE_METADATA_PROMPT;
-        prompt = JSON.parse(promptTemplate.replace('_RECIPE_DATA_', unprocessedData));
+        instructions = [
+            prompts.recipeObject, 
+            prompts.allRecipeMetadata,
+            prompts.recipeContext(unprocessedData)
+        ];
     
-        let newRecipe = await ai.gpt(prompt);
+        let newRecipe = await ai.gpt(instructions);
         
         newRecipe.ingredients = santisedIngredients.list;
         newRecipe.diet = helpers.getRecipeDietType(newRecipe.ingredients);
 
         if (!helpers.isRecipeOutputValid(newRecipe)) throw new Error("Validation Failed.");
 
-        newRecipe.name = obj.name;
-        newRecipe.author = obj.author;
-        newRecipe.cooking_time = obj.cookingTime;
-        newRecipe.steps = obj.steps;
-        newRecipe.userId = obj.userId;
+        newRecipe.name = input.name;
+        newRecipe.author = input.author;
+        newRecipe.cooking_time = input.cookingTime;
+        newRecipe.steps = input.steps;
+        newRecipe.userId = input.userId;
 
-        if (!obj.generateImage) {
+        if (!input.generateImage) {
 
-            const submissionData = await db.PendingSubmission.findOne({_id: obj.submission_id});
+            const submissionData = await db.PendingSubmission.findOne({_id: input.submission_id});
             newRecipe.img_url = submissionData.img_url;
 
             const submittedRecipe = await db.Recipe.create(newRecipe);
-            await db.PendingSubmission.findOneAndUpdate({_id: obj.submission_id}, {
+            await db.PendingSubmission.findOneAndUpdate({_id: input.submission_id}, {
                 stage: "Done - Recipe analysis & writing metadata.",
                 is_pending: false,
                 success: true,
@@ -69,11 +73,11 @@ asyncHandlers.addRecipe = async(stepsString, obj, retries = 0) => {
 
         }
 
-        await db.PendingSubmission.findOneAndUpdate({_id: obj.submission_id}, {
+        await db.PendingSubmission.findOneAndUpdate({_id: input.submission_id}, {
             stage: "Visualising recipe & generating image..."
         });
 
-        asyncHandlers.generateRecipeImage(newRecipe, obj);
+        asyncHandlers.generateRecipeImage(newRecipe, input);
 
     } catch (error) {
 
@@ -82,12 +86,12 @@ asyncHandlers.addRecipe = async(stepsString, obj, retries = 0) => {
 
         if (retries < 1) {
 
-            asyncHandlers.addRecipe(stepsString, obj, retries+1);
+            asyncHandlers.addRecipe(stepsString, input, retries+1);
             return;
 
         }
 
-        await db.PendingSubmission.findOneAndUpdate({_id: obj.submission_id}, {
+        await db.PendingSubmission.findOneAndUpdate({_id: input.submission_id}, {
             stage: "Error during recipe analysis.",
             is_pending: false,
             success: false,
@@ -97,7 +101,7 @@ asyncHandlers.addRecipe = async(stepsString, obj, retries = 0) => {
 
 }
 
-asyncHandlers.generateRecipeImage = async(newRecipe, obj) => {
+asyncHandlers.generateRecipeImage = async(newRecipe, input) => {
     try {
         
         const response = await ai.dalle(newRecipe.prompt);
@@ -118,7 +122,7 @@ asyncHandlers.generateRecipeImage = async(newRecipe, obj) => {
         newRecipe.img_url = `https://imagedelivery.net/CwcWai9Vz5sYV9GCN-o2Vg/${data.result.id}/`
 
         const submittedRecipe = await db.Recipe.create(newRecipe);
-        await db.PendingSubmission.findOneAndUpdate({_id: obj.submission_id}, {
+        await db.PendingSubmission.findOneAndUpdate({_id: input.submission_id}, {
             stage: "Done - Visualising recipe & generating image...",
             is_pending: false,
             success: true,
@@ -126,33 +130,38 @@ asyncHandlers.generateRecipeImage = async(newRecipe, obj) => {
         });
 
     } catch (error) {
-        await db.PendingSubmission.findOneAndUpdate({_id: obj.submission_id}, {
-            stage: "Processed without image generation",
+
+        // TODO: improve error handling
+
+        await db.PendingSubmission.findOneAndUpdate({_id: input.submission_id}, {
+            stage: "error during image generation",
             is_pending: false,
-            success: true,
+            success: false,
             log: error,
-            recipeId: submittedRecipe._id
         });
+
     }
 }
 
-asyncHandlers.updateRecipeInsights = async(stepsString, obj, retries = 0) => {
+asyncHandlers.updateRecipeInsights = async(stepsString, input, retries = 0) => {
 
     try {
 
-        let unprocessedData = `Recipe Name: ${obj.name}, Author: ${obj.author}, Steps: ${stepsString}`;
-        unprocessedData = unprocessedData.replace(/[\u0000-\u001F\u007F-\u009F]/g, "");
+        let unprocessedData = `Recipe Name: ${input.name}, Author: ${input.author}, Steps: ${stepsString}`;
 
-        let promptTemplate = process.env.ADDRECIPE_INSIGHTS_ONLY_PROMPT;
-        let prompt = JSON.parse(promptTemplate.replace('_RECIPE_DATA_', unprocessedData));
+        let instruction = [
+            prompts.recipeObject, 
+            prompts.recipeInsightsOnly, 
+            prompts.recipeContext(unprocessedData)
+        ];
     
-        let updatedInsights = await ai.gpt(prompt);
+        let updatedInsights = await ai.gpt(instruction);
 
         if (!helpers.isRecipeOutputValid(updatedInsights, 'insights')) throw new Error("Validation Failed.");
 
         console.log(updatedInsights);
-        console.log(obj._id)
-        await db.Recipe.findOneAndUpdate({_id: obj._id}, {
+        console.log(input._id)
+        await db.Recipe.findOneAndUpdate({_id: input._id}, {
             allergies: updatedInsights.allergies,
             health_reason: updatedInsights.health_reason,
             health_score: updatedInsights.health_score
@@ -164,7 +173,7 @@ asyncHandlers.updateRecipeInsights = async(stepsString, obj, retries = 0) => {
 
         if (retries < 1) {
 
-            asyncHandlers.updateRecipeInsights(stepsString, obj, retries+1);
+            asyncHandlers.updateRecipeInsights(stepsString, input, retries+1);
             return;
 
         }
