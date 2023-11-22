@@ -7,7 +7,8 @@ import { OpenAIApi, Configuration } from 'openai';
 // API Config
 const OpenAI = new OpenAIApi(
     new Configuration({
-        apiKey: process.env.OPENAI_KEY
+        apiKey: process.env.OPENAI_KEY,
+        logLevel: 'silent'
     })
 )
 
