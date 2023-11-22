@@ -9,7 +9,7 @@ import axios from "axios";
 
 const asyncHandlers = {}
 
-asyncHandlers.addRecipe = async(stepsString, input, retries = 0) => {
+asyncHandlers.addRecipe = async(stepsString, input, retriesCount = 0) => {
 
     try {
 
@@ -84,9 +84,9 @@ asyncHandlers.addRecipe = async(stepsString, input, retries = 0) => {
 
         console.log(error)
 
-        if (retries < 1) {
+        if (retriesCount === 0) {
 
-            asyncHandlers.addRecipe(stepsString, input, retries+1);
+            asyncHandlers.addRecipe(stepsString, input, retriesCount+1);
             return;
 
         }
