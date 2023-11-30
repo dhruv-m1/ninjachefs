@@ -9,7 +9,7 @@ export default function Header() {
 
             <Link to="../"> <img  className="h-11 w-auto" src={logo} alt="Ninja Chefs Logo"/></Link>
 
-            <section className="content-end">
+            <section>
                 <UserButton></UserButton>
             </section>
             
