@@ -17,6 +17,16 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+.cl-userButtonPopoverActionButton__manageAccount {
+  display: none !important;
+}
+.cl-userProfile-root {
+  display: none !important;
+
+}
+.cl-profileSectionPrimaryButton, .cl-profileSectionSecondaryButton {
+  display: none !important;
+}
 
 @layer base {
 
