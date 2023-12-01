@@ -59,6 +59,12 @@ export default function RecipeView() {
 
         let recipe = await recipes.specific.get(idx);
 
+        if (!recipe) {
+            dialogs.showMessage("Could not find recipe", "If this recipe ever existed, it has probably been deleted.");
+            navigate('/');
+            return;
+        }
+
         if (recipe.health_score < 3) recipe.health_category = "Unhealthy";
         else if (recipe.health_score < 5) recipe.health_category = "Somewhat Unhealthy";
         else if (recipe.health_score === 5) recipe.health_category = "Some health implications";
