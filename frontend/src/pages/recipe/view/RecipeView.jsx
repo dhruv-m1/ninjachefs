@@ -8,6 +8,7 @@ import RecipeBanner from '../../../components/recipe_display/RecipeBanner';
 import RecipeInsights from '../../../components/recipe_display/RecipeInsights';
 import RecipeIngredients from '../../../components/recipe_display/RecipeIngredients';
 import RecipeSteps from '../../../components/recipe_display/RecipeSteps';
+import DefaultLayout from '../../../layouts/DefaultLayout';
 
 export default function RecipeView() {
 
