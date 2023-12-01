@@ -16,7 +16,7 @@ const DefaultSecuredLayout = ({ children }) => {
 
     useEffect(() => {
         if (isLoaded && !isSignedIn) {
-            navigate(`/auth/signin#/?redirect_url=${window.location.href}`);
+            navigate(`/auth/signin#/?redirect_url=${encodeURIComponent(window.location.href)}`);
         }
     }, [isLoaded, isSignedIn, navigate]);
 
