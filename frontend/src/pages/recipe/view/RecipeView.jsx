@@ -8,6 +8,7 @@ import RecipeBanner from '../../../components/recipe_display/RecipeBanner';
 import RecipeInsights from '../../../components/recipe_display/RecipeInsights';
 import RecipeIngredients from '../../../components/recipe_display/RecipeIngredients';
 import RecipeSteps from '../../../components/recipe_display/RecipeSteps';
+import DefaultLayout from '../../../layouts/DefaultLayout';
 
 export default function RecipeView() {
 
@@ -57,6 +58,12 @@ export default function RecipeView() {
     const loadRecipe = async() => {
 
         let recipe = await recipes.specific.get(idx);
+
+        if (!recipe) {
+            dialogs.showMessage("Could not find recipe", "If this recipe ever existed, it has probably been deleted.");
+            navigate('/');
+            return;
+        }
 
         if (recipe.health_score < 3) recipe.health_category = "Unhealthy";
         else if (recipe.health_score < 5) recipe.health_category = "Somewhat Unhealthy";

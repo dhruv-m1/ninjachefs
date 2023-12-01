@@ -1,5 +1,5 @@
 import { SignIn, SignedIn, SignedOut } from "@clerk/clerk-react";
-import { useDialogs } from '../../../providers/dialogContext';
+import { useDialogs } from '../../providers/dialogContext';
 import { useEffect, useRef } from 'react';
 
 export default function Dialog() {
@@ -51,7 +51,16 @@ export default function Dialog() {
                     <div className="flex flex-col justify-center items-center h-full gap-3">
                     
                         <SignedOut>
-                            <SignIn/>
+                            <SignIn
+                                appearance={{
+                                    elements: {
+                                        card: "font-poppins",
+                                        formButtonPrimary: "normal-case bg-[#0089e3] hover:bg-[#007dd3] text-md",
+                                        formFieldInput: "rounded-md border-[#ebebeb]",
+                                        footerActionLink: "text-[#007dd3] font-medium"
+                                    }
+                                }}
+                            />
                         </SignedOut>
 
                         <SignedIn>

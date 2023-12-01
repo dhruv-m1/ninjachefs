@@ -3,7 +3,6 @@ import Index from './pages/index.jsx';
 import { RecipeProvider } from './providers/recipeContext';
 
 import RecipeView from './pages/recipe/view/RecipeView.jsx';
-import MainLayout from './layouts/MainLayout.jsx';
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ClerkProvider, SignedIn } from "@clerk/clerk-react";
@@ -11,6 +10,11 @@ import RecipeAdd from './pages/recipe/add/RecipeAdd.jsx';
 import AccountMyRecipes from './pages/account/myrecipes/AccountMyRecipes.jsx';
 import RecipeSubmission from './pages/recipe/submission/RecipeSubmission.jsx';
 import RecipeEdit from './pages/recipe/edit/RecipeEdit.jsx';
+import AuthSignIn from './pages/auth/AuthSignIn.jsx';
+import AuthSignUp from './pages/auth/AuthSignUp.jsx';
+import DefaultSecuredLayout from './layouts/DefaultSecuredLayout.jsx';
+import DefaultLayout from './layouts/DefaultLayout.jsx';
+import { DialogProvider } from './providers/dialogContext.jsx';
 
 if (!process.env.REACT_APP_CLERK_PUBLISHABLE_KEY) {
   throw new Error("Missing Publishable Key")
@@ -23,18 +27,86 @@ function App() {
     <div className="App bg-[#FBFCFF]">
       <ClerkProvider publishableKey={clerkPubKey}>
         <RecipeProvider>
-          <BrowserRouter>
-            <MainLayout>
+          <DialogProvider>
+            <BrowserRouter>
+
               <Routes>
-                <Route index element={<Index/>} />
-                <Route path='/recipe/view/:idx' element={<RecipeView/>} />
-                <Route path='/recipe/add' element={<SignedIn><RecipeAdd/></SignedIn>} />
-                <Route path='/recipe/edit/:idx' element={<SignedIn><RecipeEdit/></SignedIn>} />
-                <Route path='/account/myrecipes' element={<SignedIn><AccountMyRecipes/></SignedIn>} />
-                <Route path='/recipe/submission/:idx' element={<RecipeSubmission/>} />
+
+                <Route 
+                  index 
+                  element={
+                    <DefaultLayout>
+                      <Index/>
+                    </DefaultLayout>
+                  } 
+                />
+
+                <Route 
+                  path='/recipe/view/:idx' 
+                  element={
+                    <DefaultLayout>
+                      <RecipeView/>
+                    </DefaultLayout>
+                  } 
+                  />
+
+                <Route 
+                  path='/recipe/add' 
+                  element={
+                    <DefaultSecuredLayout>
+                      <RecipeAdd/>
+                    </DefaultSecuredLayout>
+                  } 
+                />
+
+                <Route 
+                  path='/recipe/edit/:idx' 
+                  element={
+                    <DefaultSecuredLayout>
+                      <RecipeEdit/>
+                    </DefaultSecuredLayout>} 
+                />
+
+                <Route 
+                  path='/recipe/submission/:idx' 
+                  element={
+                    <DefaultSecuredLayout>
+                      <RecipeSubmission/>
+                    </DefaultSecuredLayout>
+                  } 
+                />
+
+                <Route 
+                  path='/auth/signin' 
+                  element={
+                    <DefaultLayout>
+                      <AuthSignIn/>
+                    </DefaultLayout>
+                  } 
+                />
+
+                <Route 
+                  path='/auth/signup' 
+                  element={
+                    <DefaultLayout>
+                      <AuthSignUp/>
+                    </DefaultLayout>
+                  } 
+                />
+
+                <Route 
+                  path='/account/myrecipes' 
+                  element={
+                    <DefaultSecuredLayout>
+                      <AccountMyRecipes/>
+                    </DefaultSecuredLayout>
+                  } 
+                />
+
               </Routes>
-            </MainLayout>
-          </BrowserRouter>
+                  
+            </BrowserRouter>
+          </DialogProvider>
         </RecipeProvider>
       </ClerkProvider>
     </div>
