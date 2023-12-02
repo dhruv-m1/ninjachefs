@@ -14,7 +14,7 @@ export default function SpamBanner() {
             </p>
 
             <p className="text-sm md:mt-1">
-                Please submit valid food recipes only - this helps maintain a pleasant experiance for everyone and
+                Please submit valid food recipes only - this helps maintain a pleasant experience for everyone and
                 ensure that things work as intended. Expletives are strictly prohibited.
                 <b> If you are testing the application, you may consider&nbsp;
                     <a href="https://github.com/dhruv-tech/ninjachefs/wiki" className="underline" target="_blank" rel="noreferrer">
