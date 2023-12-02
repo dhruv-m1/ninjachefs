@@ -2,13 +2,13 @@
 
 *Web application that leverages generative AI to simplify online recipe sharing.*
 
-📑 For **technical documentation**, click [here](https://dhruv-tech.gitbook.io/ninjachefs).
+📑 For **technical documentation**, please see this [GitBook](https://dhruv-tech.gitbook.io/ninjachefs).
 
 ## Try it out
 
-🌐 See a **live demo** at: [ninjachefs.dhruv.tech](https://go.dhruv.tech/p/ninjachefs)
+🌐 See a **live demo** [here](https://go.dhruv.tech/p/ninjachefs).
 
-🍽️ **Sample recipes** for testing the demo can be found [here.](https://github.com/dhruv-tech/ninjachefs/wiki)
+🍽️ **Sample recipes** for testing the demo can be found [here](https://github.com/dhruv-tech/ninjachefs/wiki).
 
 <img src="https://github.com/dhruv-tech/ninjachefs/assets/26849655/5b1c885d-72ca-416d-988c-07f68267540f" alt="screenshot of ninjachefs homepage" height="375">
 
@@ -16,7 +16,7 @@
 
 Sharing recipes online is tedious, and often involves a lot more than just writing the recipe - such as preparing a detailed ingredient list, writing an introduction, taking an appetising picture and a lot more.
 
-NinjaChefs, with AI, attempts to eliminate this 'barrier to entry' from online recipe sharing and make it accessible by helping the user focus on just the recipe.
+NinjaChefs + AI, attempts to eliminate this 'barrier to entry' from online recipe sharing and make it accessible by helping the user focus on just the recipe.
 
 ## Tech Stack
 
@@ -27,6 +27,7 @@ NinjaChefs, with AI, attempts to eliminate this 'barrier to entry' from online r
 * CloudFlare Images (as the CDN for serving images)
 * Clerk (for Authentication)
 * OpenAI Platform SDK (for building Generative AI features)
+* Cloudflare Workers (for building scheduled workers)
 
 ## Compatibility
 
