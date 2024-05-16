@@ -119,7 +119,7 @@ asyncHandlers.generateRecipeImage = async(newRecipe, input) => {
         if (!data.success) throw new Error("CLOUDFLARE IMAGE UPLOAD ERR0R");
 
         delete newRecipe.prompt;
-        newRecipe.img_url = `https://imagedelivery.net/CwcWai9Vz5sYV9GCN-o2Vg/${data.result.id}/`
+        newRecipe.img_url = `https://imagedelivery.net/CwcWai9Vz5sYV9GCN-o2Vg/${data.result.id}`
 
         const submittedRecipe = await db.Recipe.create(newRecipe);
         await db.PendingSubmission.findOneAndUpdate({_id: input.submission_id}, {
